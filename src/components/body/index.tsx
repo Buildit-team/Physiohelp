@@ -1,4 +1,5 @@
 import Header from "../header"
+import Blog from "./blog"
 import Carousel from "./carousel"
 import Discount from "./Discount"
 import Hero from "./Hero"
@@ -21,6 +22,7 @@ const Body = () => {
             <Discount />
             <Testimonial />
             <VelocityScroll/>
+            <Blog/>
         </div>
     )
 }
