@@ -26,7 +26,7 @@ const Carousel = () => {
                     }}
                 >
                     <SwiperSlide>
-                        <div className="bg-white w-[280px] h-[280px] shadow-lg p-[30px] overflow-y-hidden flex flex-col gap-[20px]">
+                        <div className="bg-white w-[280px] h-[280px] shadow-lg p-[30px] overflow-y-hidden flex flex-col gap-[20px] max-[650px]:w-[100%]">
                             <span className="w-[60px] h-[60px] rounded-[50%] bg-[#1053D4] flex p-[10px] items-center justify-center">
                                 <img src="/cool.svg" alt="cool" className="w-[30px] h-[30px]" />
                             </span>
@@ -41,11 +41,11 @@ const Carousel = () => {
                     </SwiperSlide>
 
                     <SwiperSlide>
-                        <div className="bg-white w-[280px] h-[280px] shadow-lg p-[30px] overflow-y-hidden flex flex-col gap-[20px]">
+                        <div className="bg-white w-[280px] h-[280px] shadow-lg p-[30px] overflow-y-hidden flex flex-col gap-[20px] max-[650px]:w-[100%]">
                             <span className="w-[60px] h-[60px] rounded-[50%] bg-[#1053D4] flex p-[10px] items-center justify-center">
-                                <img src="/rope.svg" alt="rope" className="w-[40px] h-[30px]" />
+                                <img src="/health.svg" alt="rope" className="w-[40px] h-[30px]" />
                             </span>
-                            <p className="font-montserrat">Medical E-commerce</p>
+                            <p className="font-montserrat">Health Care</p>
                             <span className="w-[60px] h-[2px] flex bg-[#1053d4]"></span>
                             <p className="text-[14px] font-[300] text-[grey] font-montserrat leading-[20px]">
                                 The gradual accumulation of<br />
@@ -56,11 +56,11 @@ const Carousel = () => {
                     </SwiperSlide>
 
                     <SwiperSlide>
-                        <div className="bg-white w-[280px] h-[280px] shadow-lg p-[30px] overflow-y-hidden flex flex-col gap-[20px]">
+                        <div className="bg-white w-[280px] h-[280px] shadow-lg p-[30px] overflow-y-hidden flex flex-col gap-[20px] max-[650px]:w-[100%]">
                             <span className="w-[60px] h-[60px] rounded-[50%] bg-[#1053D4] flex p-[10px] items-center justify-center">
-                                <img src="/history.svg" alt="history" className="w-[30px] h-[30px]" />
+                                <img src="/care.svg" alt="history" className="w-[30px] h-[30px]" />
                             </span>
-                            <p className="font-montserrat">Care Care</p>
+                            <p className="font-montserrat">Counselling</p>
                             <span className="w-[60px] h-[2px] flex bg-[#1053d4]"></span>
                             <p className="text-[14px] font-[300] text-[grey] font-montserrat leading-[20px]">
                                 The gradual accumulation of<br />
@@ -71,11 +71,11 @@ const Carousel = () => {
                     </SwiperSlide>
 
                     <SwiperSlide>
-                        <div className="bg-white w-[280px] h-[280px] shadow-lg p-[30px] overflow-y-hidden flex flex-col gap-[20px]">
+                        <div className="bg-white w-[280px] h-[280px] shadow-lg p-[30px] overflow-y-hidden flex flex-col gap-[20px] max-[650px]:w-[100%]">
                             <span className="w-[60px] h-[60px] rounded-[50%] bg-[#1053D4] flex p-[10px] items-center justify-center">
-                                <img src="/history.svg" alt="history" className="w-[30px] h-[30px]" />
+                                <img src="/counsel.svg" alt="history" className="w-[30px] h-[30px]" />
                             </span>
-                            <p className="font-montserrat">Care Care</p>
+                            <p className="font-montserrat">Free Shipping</p>
                             <span className="w-[60px] h-[2px] flex bg-[#1053d4]"></span>
                             <p className="text-[14px] font-[300] text-[grey] font-montserrat leading-[20px]">
                                 The gradual accumulation of<br />
