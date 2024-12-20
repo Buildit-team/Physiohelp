@@ -6,22 +6,51 @@
 
 .scrollbar-hide {
   -ms-overflow-style: none;
-  scrollbar-width: none; 
+  scrollbar-width: none;
 }
 .scrollbar-hide::-webkit-scrollbar {
-  display: none; 
+  display: none;
 }
 
-
 .swiper .swiper-pagination-bullet {
-  background-color: lightgrey; 
-  opacity: 0.6; 
+  background-color: lightgrey;
+  opacity: 0.6;
   transition: opacity 0.3s;
 }
 
 .swiper .swiper-pagination-bullet-active {
-  background-color: white; 
+  background-color: white;
   width: 15px;
   height: 15px;
-  opacity: 1; 
+  opacity: 1;
+}
+
+@keyframes marquee {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+@keyframes marquee-reverse {
+  0% {
+    transform: translateX(100%);
+  }
+  100% {
+    transform: translateX(-100%);
+  }
+}
+
+.animate-marquee {
+  width: 70%;
+  animation: marquee 30s linear infinite;
+  white-space: nowrap;
+  overflow: hidden;
+}
+.animate-marquee-reverse {
+  width: 70%;
+  animation: marquee-reverse 30s linear infinite;
+  white-space: nowrap;
+  overflow: hidden;
 }

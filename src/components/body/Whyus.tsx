@@ -24,7 +24,7 @@ const Whyus = () => {
                                 <img src="/shield.png" alt="" />
                             </span>
                             <span className=" flex gap-[10px] flex-col  max-[650px]:items-center">
-                                <h1 className="p-0 m-0 font-light">Wide Product Range</h1>
+                                <h1 className="p-0 m-0 font-light">Quality Assurance</h1>
                                 <p className="font-light max-[650px]:text-center">A diverse selection of products tailored to all <br></br> your recovery and wellness needs.
                                 </p>
                             </span>
@@ -34,7 +34,7 @@ const Whyus = () => {
                                 <img src="/herbal.png" alt="" />
                             </span>
                             <span className=" flex gap-[10px] flex-col  max-[650px]:items-center">
-                                <h1 className="p-0 m-0 font-light">Wide Product Range</h1>
+                                <h1 className="p-0 m-0 font-light">Eco-Friendly Practices</h1>
                                 <p className="font-light max-[650px]:text-center">A diverse selection of products tailored to all <br></br> your recovery and wellness needs.
                                 </p>
                             </span>
