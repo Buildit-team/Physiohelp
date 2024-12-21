@@ -9,7 +9,7 @@ const Blog = () => {
                         Exploring recent<br></br>research and findings
                     </h1>
                 </div>
-                <div className="w-[70%] bg-white shadow-sm h-[200px] flex ">
+                <div className="w-[70%] bg-white shadow-sm h-[200px] flex max-[650px]:hidden">
                     <span className="w-[60%] p-[20px]">
                         <h1 className="text-[25px]">Health advice </h1>
                         <p className="text-[12px]">
@@ -24,8 +24,10 @@ const Blog = () => {
                         <img src="blogimg1.svg" alt="" className="w-full object-cover" />
                     </span>
                 </div>
-                <div className="w-[70%] flex justify-between">
-                    <div className="w-[250px] bg-white shadow-sm flex flex-col h-[350px] ">
+                {/* the horizontal blog */}
+
+                <div className="w-[70%] flex justify-between max-[650px]:flex-col max-[650px]:w-full max-[650px]:items-center max-[650px]:gap-[20px]" >
+                    <div className="w-[250px] bg-white shadow-sm flex flex-col h-[380px] max-[650px]:w-[95%] max-[650px]:h-[400px]">
                         <span className="w-[100%]">
                             <img src="blogimg3.svg" alt="" className="w-full object-cover" />
                         </span>
@@ -40,7 +42,7 @@ const Blog = () => {
                             </span>
                         </span>
                     </div>
-                    <div className="w-[250px] bg-white shadow-sm flex flex-col h-[350px] ">
+                    <div className="w-[250px] bg-white shadow-sm flex flex-col h-[380px] max-[650px]:w-[95%] max-[650px]:h-[400px]">
                         <span className="w-[100%]">
                             <img src="blogimg4.svg" alt="" className="w-full object-cover" />
                         </span>
@@ -55,7 +57,7 @@ const Blog = () => {
                             </span>
                         </span>
                     </div>
-                    <div className="w-[250px] bg-white shadow-sm flex flex-col h-[350px] ">
+                    <div className="w-[250px] bg-white shadow-sm flex flex-col h-[380px] max-[650px]:w-[95%] max-[650px]:h-[400px]" >
                         <span className="w-[100%]">
                             <img src="blogimg2.svg" alt="" className="w-full object-cover" />
                         </span>

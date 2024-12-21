@@ -1,3 +1,4 @@
+import Footer from "../footer"
 import Header from "../header"
 import Blog from "./blog"
 import Carousel from "./carousel"
@@ -23,6 +24,7 @@ const Body = () => {
             <Testimonial />
             <VelocityScroll/>
             <Blog/>
+            <Footer/>
         </div>
     )
 }
