@@ -11,7 +11,9 @@ import Whyus from "./Whyus"
 const Body = () => {
     return (
         <div className="w-full flex flex-col items-center  bg-no-repeats max-[650px]:object-contain ">
-            <div className="w-full bg-[#00000089] h-full bg-[url('/osteopathy-patoient-getting-tretment-massage.svg')]">
+            <div className="w-full  h-full bg-[url('/osteopathy-patoient-getting-tretment-massage.svg')]">
+            <div className="flex w-full absolute inset-0 bg-[#00000072]"></div>
+
                 <Hero />
             </div>
             <Carousel/>
