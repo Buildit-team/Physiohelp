@@ -1,5 +1,3 @@
-import Footer from "../footer"
-import Header from "../header"
 import Blog from "./blog"
 import Carousel from "./carousel"
 import Discount from "./Discount"
@@ -12,9 +10,8 @@ import Whyus from "./Whyus"
 
 const Body = () => {
     return (
-        <div className="w-full  flex flex-col items-center bg-[url('/osteopathy-patoient-getting-tretment-massage.svg')] h-[80vh] max-[650px]:object-contain ">
-            <div className="w-full bg-[#0000007f] h-full">
-                <Header />
+        <div className="w-full flex flex-col items-center  bg-no-repeats max-[650px]:object-contain ">
+            <div className="w-full bg-[#00000089] h-full bg-[url('/osteopathy-patoient-getting-tretment-massage.svg')]">
                 <Hero />
             </div>
             <Carousel/>
@@ -24,7 +21,6 @@ const Body = () => {
             <Testimonial />
             <VelocityScroll/>
             <Blog/>
-            <Footer/>
         </div>
     )
 }
