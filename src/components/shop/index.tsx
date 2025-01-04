@@ -92,15 +92,15 @@ const ShopPage = () => {
                         >
                             <img src={i.imageUrl} alt={i.name} />
                             <div className="flex absolute inset-0 w-full h-[90%] justify-center items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <button className="w-[90%] h-[40px] bg-white rounded-[4px]">
+                                <button className="w-[90%] h-[40px] bg-white rounded-[4px] max-[650px]:h-[30px] max-[650px]:text-[12px]">
                                     Add to cart
                                 </button>
                             </div>
                         </div>
-                        <p className="text-[14px]">{i.name}</p>
+                        <p className="text-[14px] max-[650px]:text-[12px]">{i.name}</p>
                         <span className="w-full flex gap-2 items-center">
-                            <p className="text-[14px]">${i.price.toFixed(2)}</p>
-                            <p className="text-[14px] line-through text-[#6C7275]">
+                            <p className="text-[14px] max-[650px]:text-[12px]">${i.price.toFixed(2)}</p>
+                            <p className="text-[14px] line-through text-[#6C7275] max-[650px]:text-[12px]">
                                 ${i.price?.toFixed(2) || (i.price * 1.5).toFixed(2)}
                             </p>
                         </span>

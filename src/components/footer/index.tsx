@@ -32,7 +32,7 @@ const Footer = () => {
                     </div>
                 </div>
                 <span className="flex w-[95%] h-[2px] bg-[#3C7FFF] "></span>
-                <div className="w-full flex items-center justify-center text-white gap-[10px] max-[650px]:text-[12px]">
+                <div className="w-full flex items-center justify-center text-white gap-[10px] max-[650px]:text-[12px] max-[650px]:flex-col">
                     <p>Copyright © {date} PhysioHelp Store</p>
                     <span className="flex w-[2px] h-[10px] bg-[#3C7FFF] "></span>
                     <p>Design by <strong>buildit</strong></p>
