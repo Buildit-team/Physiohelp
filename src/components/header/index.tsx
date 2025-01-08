@@ -12,8 +12,8 @@ const Header = () => {
     const navItemClass = isHomePage
         ? "text-white hover:text-gray-300"
         : isStorePage
-        ? "text-black hover:text-gray-700"
-        : "text-gray-600 hover:text-gray-800";
+            ? "text-black hover:text-gray-700"
+            : "text-gray-600 hover:text-gray-800";
 
     return (
         <div className="w-[100%] absolute z-10 flex justify-center h-[120px] items-center max-[650px]:justify-between max-[650px]:w-[100%] max-[650px]:p-[10px]">
@@ -40,10 +40,22 @@ const Header = () => {
                 <p className={`cursor-pointer ${navItemClass}`}>Blog</p>
                 <p className={`cursor-pointer ${navItemClass}`}>Contact us</p>
             </span>
-            <span className="w-[20%] flex gap-[30px] max-[650px]:w-[50%] justify-end">
-                <img src="/search.svg" alt="Search" className="w-[20px]" />
-                <img src="/user.svg" alt="User" className="w-[20px]" />
-                <img src="/Cart.svg" alt="Cart" className="w-[40px]" />
+            <span className="w-[20%] flex gap-[30px] max-[650px]:w-[50%] justify-center">
+                {
+                    isHomePage ?
+                        <>
+                            <img src="/headericon1.svg" alt="Search" className="w-[20px]" />
+                            <img src="/Vector.svg" alt="User" className="w-[20px]" />
+                            <img src="/headericonBag.svg" alt="Cart" className="w-[20px]" />
+                        </>
+                        :
+                        <>
+                            <img src="/search.svg" alt="Search" className="w-[20px]" />
+                            <img src="/user.svg" alt="User" className="w-[20px]" />
+                            <img src="/Cart.svg" alt="Cart" className="w-[40px]" />
+                        </>
+                }
+
             </span>
         </div>
     );

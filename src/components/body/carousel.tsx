@@ -6,8 +6,8 @@ import 'swiper/css/pagination';
 
 const Carousel = () => {
     return (
-        <div className="w-[100%] flex justify-center items-center max-[650px]:h-[500px]">
-            <div className='w-[90%] flex items-center justify-center h-[400px]'>
+        <div className="w-[100%] flex justify-center items-center max-[650px]:h-[300px]">
+            <div className='w-[90%] flex items-center justify-center h-[300px]'>
                 <Swiper
                     modules={[Navigation, Pagination, Autoplay]}
                     spaceBetween={10}

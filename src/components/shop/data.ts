@@ -11,12 +11,12 @@ export interface Product {
 export const products: Product[] = [
     {
         id: 1,
-        name: "Wireless Headphones",
-        price: 59.99,
-        description: "High-quality wireless headphones with noise cancellation.",
-        category: "Electronics",
+        name: "Egonormic chair",
+        price: 700.99,
+        description: "100% cotton t-shirt with stylish graphic design.",
+        category: "Apparel",
         inStock: true,
-        imageUrl: "/cyclace.svg",
+        imageUrl: "/chair2.jpg",
     },
     {
         id: 2,
@@ -98,6 +98,24 @@ export const products: Product[] = [
         category: "Apparel",
         inStock: true,
         imageUrl: "/massagechair.svg",
+    },
+    {
+        id: 11,
+        name: "Egonormic chair",
+        price: 700.99,
+        description: "100% cotton t-shirt with stylish graphic design.",
+        category: "Apparel",
+        inStock: true,
+        imageUrl: "/chair2.jpg",
+    },
+    {
+        id: 12,
+        name: "Office table",
+        price: 900.99,
+        description: "100% cotton t-shirt with stylish graphic design.",
+        category: "Apparel",
+        inStock: true,
+        imageUrl: "/table1.jpg",
     },
 ];
 
