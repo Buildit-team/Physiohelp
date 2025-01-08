@@ -1,12 +1,13 @@
 import { useState } from "react";
 import { products } from "./data";
+import { useNavigate } from "react-router-dom";
 
 const ShopPage = () => {
+    const navigate = useNavigate()
     const [filteredProducts, setFilteredProducts] = useState(products);
     const [sortOrder, setSortOrder] = useState(""); // 'asc' for ascending, 'desc' for descending
     const [priceFilter, setPriceFilter] = useState(""); // Selected price range
 
-    // Price ranges for dropdown
     const priceRanges = [
         { label: "All Price", min: 0, max: Infinity },
         { label: "$0 - $50", min: 0, max: 50 },
@@ -15,7 +16,6 @@ const ShopPage = () => {
         { label: "$201 and above", min: 201, max: Infinity },
     ];
 
-    // Handle sorting
     const handleSort = (order: string) => {
         const sortedProducts = [...filteredProducts].sort((a, b) => {
             if (order === "asc") return a.price - b.price;
@@ -26,7 +26,7 @@ const ShopPage = () => {
         setSortOrder(order);
     };
 
-    // Handle price filtering
+
     const handlePriceFilter = (range: string) => {
         const selectedRange = priceRanges.find((rangeObj) => rangeObj.label === range);
         if (selectedRange) {
@@ -36,7 +36,7 @@ const ShopPage = () => {
             );
             setFilteredProducts(filtered);
         } else {
-            setFilteredProducts(products); // Default to all products
+            setFilteredProducts(products);
         }
         setPriceFilter(range);
     };
@@ -85,7 +85,7 @@ const ShopPage = () => {
                 {filteredProducts.map((i) => (
                     <div
                         key={i.id}
-                        className="w-[140px] flex flex-col p-[10px] gap-[10px] max-[650px]:p-0"
+                        className="max-[650px]w-[140px] w-[220px] flex flex-col p-[10px] gap-[10px] max-[650px]:p-0"
                     >
                         <div
                             className="h-[250px] max-[650px]:h-[200px] w-[100%] flex items-center bg-[#F3F5F7] p-[20px] relative group"
