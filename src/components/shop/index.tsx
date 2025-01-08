@@ -1,9 +1,9 @@
 import { useState } from "react";
 import { products } from "./data";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 
 const ShopPage = () => {
-    const navigate = useNavigate()
+    // const navigate = useNavigate()
     const [filteredProducts, setFilteredProducts] = useState(products);
     const [sortOrder, setSortOrder] = useState(""); // 'asc' for ascending, 'desc' for descending
     const [priceFilter, setPriceFilter] = useState(""); // Selected price range
