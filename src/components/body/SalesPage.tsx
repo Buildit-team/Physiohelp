@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom"
 
 const SalesPage = () => {
+    const navigate = useNavigate()
     return (
         <div className="w-[100%] h-auto pt-[80px] pb-[50px] flex justify-center mt-[30px] gap-[20px] bg-[#1053D4]">
             <div className="w-[100%] flex justify-center gap-[10px] max-[650px]:flex-col">
@@ -16,7 +18,7 @@ const SalesPage = () => {
                 <div className="max-[650px]:w-full flex flex-col items-center max-[650px]:p-[10px]">
                     <img src="/helping2.png" alt="none" className="w-[400px] mt-[70px] flex " />
                     <span className="w-[100%] h-[250px] flex items-end justify-end max-[650px]:h-[50px] max-[650px]:justify-center">
-                        <button className="bg-[white] text-[#1053D4] rounded-[4px] h-[40px] w-[220px] max-[650px]:w-[150px] max-[650px]:text-[14px]">Explore shop</button>
+                        <button className="bg-[white] text-[#1053D4] rounded-[4px] h-[40px] w-[220px] max-[650px]:w-[150px] max-[650px]:text-[14px]" onClick={()=> navigate('/shop')}>Explore shop</button>
                     </span>
                 </div>
             </div>

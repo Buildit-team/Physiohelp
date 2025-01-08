@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom"
 
 const Discount = () => {
+    const navigate = useNavigate()
     return (
         <div className="w-[100%] h-auto pt-[80px] pb-[50px] flex flex-col justify-center mt-[30px] gap-[20px] bg-[#F3F5F7]">
             <div className="w-full h-auto flex flex-col gap-[30px]">
@@ -44,7 +46,7 @@ const Discount = () => {
                 </div>
             </div>
             <div className="w-[82%]  flex justify-end max-[6450px]:justify-center max-[650px]:w-full">
-                <button className="w-[150px] h-[40px] bg-[#1053D4] text-white rounded-[8px]">See Shop</button>
+                <button className="w-[150px] h-[40px] bg-[#1053D4] text-white rounded-[8px]" onClick={()=> navigate('/shop')}>See Shop</button>
             </div>
         </div>
     )
