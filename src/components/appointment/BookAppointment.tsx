@@ -42,7 +42,7 @@ const BookAppointment = () => {
 
     return (
         <div className="w-full mt-24 flex flex-col items-center">
-            <div className="w-1/2 bg-white p-8 rounded-lg shadow-md">
+            <div className="w-1/2 bg-white p-8 rounded-lg shadow-md max-[650px]:w-full">
                 <h1 className="text-2xl font-medium mb-4">Select Appointment Time</h1>
 
                 {/* Date Picker */}

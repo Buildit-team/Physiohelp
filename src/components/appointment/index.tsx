@@ -23,7 +23,7 @@ const Appointment = () => {
 
     return (
         <div className="w-full mt-[100px] flex flex-col items-center">
-            <div className="w-[50%] bg-white p-8 rounded-lg shadow-md max-[650px]:w-full">
+            <div className="w-[50%] bg-white p-8 max-[650px]:p-4 rounded-lg shadow-md max-[650px]:w-full">
                 <span className='w-full flex flex-col items-center'>
                     <h1 className="text-[25px] font-medium mb-4">Essential Questions</h1>
                     <p className="text-gray-600 mb-6">Questions that will help us understand you better.</p>
@@ -76,7 +76,7 @@ const Appointment = () => {
                                 onChange={(e) => setLimitation(e.target.value)}
                                 placeholder="Tell us what you can’t/can barely do since the pain started."
                                 required
-                                className="mt-1 block w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-[lightgrey]"
+                                className="mt-1 block w-full p-2 border h-[300px] border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-[lightgrey]"
                             />
                         </div>
                     </div>
