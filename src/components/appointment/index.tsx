@@ -23,7 +23,7 @@ const Appointment = () => {
 
     return (
         <div className="w-full mt-[100px] flex flex-col items-center">
-            <div className="w-[50%] bg-white p-8 rounded-lg shadow-md">
+            <div className="w-[50%] bg-white p-8 rounded-lg shadow-md max-[650px]:w-full">
                 <span className='w-full flex flex-col items-center'>
                     <h1 className="text-[25px] font-medium mb-4">Essential Questions</h1>
                     <p className="text-gray-600 mb-6">Questions that will help us understand you better.</p>
