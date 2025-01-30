@@ -5,6 +5,9 @@ import Layout from "./components/layout";
 import Detailspage from "./components/shop/index[id]";
 import Carting from "./components/cart";
 import ScrollToTop from "./utils/ScrollToTop";
+import Appointment from "./components/appointment";
+import BookAppointment from "./components/appointment/BookAppointment";
+import AppointmentPreview from "./components/appointment/AppointmentPreview";
 
 
 export const Routes = createHashRouter([
@@ -41,6 +44,33 @@ export const Routes = createHashRouter([
             <ScrollToTop>
                 <Layout>
                     <Carting />
+                </Layout>
+            </ScrollToTop>
+    },
+    {
+        path: '/appointment',
+        element:
+            <ScrollToTop>
+                <Layout>
+                    <Appointment />
+                </Layout>
+            </ScrollToTop>
+    },
+    {
+        path: '/book-appointment',
+        element:
+            <ScrollToTop>
+                <Layout>
+                    <BookAppointment />
+                </Layout>
+            </ScrollToTop>
+    },
+    {
+        path: '/appointment-preview',
+        element:
+            <ScrollToTop>
+                <Layout>
+                    <AppointmentPreview />
                 </Layout>
             </ScrollToTop>
     },

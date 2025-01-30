@@ -1,7 +1,6 @@
 import { MdDelete } from "react-icons/md";
 import { useCart } from "../../context/CartCaontex";
 
-
 interface CartProps {
     onCheckout: () => void;
 }
@@ -11,78 +10,91 @@ const Cart = ({ onCheckout }: CartProps) => {
     const total = getTotalAmount();
 
     return (
-        <div className="w-[100%] flex">
-            {
-                cart.length > 0 ?
-                    <>
-                        <div className="w-[70%] flex gap-4 flex-col p-[10px]">
-                            <span className="w-[100%] h-[60px] flex justify-between  mt-[40px] border-b border-b-black">
-                                <p className="w-[300px] flex items-center">Products</p>
-                                <p className="w-[200px] flex items-center justify-center">Quantity</p>
-                                <p className="w-[200px] flex items-center justify-center">Price</p>
-                                <p className="w-[200px] flex items-center justify-center">Subtotal</p>
-                            </span>
-                            {
-                                cart.map((i) => {
-                                    const subtotal = i.product.price * i.quantity;
+        <div className="w-full">
+            {cart.length > 0 && (
+                <div className="flex flex-col lg:flex-row gap-6 p-4">
+                    <div className="w-full lg:w-2/3">
+                        <div className="hidden md:flex justify-between border-b border-black py-4 mb-6">
+                            <p className="w-1/3">Products</p>
+                            <p className="w-1/5 text-center">Quantity</p>
+                            <p className="w-1/5 text-center">Price</p>
+                            <p className="w-1/5 text-center">Subtotal</p>
+                        </div>
+                        <div className="space-y-6">
+                            {cart.map((item) => {
+                                const subtotal = item.product.price * item.quantity;
 
-                                    return (
-                                        <div key={i.product.id} className="w-full flex items-center gap-[20px] h-[120px]">
-                                            <img src={i?.product?.imageUrl[0]} alt="" className="w-[100px] h-[100px]" />
-                                            <span className="flex flex-col w-[200px] gap-[20px] justify-center h-[100px]">
-                                                <p>{i?.product?.name}</p>
-                                                <p
-                                                    className="flex items-center gap-[10px] text-red-500 cursor-pointer"
-                                                    onClick={() => removeFromCart(i.product.id)}
+                                return (
+                                    <div key={item.product.id} className="flex flex-col md:flex-row md:items-center gap-4 p-4 border rounded-lg">
+                                        <div className="flex gap-4 md:w-1/3">
+                                            <img 
+                                                src={item.product.imageUrl[0]} 
+                                                alt={item.product.name} 
+                                                className="w-20 h-20 object-cover rounded"
+                                            />
+                                            <div className="flex flex-col justify-between">
+                                                <p className="font-medium">{item.product.name}</p>
+                                                <button
+                                                    onClick={() => removeFromCart(item.product.id)}
+                                                    className="flex items-center gap-2 text-red-500 text-sm"
                                                 >
                                                     <MdDelete /> Remove
-                                                </p>
-                                            </span>
-                                            <span className="flex items-center gap-1 border rounded">
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        {/* Quantity Controls */}
+                                        <div className="flex items-center justify-between md:justify-center md:w-1/5">
+                                            <span className="md:hidden">Quantity:</span>
+                                            <div className="flex items-center border rounded">
                                                 <button
-                                                    onClick={() => i.quantity > 1 && updateQuantity(i.product.id, i.quantity - 1)}
-                                                    className="w-8 h-8 flex items-center justify-center  disabled:opacity-50"
-                                                    disabled={i.quantity <= 1}
+                                                    onClick={() => item.quantity > 1 && updateQuantity(item.product.id, item.quantity - 1)}
+                                                    className="w-8 h-8 flex items-center justify-center disabled:opacity-50"
+                                                    disabled={item.quantity <= 1}
                                                 >
                                                     -
                                                 </button>
-                                                <p className="w-8 text-center">{i.quantity}</p>
+                                                <p className="w-8 text-center">{item.quantity}</p>
                                                 <button
-                                                    onClick={() => updateQuantity(i.product.id, i.quantity + 1)}
-                                                    className="w-8 h-8 flex items-center justify-center "
+                                                    onClick={() => updateQuantity(item.product.id, item.quantity + 1)}
+                                                    className="w-8 h-8 flex items-center justify-center"
                                                 >
                                                     +
                                                 </button>
-                                            </span>
-                                            <span className="flex gap-[20px] w-[200px] items-center justify-center h-[100px] ">
-                                                <p>${i.product.price}</p>
-                                            </span>
-                                            <span className="flex gap-[20px] w-[200px] items-center justify-center h-[100px] ">
-                                                <p>${subtotal.toFixed(2)}</p>
-                                            </span>
+                                            </div>
                                         </div>
-                                    )
-                                })
-                            }
+                                        <div className="flex justify-between md:justify-center md:w-1/5">
+                                            <span className="md:hidden">Price:</span>
+                                            <p>${item.product.price}</p>
+                                        </div>
+                                        <div className="flex justify-between md:justify-center md:w-1/5">
+                                            <span className="md:hidden">Subtotal:</span>
+                                            <p className="font-medium">${subtotal.toFixed(2)}</p>
+                                        </div>
+                                    </div>
+                                );
+                            })}
                         </div>
-                        <div className="w-[30%] h-[150px] flex mt-[70px] border rounded flex-col p-[10px]">
-                            <p>Cart Summary</p>
-                            <span className="h-[70px] flex items-center justify-between">
-                                <p>Total</p>
-                                <p className="text-[22px] text-[#1053D4]"> ${total}</p>
-                            </span>
+                    </div>
+                    <div className="w-full lg:w-1/3">
+                        <div className="sticky top-4 border rounded-lg p-6 space-y-4">
+                            <h2 className="text-xl font-semibold">Cart Summary</h2>
+                            <div className="flex justify-between items-center py-4 border-t">
+                                <p className="font-medium">Total</p>
+                                <p className="text-2xl text-blue-600">${total}</p>
+                            </div>
                             <button 
-                                className="w-[100%] h-[40px] rounded bg-[#1053D4] text-white"
                                 onClick={onCheckout}
+                                className="w-full py-3 px-4 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
                             >
                                 Checkout
                             </button>
                         </div>
-                    </>
-                    : null
-            }
+                    </div>
+                </div>
+            )}
         </div>
-    )
-}
+    );
+};
 
 export default Cart;

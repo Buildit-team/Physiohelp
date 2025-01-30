@@ -1,5 +1,7 @@
+import { useNavigate } from "react-router-dom"
 
 const Hero = () => {
+    const navigate = useNavigate()
     return (
         <div className="w-full p-2 flex items-center flex-col relative">
             <div className="w-[90%] h-[90vh] flex max-[650px]:w-full items-end">
@@ -12,7 +14,7 @@ const Hero = () => {
                         Get your self booked now!!!
                     </p>
                     <span className="gap-2 flex max-[650px]:justify-center max-[650px]:w-full">
-                        <button className="bg-[white] text-[#1053D4] rounded-[4px] h-[50px] w-[180px] max-[650px]:w-[150px] max-[650px]:text-[14px]">Schedule a session</button>
+                        <button className="bg-[white] text-[#1053D4] rounded-[4px] h-[50px] w-[180px] max-[650px]:w-[150px] max-[650px]:text-[14px]" onClick={()=> navigate('/appointment')}>Schedule a session</button>
                         <button className="border-[white] border  rounded-[4px] text-[white] h-[50px] w-[150px] max-[650px]:w-[100px] max-[650px]:text-[14px]">Learn more</button>
                     </span>
                 </div>
