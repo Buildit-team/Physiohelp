@@ -11,10 +11,12 @@
   },
   "dependencies": {
     "@motionone/utils": "^10.18.0",
+    "animate.css": "^4.1.1",
     "framer-motion": "11.3.29",
     "motion": "^11.14.1",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
+    "react-hot-toast": "^2.5.1",
     "react-icons": "^5.3.0",
     "react-router-dom": "^7.0.1",
     "swiper": "^11.1.15"

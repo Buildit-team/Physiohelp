@@ -2,7 +2,6 @@
 @tailwind components;
 @tailwind utilities;
 
-
 .scrollbar-hide {
   -ms-overflow-style: none;
   scrollbar-width: none;
@@ -52,4 +51,9 @@
   animation: marquee-reverse 30s linear infinite;
   white-space: nowrap;
   overflow: hidden;
+}
+
+.slideInRight {
+  animation: slideInRight;
+  animation-duration: 1s;
 }

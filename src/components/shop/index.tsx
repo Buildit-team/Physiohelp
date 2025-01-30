@@ -1,13 +1,16 @@
 import { useState } from "react";
 import { products } from "./data";
-// import { useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
+import { useCart } from "../../context/CartCaontex";
+
 
 const ShopPage = () => {
-    // const navigate = useNavigate()
+    const navigate = useNavigate()
     const [filteredProducts, setFilteredProducts] = useState(products);
-    const [sortOrder, setSortOrder] = useState(""); // 'asc' for ascending, 'desc' for descending
-    const [priceFilter, setPriceFilter] = useState(""); // Selected price range
-
+    const [sortOrder, setSortOrder] = useState("");
+    const [priceFilter, setPriceFilter] = useState("");
+    const { addToCart } = useCart();
+    
     const priceRanges = [
         { label: "All Price", min: 0, max: Infinity },
         { label: "$0 - $50", min: 0, max: 50 },
@@ -43,7 +46,6 @@ const ShopPage = () => {
 
     return (
         <div className="w-full flex flex-col items-center justify-center gap-[20px]">
-            {/* Header Section */}
             <div className="w-full flex justify-center items-center mt-[100px]">
                 <div className="flex ml-[30px] w-[80%] flex-col items-center bg-[url('/shop-page.svg')] h-[60vh] max-[650px]:object-contain bg-no-repeat max-[650px]:ml-0 max-[650px]:w-[90%]">
                     <span className="flex flex-col items-center justify-center h-[70%] text-center max-[650px]:p-2">
@@ -52,10 +54,7 @@ const ShopPage = () => {
                     </span>
                 </div>
             </div>
-
-            {/* Filter and Sort Controls */}
             <div className="flex w-[77%] justify-between mb-[20px] gap-4 max-[650px]:flex-col max-[650px]:w-[90%]">
-                {/* Price Filter Dropdown */}
                 <div className="max-[650px]:w-full">
                     <select
                         value={priceFilter}
@@ -73,7 +72,7 @@ const ShopPage = () => {
                     <select
                         value={sortOrder}
                         onChange={(e) => handleSort(e.target.value)}
-                        className="border p-2 max-[650px]:w-full"
+                        className="border p-2 max-[650px]:w-full outline-none"
                     >
                         <option value="">Sort by</option>
                         <option value="asc">Price: Low to High</option>
@@ -90,9 +89,12 @@ const ShopPage = () => {
                         <div
                             className="h-[250px] max-[650px]:h-[200px] w-[100%] flex items-center bg-[#F3F5F7] p-[20px] relative group"
                         >
-                            <img src={i.imageUrl} alt={i.name} />
-                            <div className="flex absolute inset-0 w-full h-[90%] justify-center items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                <button className="w-[90%] h-[40px] bg-white rounded-[4px] max-[650px]:h-[30px] max-[650px]:text-[12px]">
+                            <img src={i.imageUrl[0]} alt={i.name} />
+                            <div className="flex flex-col absolute inset-0 w-full h-[90%] justify-between items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                                <span className="flex w-full h-[80%]" onClick={() => navigate(`/shop/${i.id}`)} />
+                                <button
+                                    onClick={() => addToCart(i)}
+                                    className="w-[90%] h-[40px] bg-white rounded-[4px] max-[650px]:h-[30px] max-[650px]:text-[12px]">
                                     Add to cart
                                 </button>
                             </div>
@@ -112,3 +114,4 @@ const ShopPage = () => {
 };
 
 export default ShopPage;
+
