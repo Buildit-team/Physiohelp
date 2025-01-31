@@ -80,7 +80,7 @@ const Cart = ({ onCheckout }: CartProps) => {
                             <h2 className="text-xl font-semibold">Cart Summary</h2>
                             <div className="flex justify-between items-center py-4 border-t">
                                 <p className="font-medium">Total</p>
-                                <p className="text-2xl text-blue-600">${total}</p>
+                                <p className="text-2xl text-blue-600">${total.toFixed(2)}</p>
                             </div>
                             <button 
                                 onClick={onCheckout}

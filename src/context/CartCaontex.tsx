@@ -1,5 +1,4 @@
-import { createContext, useContext, useState, ReactNode } from 'react';
-
+import { createContext, useContext, useState, ReactNode, useEffect } from 'react';
 import toast from 'react-hot-toast';
 import { products } from '../components/shop/data';
 
@@ -20,8 +19,14 @@ type CartContextType = {
 const CartContext = createContext<CartContextType | undefined>(undefined);
 
 export function CartProvider({ children }: { children: ReactNode }) {
-    const [cart, setCart] = useState<CartItem[]>([]);
+    const [cart, setCart] = useState<CartItem[]>(() => {
+        const savedCart = localStorage.getItem('cart');
+        return savedCart ? JSON.parse(savedCart) : [];
+    });
 
+    useEffect(() => {
+        localStorage.setItem('cart', JSON.stringify(cart));
+    }, [cart]);
 
     const addToCart = (product: typeof products[0]) => {
         const existingProductIndex = cart.findIndex(item => item.product.id === product.id);
@@ -70,7 +75,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
     );
 }
 
-// Custom hook to use the cart context
 export function useCart() {
     const context = useContext(CartContext);
     if (context === undefined) {
