@@ -1,9 +1,17 @@
 import { useState } from "react";
 import Cart from "./Cart";
 import Checkout from "./Checkout";
+import SummaryPage from "./SummaryPage";
 
 const Carting = () => {
     const [activeTab, setActiveTab] = useState<'Shopping Cart' | 'checkout' | 'order'>('Shopping Cart');
+    const [orderDetails, setOrderDetails] = useState<any>(null);
+
+    const handleCheckoutSubmit = (formData: any) => {
+        setOrderDetails(formData);
+        setActiveTab('order');
+        localStorage.setItem('orderDetails', JSON.stringify(formData));
+    };
 
     return (
         <div className="w-[100%] mt-[100px] flex flex-col items-center bg-white slideInRight">
@@ -29,14 +37,7 @@ const Carting = () => {
                 >
                     Make Payment
                 </button>
-                <button
-                    className={`font-bold ${activeTab === 'order' ? 'text-black border-b-2 border-black' : 'text-gray-500'} md:block hidden`}
-                    onClick={() => setActiveTab('order')}
-                >
-                    Order Complete
-                </button>
             </span>
-            {/* Mobile Tabs */}
             <div className="md:hidden w-full flex justify-center gap-[30px] p-[10px] items-center">
                 <button
                     className={`font-bold ${activeTab === 'Shopping Cart' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}
@@ -59,10 +60,9 @@ const Carting = () => {
             </div>
             <div className="w-[80%] max-[650px]:w-[100%]">
                 {activeTab === 'Shopping Cart' && <Cart onCheckout={() => setActiveTab('checkout')} />}
-                {activeTab === 'checkout' && <Checkout />}
-                {activeTab === 'order' && 'Order page'}
+                {activeTab === 'checkout' && <Checkout onCheckoutSubmit={handleCheckoutSubmit} />}
+                {activeTab === 'order' && <SummaryPage orderDetails={orderDetails} />}
             </div>
-
         </div>
     )
 }

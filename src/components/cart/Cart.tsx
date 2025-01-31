@@ -23,7 +23,6 @@ const Cart = ({ onCheckout }: CartProps) => {
                         <div className="space-y-6">
                             {cart.map((item) => {
                                 const subtotal = item.product.price * item.quantity;
-
                                 return (
                                     <div key={item.product.id} className="flex flex-col md:flex-row md:items-center gap-4 p-4 border rounded-lg">
                                         <div className="flex gap-4 md:w-1/3">
