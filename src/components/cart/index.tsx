@@ -2,15 +2,21 @@ import { useState } from "react";
 import Cart from "./Cart";
 import Checkout from "./Checkout";
 import SummaryPage from "./SummaryPage";
+import { useCart } from "../../context/CartCaontex";
+
 
 const Carting = () => {
     const [activeTab, setActiveTab] = useState<'Shopping Cart' | 'checkout' | 'order'>('Shopping Cart');
     const [orderDetails, setOrderDetails] = useState<any>(null);
+    const { cart, getTotalAmount } = useCart(); 
+    const total = getTotalAmount();
 
     const handleCheckoutSubmit = (formData: any) => {
         setOrderDetails(formData);
         setActiveTab('order');
         localStorage.setItem('orderDetails', JSON.stringify(formData));
+        localStorage.setItem('cart', JSON.stringify(cart));
+        localStorage.setItem('total', JSON.stringify(total));
     };
 
     return (
@@ -35,7 +41,7 @@ const Carting = () => {
                     className={`font-bold ${activeTab === 'order' ? 'text-black border-b-2 border-black' : 'text-gray-500'} md:block hidden`}
                     onClick={() => setActiveTab('order')}
                 >
-                    Make Payment
+                    Order Summary
                 </button>
             </span>
             <div className="md:hidden w-full flex justify-center gap-[30px] p-[10px] items-center">
@@ -55,16 +61,22 @@ const Carting = () => {
                     className={`font-bold ${activeTab === 'order' ? 'text-black border-b-2 border-black' : 'text-gray-500'}`}
                     onClick={() => setActiveTab('order')}
                 >
-                    Payment
+                    Summary
                 </button>
             </div>
             <div className="w-[80%] max-[650px]:w-[100%]">
                 {activeTab === 'Shopping Cart' && <Cart onCheckout={() => setActiveTab('checkout')} />}
                 {activeTab === 'checkout' && <Checkout onCheckoutSubmit={handleCheckoutSubmit} />}
-                {activeTab === 'order' && <SummaryPage orderDetails={orderDetails} />}
+                {activeTab === 'order' && (
+                    <SummaryPage
+                        orderDetails={orderDetails}
+                        cart={cart}
+                        total={total}
+                    />
+                )}
             </div>
         </div>
-    )
-}
+    );
+};
 
 export default Carting;

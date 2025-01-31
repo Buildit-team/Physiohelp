@@ -3,7 +3,7 @@ import { createContext, useContext, useState, ReactNode } from 'react';
 import toast from 'react-hot-toast';
 import { products } from '../components/shop/data';
 
-type CartItem = {
+export type CartItem = {
     product: typeof products[0];
     quantity: number;
 };
