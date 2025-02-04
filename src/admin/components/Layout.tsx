@@ -2,41 +2,49 @@ import { useEffect, useState } from "react";
 import { Outlet, useLocation } from "react-router-dom";
 import Sidebar from "../sidebar";
 import { IoMdNotificationsOutline } from "react-icons/io";
+import { RxHamburgerMenu } from "react-icons/rx";
+import { routeTitleMap } from "../../utils/routeTitle";
 
 const Layout = () => {
     const location = useLocation();
     const [currentTitle, setCurrentTitle] = useState("Dashboard");
-    const routeTitleMap: { [key: string]: string } = {
-        "/admin": "Dashboard",
-        "/admin/product": "Product",
-        "/admin/order": "Order",
-        "/admin/customer": 'Customer',
-        "/admin/report": 'Report',
-        "/admin/blog": 'Blog'
-    };
+    const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
     useEffect(() => {
         const title = routeTitleMap[location.pathname] || "Admin";
-        setCurrentTitle(title)
+        setCurrentTitle(title);
         document.title = title;
     }, [location.pathname]);
 
+    const toggleSidebar = () => {
+        setIsSidebarOpen(!isSidebarOpen);
+    };
+
     return (
         <div className="w-full flex h-screen">
-            <div className="flex w-[20%]">
-                <Sidebar />
+            <div
+                className={`fixed md:fixed top-0 left-0 w-[20%] max-[650px]:w-[80%] h-screen bg-[#1053D4] transform transition-transform duration-300 ease-in-out ${
+                    isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+                } z-40`}
+            >
+                <Sidebar onClose={() => setIsSidebarOpen(false)} />
             </div>
-            <div className="flex w-[80%] flex-col">
-                <div className="w-full h-[8%] flex justify-center">
-                    <div className="flex w-[95%] h-full">
-                        <span className="flex w-[20%] items-center">
-                            <p className="text-[20px]">{currentTitle}</p>
+            <div className="flex w-full md:w-[80%] md:ml-[20%] flex-col">
+                <div className="sticky top-0 w-full h-auto min-h-[70px] md:h-[18%] flex justify-center bg-white shadow-sm z-30">
+                    <div className="flex w-full px-4 md:w-[95%] h-full items-center py-3">
+                        <span className="md:hidden flex items-center ml-8">
+                            <p className="text-lg font-medium">{currentTitle}</p>
                         </span>
-                        <div className="w-[80%] flex justify-end gap-[10px] items-center">
-                            <span className="w-[120px] h-[30px] flex items-center justify-center rounded-[8px] bg-[#E1E6FF]">
-                                <p>Admin Yusuf</p>
+                        <span className="hidden md:flex w-[20%] items-center">
+                            <p className="text-xl font-medium">{currentTitle}</p>
+                        </span>
+                        <div className="flex-1 md:w-[80%] flex justify-end gap-3 md:gap-[10px] items-center">
+                            <span className="flex items-center justify-center px-3 py-1.5 rounded-[8px] bg-[#E1E6FF]">
+                                <p className="text-sm md:text-base">Admin Yusuf</p>
                             </span>
-                            <IoMdNotificationsOutline size={25} />
+                            <button className="p-2 rounded-full hover:bg-gray-100">
+                                <IoMdNotificationsOutline className="w-6 h-6" />
+                            </button>
                         </div>
                     </div>
                 </div>
@@ -45,6 +53,11 @@ const Layout = () => {
                         <Outlet />
                     </div>
                 </div>
+            </div>
+            <div className="md:hidden fixed top-4 left-2 z-50">
+                <button onClick={toggleSidebar} className="p-2 rounded-lg bg-white shadow-md">
+                    <RxHamburgerMenu className="text-[#1053D4]" />
+                </button>
             </div>
         </div>
     );

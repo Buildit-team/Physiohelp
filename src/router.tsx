@@ -9,11 +9,12 @@ import Appointment from "./components/appointment";
 import BookAppointment from "./components/appointment/BookAppointment";
 import AppointmentPreview from "./components/appointment/AppointmentPreview";
 import Admin from "./admin";
-import Blog from "./components/body/blog";
 import CustomerManagement from "./admin/components/customer";
 import OrderManagement from "./admin/components/order";
 import Products from "./admin/components/products";
 import ReportManagement from "./admin/components/report";
+import BlogManagment from "./admin/components/blog";
+import AddProduct from "./admin/components/products/AddProduct";
 
 
 export const Routes = createHashRouter([
@@ -89,6 +90,10 @@ export const Routes = createHashRouter([
                 element: <Products />
             },
             {
+                path: '/admin/add-product',
+                element: <AddProduct />
+            },
+            {
                 path: '/admin/order',
                 element: <OrderManagement />
             },
@@ -102,7 +107,7 @@ export const Routes = createHashRouter([
             },
             {
                 path: '/admin/blog',
-                element: <Blog />
+                element: <BlogManagment />
             },
         ]
     },
