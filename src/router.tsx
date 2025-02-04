@@ -8,6 +8,12 @@ import ScrollToTop from "./utils/ScrollToTop";
 import Appointment from "./components/appointment";
 import BookAppointment from "./components/appointment/BookAppointment";
 import AppointmentPreview from "./components/appointment/AppointmentPreview";
+import Admin from "./admin";
+import Blog from "./components/body/blog";
+import CustomerManagement from "./admin/components/customer";
+import OrderManagement from "./admin/components/order";
+import Products from "./admin/components/products";
+import ReportManagement from "./admin/components/report";
 
 
 export const Routes = createHashRouter([
@@ -74,4 +80,31 @@ export const Routes = createHashRouter([
                 </Layout>
             </ScrollToTop>
     },
+    {
+        path: '/admin',
+        element: <Admin />,
+        children: [
+            {
+                path: '/admin/product',
+                element: <Products />
+            },
+            {
+                path: '/admin/order',
+                element: <OrderManagement />
+            },
+            {
+                path: '/admin/customer',
+                element: <CustomerManagement />
+            },
+            {
+                path: '/admin/report',
+                element: <ReportManagement />
+            },
+            {
+                path: '/admin/blog',
+                element: <Blog />
+            },
+        ]
+    },
+
 ])
