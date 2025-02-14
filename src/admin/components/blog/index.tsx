@@ -59,8 +59,8 @@ const BlogManagment: React.FC = () => {
   ];
   const buttons = [
     {
-      label: 'Add Product',
-      onClick: () => navigate('/admin/add-product'),
+      label: 'Add Blog',
+      onClick: () => navigate('/admin/add-blog'),
       variant: 'primary' as const
     },
 

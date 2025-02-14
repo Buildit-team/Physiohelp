@@ -16,6 +16,9 @@ import ReportManagement from "./admin/components/report";
 import BlogManagment from "./admin/components/blog";
 import AddProduct from "./admin/components/products/AddProduct";
 import CustomerDetailsPage from "./admin/components/customer/DetailsPage";
+import BlogUploadPage from "./admin/components/blog/AddBlog";
+import BlogPreviewPage from "./admin/components/blog/BlogPreview";
+import BlogPostSuccess from "./admin/components/blog/UploadSuccess";
 
 
 export const Routes = createHashRouter([
@@ -113,6 +116,18 @@ export const Routes = createHashRouter([
             {
                 path: '/admin/blog',
                 element: <BlogManagment />
+            },
+            {
+                path: '/admin/add-blog',
+                element: <BlogUploadPage />
+            },
+            {
+                path: '/admin/preview-blog',
+                element: <BlogPreviewPage />
+            },
+            {
+                path: '/admin/blog-upload-success',
+                element: <BlogPostSuccess />
             },
         ]
     },

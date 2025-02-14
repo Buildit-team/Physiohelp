@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { ChevronUp, ChevronDown, Pencil, Trash2, Eye, Search, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format, isWithinInterval, parseISO } from 'date-fns';
 import { DataItemT, TablePropsT, DateRange, ButtonPropsT, ImageWithTextConfig } from '../interface/addProduct';
+import { Key } from 'react';
 
 
 
@@ -205,13 +206,13 @@ const Table = <T extends DataItemT>({
               <input
                 type="date"
                 className="px-3 py-2 border rounded-md text-sm"
-                onChange={(e) => setDate(prev => ({ ...prev, from: e.target.value ? new Date(e.target.value) : undefined }))}
+                onChange={(e) => setDate((prev) => ({ ...prev, from: e.target.value ? new Date(e.target.value) : undefined }))}
               />
               <span className="text-gray-500">to</span>
               <input
                 type="date"
                 className="px-3 py-2 border rounded-md text-sm"
-                onChange={(e) => setDate(prev => ({ ...prev, to: e.target.value ? new Date(e.target.value) : undefined }))}
+                onChange={(e) => setDate((prev) => ({ ...prev, to: e.target.value ? new Date(e.target.value) : undefined }))}
               />
             </div>
           </div>
@@ -256,7 +257,7 @@ const Table = <T extends DataItemT>({
             </tr>
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
-            {paginatedData.map((item, rowIndex) => (
+            {paginatedData.map((item: T, rowIndex: Key | null | undefined) => (
               <tr key={rowIndex}>
                 {columns.map((column, colIndex) => (
                   <td
