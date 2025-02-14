@@ -15,6 +15,7 @@ import Products from "./admin/components/products";
 import ReportManagement from "./admin/components/report";
 import BlogManagment from "./admin/components/blog";
 import AddProduct from "./admin/components/products/AddProduct";
+import CustomerDetailsPage from "./admin/components/customer/DetailsPage";
 
 
 export const Routes = createHashRouter([
@@ -102,6 +103,10 @@ export const Routes = createHashRouter([
                 element: <CustomerManagement />
             },
             {
+                path: '/admin/customer/:id',
+                element: <CustomerDetailsPage />
+            },
+            {
                 path: '/admin/report',
                 element: <ReportManagement />
             },
@@ -111,5 +116,4 @@ export const Routes = createHashRouter([
             },
         ]
     },
-
 ])

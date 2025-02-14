@@ -1,54 +1,10 @@
 import { useNavigate } from "react-router-dom";
-import Table, { ColumnT } from "../../../utils/Table";
+import Table from "../../../utils/Table";
+import { ColumnT, Product } from "../../../interface/addProduct";
+import { products } from "./data";
 
-type Product = {
-    id: string;
-    name: string;
-    sku: string;
-    stock: number;
-    price: number;
-    status: 'Published' | 'Low Stock';
-    added: string;
-};
-const products: Product[] = [
-    {
-        id: '1',
-        name: 'Massage Chair',
-        sku: '302012',
-        stock: 10,
-        price: 121.00,
-        status: 'Low Stock',
-        added: '29 Dec 2022'
-    },
-    {
-        id: '2',
-        name: 'Hand Grip',
-        sku: '302011',
-        stock: 204,
-        price: 590.00,
-        status: 'Published',
-        added: '24 Dec 2022'
-    },
-    {
-        id: '3',
-        name: 'Facial Gun',
-        sku: '302002',
-        stock: 48,
-        price: 125.00,
-        status: 'Published',
-        added: '12 Dec 2022'
-    },
-    {
-        id: '4',
-        name: 'Mini exercise bicycle',
-        sku: '301901',
-        stock: 401,
-        price: 348.00,
-        status: 'Published',
-        added: '21 Oct 2022'
-    }
-];
-// Usage in your component
+
+
 const Products = () => {
     const navigate = useNavigate()
     const columns: ColumnT<Product>[] = [
@@ -56,6 +12,17 @@ const Products = () => {
             key: 'name',
             header: 'Products',
             sortable: false,
+            isImageWithText: true,
+            imageWithTextConfig: {
+                imageKey: 'productImage',
+                textKey: 'name',
+                imageConfig: {
+                    width: '48px',
+                    height: '48px',
+                    className: 'rounded-md',
+                    fallbackSrc: '/placeholder-product.png'
+                }
+            }
         },
         {
             key: 'sku',
@@ -79,8 +46,8 @@ const Products = () => {
             render: (value) => (
                 <span
                     className={`px-2 py-1 rounded-full text-xs ${value === 'Low Stock'
-                            ? 'bg-red-100 text-red-800'
-                            : 'bg-yellow-100 text-yellow-800'
+                        ? 'bg-red-100 text-red-800'
+                        : 'bg-yellow-100 text-yellow-800'
                         }`}
                 >
                     {value}
@@ -109,7 +76,7 @@ const Products = () => {
         {
             label: 'Add Product',
             onClick: () => navigate('/admin/add-product'),
-            variant: 'primary' as 'primary'
+            variant: 'primary' as const
         },
 
     ];

@@ -1,50 +1,37 @@
 import React, { useState } from 'react';
 import { ChevronUp, ChevronDown, Pencil, Trash2, Eye, Search, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
 import { format, isWithinInterval, parseISO } from 'date-fns';
+import { DataItemT, TablePropsT, DateRange, ButtonPropsT, ImageWithTextConfig } from '../interface/addProduct';
 
-type DateRange = {
-  from: Date | undefined;
-  to: Date | undefined;
-};
 
-type ButtonPropsT = {
-  label: string;
-  onClick: () => void;
-  variant?: 'primary' | 'secondary' | 'outline';
-};
 
-type FilterOption = {
-  label: string;
-  value: string;
-};
+const ImageWithTextCell = <T extends DataItemT>({
+  item,
+  config
+}: {
+  item: T;
+  config: ImageWithTextConfig;
+}) => {
+  const [imageError, setImageError] = useState(false);
 
-type DataItemT = {
-  [key: string]: any;
-};
-
-export type ColumnT<T> = {
-  key: keyof T;
-  header: string;
-  sortable?: boolean;
-  searchable?: boolean;
-  render?: (value: any, item: T) => React.ReactNode;
-};
-
-type TablePropsT<T> = {
-  data?: T[];
-  columns: ColumnT<T>[];
-  actions?: {
-    onEdit?: (item: T) => void;
-    onDelete?: (item: T) => void;
-    onView?: (item: T) => void;
-  };
-  buttons?: ButtonPropsT[];
-  className?: string;
-  searchPlaceholder?: string;
-  filterOptions?: FilterOption[];
-  filterKey?: keyof T;
-  dateFilterKey?: keyof T;
-  itemsPerPage?: number;
+  return (
+    <div className="flex items-center gap-3">
+      <img
+        src={imageError && config.imageConfig?.fallbackSrc ?
+          config.imageConfig.fallbackSrc :
+          item[config.imageKey] as string
+        }
+        alt={String(item[config.textKey])}
+        className={`object-cover rounded-md ${config.imageConfig?.className || ''}`}
+        style={{
+          width: config.imageConfig?.width || '40px',
+          height: config.imageConfig?.height || '40px'
+        }}
+        onError={() => setImageError(true)}
+      />
+      <span className="font-medium text-gray-900">{item[config.textKey]}</span>
+    </div>
+  );
 };
 
 const Table = <T extends DataItemT>({
@@ -84,15 +71,23 @@ const Table = <T extends DataItemT>({
   const filteredData = React.useMemo(() => {
     let filtered = data;
 
+
     if (searchQuery) {
       filtered = filtered.filter((item) =>
-        columns.some(
-          (column) =>
-            column.searchable &&
-            String(item[column.key])
+        columns.some((column) => {
+          if (column.searchable) {
+            if (column.isImageWithText && column.imageWithTextConfig) {
+              // Search in the text part of combined fields
+              return String(item[column.imageWithTextConfig.textKey])
+                .toLowerCase()
+                .includes(searchQuery.toLowerCase());
+            }
+            return String(item[column.key])
               .toLowerCase()
-              .includes(searchQuery.toLowerCase())
-        )
+              .includes(searchQuery.toLowerCase());
+          }
+          return false;
+        })
       );
     }
 
@@ -111,7 +106,7 @@ const Table = <T extends DataItemT>({
     }
 
     return filtered;
-  }, [data, searchQuery, activeFilter, filterKey, columns, date]);
+  }, [data, searchQuery, filterKey, activeFilter, dateFilterKey, date.from, date.to, columns]);
 
   const sortedData = React.useMemo(() => {
     if (!sortConfig.key) return filteredData;
@@ -195,8 +190,8 @@ const Table = <T extends DataItemT>({
                 key={option.value}
                 onClick={() => setActiveFilter(option.value)}
                 className={`px-4 py-2 rounded-md text-sm font-medium transition-colors ${activeFilter === option.value
-                    ? 'bg-blue-100 text-blue-700'
-                    : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  ? 'bg-blue-100 text-blue-700'
+                  : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
               >
                 {option.label}
@@ -268,11 +263,18 @@ const Table = <T extends DataItemT>({
                     key={`${String(column.key)}-${rowIndex}-${colIndex}`}
                     className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
                   >
-                    {column.render
-                      ? column.render(item[column.key], item)
-                      : typeof item[column.key] === 'string' && !isNaN(Date.parse(item[column.key]))
-                        ? format(new Date(item[column.key]), 'yyyy-MM-dd')
-                        : item[column.key]}
+                    {column.isImageWithText && column.imageWithTextConfig ? (
+                      <ImageWithTextCell
+                        item={item}
+                        config={column.imageWithTextConfig}
+                      />
+                    ) : column.render ? (
+                      column.render(item[column.key], item)
+                    ) : typeof item[column.key] === 'string' && !isNaN(Date.parse(item[column.key])) ? (
+                      format(new Date(item[column.key]), 'yyyy-MM-dd')
+                    ) : (
+                      item[column.key]
+                    )}
                   </td>
                 ))}
                 {actions && (
@@ -319,11 +321,18 @@ const Table = <T extends DataItemT>({
               <div key={`${String(column.key)}-${rowIndex}-${colIndex}`} className="mb-3 flex justify-between">
                 <div className="text-sm font-medium text-gray-500">{column.header}</div>
                 <div className="text-sm text-gray-700">
-                  {column.render
-                    ? column.render(item[column.key], item)
-                    : typeof item[column.key] === 'string' && !isNaN(Date.parse(item[column.key]))
-                      ? format(new Date(item[column.key]), 'yyyy-MM-dd')
-                      : item[column.key]}
+                  {column.isImageWithText && column.imageWithTextConfig ? (
+                    <ImageWithTextCell
+                      item={item}
+                      config={column.imageWithTextConfig}
+                    />
+                  ) : column.render ? (
+                    column.render(item[column.key], item)
+                  ) : typeof item[column.key] === 'string' && !isNaN(Date.parse(item[column.key])) ? (
+                    format(new Date(item[column.key]), 'yyyy-MM-dd')
+                  ) : (
+                    item[column.key]
+                  )}
                 </div>
               </div>
             ))}
@@ -359,7 +368,6 @@ const Table = <T extends DataItemT>({
         ))}
       </div>
 
-      {/* Pagination Controls */}
       <div className="flex flex-col md:flex-row items-center justify-between mt-4 gap-4">
         <div className="text-sm text-gray-500">
           Showing {startIndex + 1} to {Math.min(endIndex, totalItems)} of {totalItems} entries

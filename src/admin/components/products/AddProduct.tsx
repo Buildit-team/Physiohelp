@@ -1,23 +1,5 @@
 import React, { useState } from 'react';
-
-interface ProductFormData {
-    name: string;
-    description: string;
-    status: 'Low Stock' | 'In Stock' | 'Out of Stock';
-    basePrice: number;
-    discountType: string;
-    discountPercentage: number;
-    taxClass: string;
-    vatAmount: number;
-    sku: string;
-    barcode: string;
-    quantity: number;
-    weight: number;
-    height: number;
-    length: number;
-    width: number;
-    photo: File | null;
-}
+import { ProductFormData } from '../../../interface/addProduct';
 
 const AddProduct: React.FC = () => {
     const [formData, setFormData] = useState<ProductFormData>({
@@ -36,10 +18,10 @@ const AddProduct: React.FC = () => {
         height: 0,
         length: 0,
         width: 0,
-        photo: null,
+        photos: [],
     });
 
-    const [photoPreview, setPhotoPreview] = useState<string>('');
+    const [photoPreviews, setPhotoPreviews] = useState<string[]>([]);
 
     const handleInputChange = (
         e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
@@ -52,24 +34,25 @@ const AddProduct: React.FC = () => {
     };
 
     const handlePhotoChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        if (e.target.files && e.target.files[0]) {
-            const file = e.target.files[0];
-            setFormData((prev) => ({ ...prev, photo: file }));
-            setPhotoPreview(URL.createObjectURL(file));
+        if (e.target.files && e.target.files.length > 0) {
+            const files = Array.from(e.target.files);
+            const newPreviews = files.map(file => URL.createObjectURL(file));
+
+            setFormData((prev) => ({ ...prev, photos: [...prev.photos, ...files] }));
+            setPhotoPreviews((prev) => [...prev, ...newPreviews]);
         }
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        // Here you would typically send the formData to your backend
         console.log('Form submitted:', formData);
     };
 
     return (
-        <form onSubmit={handleSubmit} className="w-[100%] mx-auto p-4 overflow-scroll flex">
-            <div className='w-[60%] mt-[30px]'>
-                {/* General Information */}
-                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%]">
+        <form onSubmit={handleSubmit} className="w-[100%] mx-auto p-4 max-[650px]:p-0 overflow-scroll flex max-[650px]:flex-col">
+            <div className='w-[60%] mt-[30px] max-[650px]:w-full '>
+                {/* General Information Section */}
+                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">General Information</h2>
                     <div className="space-y-4">
                         <div>
@@ -98,27 +81,34 @@ const AddProduct: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Media */}
-                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%]">
+                {/* Media Section */}
+                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">Media</h2>
                     <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center">
-                        {photoPreview ? (
-                            <div className="relative">
-                                <img
-                                    src={photoPreview}
-                                    alt="Preview"
-                                    className="max-h-48 mx-auto"
-                                />
-                                <button
-                                    type="button"
-                                    className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 rounded-md text-sm"
-                                    onClick={() => {
-                                        setPhotoPreview('');
-                                        setFormData((prev) => ({ ...prev, photo: null }));
-                                    }}
-                                >
-                                    Remove
-                                </button>
+                        {photoPreviews.length > 0 ? (
+                            <div className="grid grid-cols-3 gap-4">
+                                {photoPreviews.map((preview, index) => (
+                                    <div key={index} className="relative">
+                                        <img
+                                            src={preview}
+                                            alt={`Preview ${index + 1}`}
+                                            className="max-h-48 mx-auto"
+                                        />
+                                        <button
+                                            type="button"
+                                            className="absolute top-0 right-0 bg-red-500 text-white px-2 py-1 rounded-md text-sm"
+                                            onClick={() => {
+                                                const updatedPreviews = photoPreviews.filter((_, i) => i !== index);
+                                                const updatedFiles = formData.photos.filter((_, i) => i !== index);
+
+                                                setPhotoPreviews(updatedPreviews);
+                                                setFormData((prev) => ({ ...prev, photos: updatedFiles }));
+                                            }}
+                                        >
+                                            Remove
+                                        </button>
+                                    </div>
+                                ))}
                             </div>
                         ) : (
                             <div>
@@ -128,20 +118,21 @@ const AddProduct: React.FC = () => {
                                     onChange={handlePhotoChange}
                                     className="hidden"
                                     id="photo-upload"
+                                    multiple
                                 />
                                 <label
                                     htmlFor="photo-upload"
                                     className="cursor-pointer text-blue-600 hover:text-blue-800"
                                 >
-                                    Drag and drop image here, or click to add image
+                                    Drag and drop images here, or click to add images
                                 </label>
                             </div>
                         )}
                     </div>
                 </div>
 
-                {/* Pricing */}
-                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%]">
+                {/* Pricing Section */}
+                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">Pricing</h2>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
@@ -171,8 +162,8 @@ const AddProduct: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Inventory */}
-                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%]">
+                {/* Inventory Section */}
+                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">Inventory</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
@@ -211,8 +202,8 @@ const AddProduct: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Shipping and Delivery */}
-                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%]">
+                {/* Shipping and Delivery Section */}
+                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">Shipping and Delivery</h2>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
@@ -262,9 +253,7 @@ const AddProduct: React.FC = () => {
                     </div>
                 </div>
             </div>
-
-            {/* Form Actions */}
-            <div className=" w-[40%] flex justify-end gap-4">
+            <div className=" w-[40%] flex justify-end gap-4 max-[650px]:w-full max-[650px]:justify-center max-[650px]:mb-[10px]">
                 <button
                     type="button"
                     className="px-4 py-2 h-[40px] bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"

@@ -29,8 +29,8 @@ const Layout = () => {
             >
                 <Sidebar onClose={() => setIsSidebarOpen(false)} />
             </div>
-            <div className="flex w-full md:w-[80%] md:ml-[20%] flex-col">
-                <div className="sticky top-0 w-full h-auto min-h-[70px] md:h-[18%] flex justify-center bg-white shadow-sm z-30">
+            <div className="flex w-full md:w-[80%] md:ml-[20%] flex-col gap-[20px]">
+                <div className="sticky top-0 w-full h-auto min-h-[70px] flex justify-center bg-white shadow-sm z-100">
                     <div className="flex w-full px-4 md:w-[95%] h-full items-center py-3">
                         <span className="md:hidden flex items-center ml-8">
                             <p className="text-lg font-medium">{currentTitle}</p>
