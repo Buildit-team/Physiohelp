@@ -38,11 +38,12 @@ const Appointment = () => {
                                 "20 Minute Physical Therapy “Discover Session”",
                                 "Recommended Physiotherapy Tools",
                                 "Mobility & Injury-Risk Assessment",
+                                "Home service",
                                 "Other"
                             ].map((service) => (
                                 <label key={service} className="flex items-center">
                                     <input
-                                        type="radio" 
+                                        type="radio"
                                         value={service}
                                         checked={services === service}
                                         onChange={(e) => setServices(e.target.value)}
