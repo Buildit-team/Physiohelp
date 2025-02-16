@@ -1,9 +1,22 @@
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
+interface AppointmentData {
+    services: string;
+    limitation: string;
+    painDuration: string;
+    date: string;
+    time: string;
+    fullName: string;
+    phoneNumber: string;
+    email: string;
+    location: string;
+    painLocation: string
+}
+
 const AppointmentPreview = () => {
     const navigate = useNavigate();
-    const [appointmentData, setAppointmentData] = useState<any>(null);
+    const [appointmentData, setAppointmentData] = useState<AppointmentData>();
 
     useEffect(() => {
         const data = localStorage.getItem('appointmentData');
@@ -29,11 +42,13 @@ const AppointmentPreview = () => {
                 <h1 className="text-2xl font-medium mb-6">Review Your Appointment</h1>
 
                 <div className="space-y-4">
+                    {/* Selected Services */}
                     <div className="border-b pb-4">
                         <h2 className="text-xl text-blue-600 mb-2">Selected Services</h2>
                         <p className="text-gray-700">{appointmentData.services}</p>
                     </div>
 
+                    {/* Medical Details */}
                     <div className="border-b pb-4">
                         <h2 className="text-xl text-blue-600 mb-2">Medical Details</h2>
                         <p className="text-gray-700"><strong>Pain Location:</strong> {appointmentData.painLocation}</p>
@@ -41,13 +56,24 @@ const AppointmentPreview = () => {
                         <p className="text-gray-700"><strong>Pain Duration:</strong> {appointmentData.painDuration}</p>
                     </div>
 
+                    {/* Appointment Time */}
                     <div className="border-b pb-4">
                         <h2 className="text-xl text-blue-600 mb-2">Appointment Time</h2>
                         <p className="text-gray-700"><strong>Date:</strong> {new Date(appointmentData.date).toLocaleDateString()}</p>
                         <p className="text-gray-700"><strong>Time:</strong> {appointmentData.time}</p>
                     </div>
+
+                    {/* Personal Information */}
+                    <div className="border-b pb-4">
+                        <h2 className="text-xl text-blue-600 mb-2">Personal Information</h2>
+                        <p className="text-gray-700"><strong>Full Name:</strong> {appointmentData.fullName}</p>
+                        <p className="text-gray-700"><strong>Phone Number:</strong> {appointmentData.phoneNumber}</p>
+                        <p className="text-gray-700"><strong>Email:</strong> {appointmentData.email}</p>
+                        <p className="text-gray-700"><strong>Preferred Location:</strong> {appointmentData.location}</p>
+                    </div>
                 </div>
 
+                {/* Buttons */}
                 <div className="mt-8 flex items-center justify-center gap-[30px]">
                     <button
                         onClick={() => navigate(-1)}
