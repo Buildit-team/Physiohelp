@@ -4,12 +4,18 @@ import Sidebar from "../sidebar";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { routeTitleMap } from "../../utils/routeTitle";
+import { useQuery } from 'react-query';
+import { getAdmin } from '../services/api-service';
 
 const Layout = () => {
     const location = useLocation();
     const [currentTitle, setCurrentTitle] = useState("Dashboard");
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
+
+    const { data } = useQuery('user', () => getAdmin())
+    console.log(data);
+    
     useEffect(() => {
         const title = routeTitleMap[location.pathname] || "Admin";
         setCurrentTitle(title);
@@ -64,3 +70,4 @@ const Layout = () => {
 };
 
 export default Layout;
+

@@ -1,4 +1,4 @@
-import { createHashRouter } from "react-router-dom";
+import { createBrowserRouter } from "react-router-dom";
 import Body from "./components/body";
 import ShopPage from "./components/shop";
 import Layout from "./components/layout";
@@ -19,9 +19,12 @@ import CustomerDetailsPage from "./admin/components/customer/DetailsPage";
 import BlogUploadPage from "./admin/components/blog/AddBlog";
 import BlogPreviewPage from "./admin/components/blog/BlogPreview";
 import BlogPostSuccess from "./admin/components/blog/UploadSuccess";
+import SignUp from "./admin/auth/Signup";
+import Login from "./admin/auth/login";
+import VerifyEmail from "./admin/auth/verify";
 
 
-export const Routes = createHashRouter([
+export const Routes = createBrowserRouter([
     {
         path: '/',
         element:
@@ -129,6 +132,19 @@ export const Routes = createHashRouter([
                 path: '/admin/blog-upload-success',
                 element: <BlogPostSuccess />
             },
+
         ]
+    },
+    {
+        path: '/admin/signup',
+        element: <SignUp />
+    },
+    {
+        path: '/admin/login',
+        element: <Login />
+    },
+    {
+        path: '/admin/verify',
+        element: <VerifyEmail />
     },
 ])

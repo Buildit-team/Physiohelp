@@ -5,7 +5,8 @@ import { SlPeople } from "react-icons/sl";
 import { HiOutlineFolderMinus } from "react-icons/hi2";
 import { IoReaderOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
-import { RxCross2 } from "react-icons/rx"; 
+import { RxCross2 } from "react-icons/rx";
+import { CiWallet } from "react-icons/ci";
 
 const Sidebar = ({ onClose }: { onClose: () => void }) => {
     const navigate = useNavigate();
@@ -33,6 +34,16 @@ const Sidebar = ({ onClose }: { onClose: () => void }) => {
                     >
                         <RxDashboard />
                         <p>Dashboard</p>
+                    </span>
+                    <span
+                        className="w-[80%] h-[60px] cursor-pointer flex gap-[10px] items-center text-white"
+                        onClick={() => {
+                            navigate("/admin")
+                            onClose()
+                        }}
+                    >
+                        <CiWallet />
+                        <p>Wallet</p>
                     </span>
                     <span
                         className="w-[80%] h-[60px] cursor-pointer flex gap-[10px] items-center text-white"

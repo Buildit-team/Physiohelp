@@ -51,7 +51,6 @@ const AddProduct: React.FC = () => {
     return (
         <form onSubmit={handleSubmit} className="w-[100%] mx-auto p-4 max-[650px]:p-0 overflow-scroll flex max-[650px]:flex-col">
             <div className='w-[60%] mt-[30px] max-[650px]:w-full '>
-                {/* General Information Section */}
                 <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">General Information</h2>
                     <div className="space-y-4">
