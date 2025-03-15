@@ -1,10 +1,10 @@
+import { useMemo, useCallback } from "react";
 import Table from "../../../utils/Table";
 import { ColumnT, Product } from "../../../interface/addProduct";
 import { products } from "../products/data";
 
-
 const OrderManagement = () => {
-  const columns: ColumnT<Product>[] = [
+  const columns: ColumnT<Product>[] = useMemo(() => [
     {
       key: 'id',
       header: 'Order ID',
@@ -37,7 +37,6 @@ const OrderManagement = () => {
       render: (value) => (
         <div className="flex flex-col">
           <span className="font-medium">{value.name}</span>
-          {/* <span className="text-gray-500 text-sm">{value.email}</span> */}
         </div>
       )
     },
@@ -61,26 +60,27 @@ const OrderManagement = () => {
         </span>
       ),
     },
+  ], []);
 
-  ];
-
-  const handleEdit = (product: Product) => {
-    console.log('Edit product:', product);
-  };
-
-  const handleDelete = (product: Product) => {
-    console.log('Delete product:', product);
-  };
-
-  const handleView = (product: Product) => {
-    console.log('View product:', product);
-  };
-  const filterOptions = [
+  const filterOptions = useMemo(() => [
     { label: 'All Order', value: 'all' },
     { label: 'Processing', value: 'published' },
     { label: 'Delivered', value: 'low stock' },
     { label: 'Cancelled', value: 'low stock' }
-  ];
+  ], []);
+
+  const handleEdit = useCallback((product: Product) => {
+    console.log('Edit product:', product);
+  }, []);
+
+  const handleDelete = useCallback((product: Product) => {
+    console.log('Delete product:', product);
+  }, []);
+
+  const handleView = useCallback((product: Product) => {
+    console.log('View product:', product);
+  }, []);
+
   return (
     <Table
       data={products}
@@ -97,5 +97,4 @@ const OrderManagement = () => {
   );
 };
 
-
-export default OrderManagement
+export default OrderManagement;
