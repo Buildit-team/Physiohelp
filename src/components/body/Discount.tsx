@@ -45,7 +45,7 @@ const Discount = () => {
                     </div>
                 </div>
             </div>
-            <div className="w-[82%]  flex justify-end max-[6450px]:justify-center max-[650px]:w-full">
+            <div className="w-[100%] flex pt-6 justify-center max-[650px]:w-full">
                 <button className="w-[150px] h-[40px] bg-[#1053D4] text-white rounded-[8px]" onClick={()=> navigate('/shop')}>See Shop</button>
             </div>
         </div>

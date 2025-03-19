@@ -44,8 +44,8 @@ const TestimonialCarousel: React.FC = () => {
         <div className="bg-pink-500 text-white py-12 w-[100%] flex justify-center">
             <div className='w-[90%]'>
                 <span>
-                    <p className="text-[18px] font-[300] text-[white] font-montserrat leading-[30px] p-0 max-[650px]:text-center max-[650px]:text-[14px] max-[650px]:leading-[20px] mt-[20px]">Review</p>
-                    <h2 className="text-[70px] p-0 m-0 max-[650px]:text-[50px] max-[425px]:text-[40px] max-[650px]:text-center text-[white] font-Cormorant">
+                    <p className="text-[18px] font-[500] text-[white] font-montserrat leading-[30px] p-0 max-[650px]:text-center max-[650px]:text-[14px] max-[650px]:leading-[20px] mt-[20px]">Reviews</p>
+                    <h2 className="text-[70px] p-0 m-0 max-[650px]:text-[50px] max-[425px]:text-[40px] max-[650px]:text-center text-[white] leading-none font-Cormorant">
                         Testimonials that <br />inspire us.
                     </h2>
                 </span>
