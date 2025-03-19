@@ -29,7 +29,7 @@ const SignUp: React.FC = () => {
             toast.success('Account created successfully');
         },
         onError: (error: any) => {
-            toast.error('Signup failed. Please try again.');
+            toast.error(error.response.data.message);
             console.error('Signup failed', error);
         },
     });
@@ -55,7 +55,7 @@ const SignUp: React.FC = () => {
                 <h2 className="w-[75%] text-2xl font-bold mb-6">Create an account</h2>
                 {isError && (
                     <div className="text-red-500 mb-4">
-                        {error instanceof Error ? error.message : 'An error occurred during signup'}
+                        {error ? error?.response?.data?.message : 'An error occurred during signup'}
                     </div>
                 )}
 
