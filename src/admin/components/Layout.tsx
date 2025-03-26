@@ -11,11 +11,13 @@ const Layout = () => {
     const location = useLocation();
     const [currentTitle, setCurrentTitle] = useState("Dashboard");
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const [name, setName] = useState()
 
-
-    const { data } = useQuery('user', () => getAdmin())
-    console.log(data);
-    
+    const { data } = useQuery('user', () => getAdmin(), {
+        onSuccess: () => {
+            setName(data?.data?.name)
+        }
+    })
     useEffect(() => {
         const title = routeTitleMap[location.pathname] || "Admin";
         setCurrentTitle(title);
@@ -29,9 +31,8 @@ const Layout = () => {
     return (
         <div className="w-full flex h-screen">
             <div
-                className={`fixed md:fixed top-0 left-0 w-[20%] max-[650px]:w-[80%] h-screen bg-[#1053D4] transform transition-transform duration-300 ease-in-out ${
-                    isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
-                } z-40`}
+                className={`fixed md:fixed top-0 left-0 w-[20%] max-[650px]:w-[80%] h-screen bg-[#1053D4] transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+                    } z-40`}
             >
                 <Sidebar onClose={() => setIsSidebarOpen(false)} />
             </div>
@@ -46,7 +47,7 @@ const Layout = () => {
                         </span>
                         <div className="flex-1 md:w-[80%] flex justify-end gap-3 md:gap-[10px] items-center">
                             <span className="flex items-center justify-center px-3 py-1.5 rounded-[8px] bg-[#E1E6FF]">
-                                <p className="text-sm md:text-base">Admin Yusuf</p>
+                                <p className="text-sm md:text-base">{name}</p>
                             </span>
                             <button className="p-2 rounded-full hover:bg-gray-100">
                                 <IoMdNotificationsOutline className="w-6 h-6" />

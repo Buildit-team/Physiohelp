@@ -15,12 +15,16 @@ const ImageWithTextCell = <T extends DataItemT>({
 }) => {
   const [imageError, setImageError] = useState(false);
 
+  const imageSrc = item[config.imageKey] && item[config.imageKey].length > 0
+    ? item[config.imageKey][0].image_url
+    : config.imageConfig?.fallbackSrc;
+
   return (
     <div className="flex items-center gap-3">
       <img
         src={imageError && config.imageConfig?.fallbackSrc ?
           config.imageConfig.fallbackSrc :
-          item[config.imageKey] as string
+          imageSrc as string
         }
         alt={String(item[config.textKey])}
         className={`object-cover rounded-md ${config.imageConfig?.className || ''}`}
@@ -78,7 +82,6 @@ const Table = <T extends DataItemT>({
         columns.some((column) => {
           if (column.searchable) {
             if (column.isImageWithText && column.imageWithTextConfig) {
-              // Search in the text part of combined fields
               return String(item[column.imageWithTextConfig.textKey])
                 .toLowerCase()
                 .includes(searchQuery.toLowerCase());
@@ -126,7 +129,6 @@ const Table = <T extends DataItemT>({
     });
   }, [filteredData, sortConfig]);
 
-  // Pagination logic
   const totalItems = sortedData.length;
   const totalPages = Math.ceil(totalItems / itemsPerPage);
   const startIndex = (currentPage - 1) * itemsPerPage;
@@ -165,7 +167,6 @@ const Table = <T extends DataItemT>({
 
   return (
     <div className="w-full flex flex-col gap-[20px]">
-      {/* Search and Filters */}
       <div className="flex flex-col gap-4 max-[650px]:mt-[40px]">
         <div className="flex flex-col md:flex-row md:items-center gap-4 w-full">
           <div className="relative flex-grow w-full md:w-[50%]">
@@ -218,8 +219,6 @@ const Table = <T extends DataItemT>({
           </div>
         </div>
       </div>
-
-      {/* Table for Desktop */}
       <div className="hidden md:block w-full overflow-x-auto">
         <table className={`min-w-full divide-y divide-gray-200 ${className}`}>
           <thead className="bg-gray-50">
@@ -227,7 +226,7 @@ const Table = <T extends DataItemT>({
               {columns.map((column, index) => (
                 <th
                   key={`${String(column.key)}-${index}`}
-                  className="px-6 py-3 text-left text-sm font-medium text-gray-500 tracking-wider cursor-pointer"
+                  className="px-6 py-3 text-left text-sm font-medium text-gray-500 tracking-wider cursor-pointer "
                   onClick={() => column.sortable && handleSort(column.key)}
                 >
                   <div className="flex items-center gap-2">
@@ -262,7 +261,7 @@ const Table = <T extends DataItemT>({
                 {columns.map((column, colIndex) => (
                   <td
                     key={`${String(column.key)}-${rowIndex}-${colIndex}`}
-                    className="px-6 py-4 whitespace-nowrap text-sm text-gray-500"
+                    className="px-6 py-4 whitespace-wrap  text-sm text-gray-500"
                   >
                     {column.isImageWithText && column.imageWithTextConfig ? (
                       <ImageWithTextCell

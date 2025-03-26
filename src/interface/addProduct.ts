@@ -3,9 +3,8 @@ export interface ProductFormData {
     description: string;
     status: string;
     basePrice: number;
-    discountType: string;
     discountPercentage: number;
-    taxClass: string;
+    taxClass?: string;
     vatAmount: number;
     sku: string;
     barcode: string;
@@ -14,23 +13,40 @@ export interface ProductFormData {
     height: number;
     length: number;
     width: number;
-    photos: File[];
+}
+export interface ProductImage{
+    images: File[];
 }
 
-
 export type Product = {
-    id: string;
-    name: string;
-    sku: string;
-    stock: number;
-    price: number;
-    status: 'Published' | 'Low Stock';
-    added: string;
-    productImage:  string;
-    customer: { 
-        name: string;
-        email: string;
+    id: number;
+    product_id: string;
+    admin_id: string;
+    product_name: string;
+    description: string;
+    product_image: { image_id: string; image_url: string; }[] | null; // Changed to array of image objects or null
+    price: {
+        vat: number;
+        basic_price: number;
+        build_it_com: number;
+        client_price: number;
+        payment_price: number;
+        discounted_rate: number;
     };
+    inventory: {
+        sku_id: string;
+        barcode: string;
+        quantity: number;
+    };
+    shipping_details: {
+        width: number;
+        height: number;
+        length: number;
+        weight: number;
+    };
+    status: string; // Changed to string
+    created_at: string;
+    updated_at: string;
 };
 
 

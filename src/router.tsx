@@ -22,6 +22,8 @@ import BlogPostSuccess from "./admin/components/blog/UploadSuccess";
 import SignUp from "./admin/auth/Signup";
 import Login from "./admin/auth/login";
 import VerifyEmail from "./admin/auth/verify";
+import UploadImage from "./admin/components/products/uploadImage";
+import ProductDetails from "./admin/components/products/index[id]";
 
 
 export const Routes = createBrowserRouter([
@@ -97,8 +99,16 @@ export const Routes = createBrowserRouter([
                 element: <Products />
             },
             {
+                path: '/admin/product/:id',
+                element: <ProductDetails />
+            },
+            {
                 path: '/admin/add-product',
                 element: <AddProduct />
+            },
+            {
+                path: '/admin/add-product-image/:id',
+                element: <UploadImage />
             },
             {
                 path: '/admin/order',
