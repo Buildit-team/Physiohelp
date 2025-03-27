@@ -1,4 +1,5 @@
 import React, { useState } from 'react';
+import { motion } from 'framer-motion';
 
 interface CheckoutProps {
     onCheckoutSubmit: (formData: any) => void;
@@ -29,7 +30,25 @@ const Checkout: React.FC<CheckoutProps> = ({ onCheckoutSubmit }) => {
     };
 
     return (
-        <form onSubmit={handleSubmit} className="max-w-lg mx-auto p-4 space-y-4">
+        <motion.form initial={{ 
+            opacity: 0, 
+            y: 10 
+          }}
+          whileInView={{ 
+            opacity: 1, 
+            y: 0,
+            transition: {
+              type: "spring",
+              damping: 30,
+              stiffness: 180,
+              mass: 1,
+              delay: 0.2,
+            }
+          }}
+          viewport={{
+            amount: 0.2, // Changed from "some" to a numeric value
+            once: true,
+          }} onSubmit={handleSubmit} className="max-w-lg mx-auto p-4 space-y-4">
             <div className="grid grid-cols-2 gap-4">
                 <div>
                     <label className="block text-sm font-medium text-gray-700">First name *</label>
@@ -95,7 +114,7 @@ const Checkout: React.FC<CheckoutProps> = ({ onCheckoutSubmit }) => {
                     Submit
                 </button>
             </div>
-        </form>
+        </motion.form>
     );
 };
 

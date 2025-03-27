@@ -40,9 +40,9 @@ const Header = () => {
         <div className={headerClass}>
             <div className="w-[30%] max-[650px]:w-[45%]">
                 {(isHomePage && !hasScrolled) ? (
-                    <img src="/newlogo.svg" alt="Logo" />
+                    <img src="/newlogo.svg" onClick={() => navigate("/")} alt="Logo" />
                 ) : (
-                    <img src="/logo-dark.svg" alt="Logo" className="w-[400px]" />
+                    <img src="/logo-dark.svg" onClick={() => navigate("/")} alt="Logo" className="w-[320px]" />
                 )}
             </div>
             <span className="w-[50%] flex gap-[30px] justify-center items-center max-[650px]:hidden">

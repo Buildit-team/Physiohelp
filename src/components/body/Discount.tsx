@@ -1,9 +1,29 @@
 import { useNavigate } from "react-router-dom"
+import {motion} from 'framer-motion'
+
 
 const Discount = () => {
     const navigate = useNavigate()
     return (
-        <div className="w-[100%] h-auto pt-[80px] pb-[50px] flex flex-col justify-center mt-[30px] gap-[20px] bg-[#F3F5F7]">
+        <motion.div initial={{ 
+            opacity: 0, 
+            y: 10 
+          }}
+          whileInView={{ 
+            opacity: 1, 
+            y: 0,
+            transition: {
+              type: "spring",
+              damping: 30,
+              stiffness: 180,
+              mass: 1,
+              delay: 0.2,
+            }
+          }}
+          viewport={{
+            amount: 0.2, // Changed from "some" to a numeric value
+            once: true,
+          }} className="w-[100%] h-auto pt-[80px] pb-[50px] flex flex-col justify-center mt-[30px] gap-[20px] bg-[#F3F5F7]">
             <div className="w-full h-auto flex flex-col gap-[30px]">
                 <div className="w-[100%] flex justify-center gap-[30px] max-[650px]:flex-col">
                     <div className="w-[350px] h-[200px] bg-[#1053D4] rounded-[10px] max-[650px]:rounded-[0px] flex flex-col gap-[10px] items-center justify-center max-[650px]:w-full">
@@ -48,7 +68,7 @@ const Discount = () => {
             <div className="w-[100%] flex pt-6 justify-center max-[650px]:w-full">
                 <button className="w-[150px] h-[40px] bg-[#1053D4] text-white rounded-[8px]" onClick={()=> navigate('/shop')}>See Shop</button>
             </div>
-        </div>
+        </motion.div>
     )
 }
 

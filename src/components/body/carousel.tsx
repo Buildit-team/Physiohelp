@@ -1,4 +1,5 @@
 import { Swiper, SwiperSlide } from 'swiper/react';
+import {motion} from 'framer-motion';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -6,7 +7,25 @@ import 'swiper/css/pagination';
 
 const Carousel = () => {
     return (
-        <div className="w-[100%] flex justify-center items-center max-[650px]:h-[300px]">
+        <motion.div initial={{ 
+            opacity: 0, 
+            y: 10 
+          }}
+          whileInView={{ 
+            opacity: 1, 
+            y: 0,
+            transition: {
+              type: "spring",
+              damping: 30,
+              stiffness: 180,
+              mass: 1,
+              delay: 0.2,
+            }
+          }}
+          viewport={{
+            amount: 0.2, // Changed from "some" to a numeric value
+            once: true,
+          }} className="w-[100%] flex justify-center items-center max-[650px]:h-[300px]">
             <div className='w-[90%] flex items-center justify-center h-[300px]'>
                 <Swiper
                     modules={[Navigation, Pagination, Autoplay]}
@@ -86,7 +105,7 @@ const Carousel = () => {
                     </SwiperSlide>
                 </Swiper>
             </div>
-        </div>
+        </motion.div>
     );
 };
 

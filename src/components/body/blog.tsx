@@ -1,4 +1,5 @@
 import React from "react";
+import { motion } from "framer-motion";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -28,7 +29,25 @@ const blogs = [
 
 const Blog: React.FC = () => {
   return (
-    <div className="w-[100%] h-auto pb-[50px] flex justify-center mt-[30px] gap-[20px] bg-[#F3F5F7]">
+    <motion.div initial={{ 
+      opacity: 0, 
+      y: 10 
+    }}
+    whileInView={{ 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 30,
+        stiffness: 180,
+        mass: 1,
+        delay: 0.2,
+      }
+    }}
+    viewport={{
+      amount: 0.2, // Changed from "some" to a numeric value
+      once: true,
+    }} className="w-[100%] h-auto pb-[50px] flex justify-center mt-[30px] gap-[20px] bg-[#F3F5F7]">
       <div className="w-[90%] flex flex-col items-center gap-[10px] max-[650px]:flex-col">
         {/* Blog Header */}
         <div className="w-[90%] flex flex-col gap-[20px] max-[650px]:w-full">
@@ -101,7 +120,7 @@ const Blog: React.FC = () => {
           </Swiper>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 

@@ -1,9 +1,28 @@
 import { useNavigate } from "react-router-dom";
+import {motion} from 'framer-motion';
 
 const SalesPage = () => {
   const navigate = useNavigate();
   return (
-    <div className="w-[100%] h-auto  flex flex-col pt-[80px] pb-[50px] flex justify-center mt-[30px] gap-[20px] bg-[#1053D4]">
+    <motion.div initial={{ 
+      opacity: 0, 
+      y: 10 
+    }}
+    whileInView={{ 
+      opacity: 1, 
+      y: 0,
+      transition: {
+        type: "spring",
+        damping: 30,
+        stiffness: 180,
+        mass: 1,
+        delay: 0.5,
+      }
+    }}
+    viewport={{
+      amount: 0.2, // Changed from "some" to a numeric value
+      once: true,
+    }} className="w-[100%] h-auto  flex flex-col pt-[80px] pb-[50px] flex justify-center mt-[30px] gap-[20px] bg-[#1053D4]">
       <div className="w-[100%] flex justify-center gap-[10px] max-[650px]:flex-col">
         <div className="w-[50%] flex flex-col max-[650px]:w-full pr-4 pb-8">
         <h1 className="text-[100px] max-[1024px]:text-[80px] max-[650px]:text-[50px] max-[425px]:text-[30px] max-[650px]:text-center text-white font-Cormorant">
@@ -36,7 +55,7 @@ const SalesPage = () => {
           </span>
         </div>
       </div>
-    </div>
+    </motion.div>
   );
 };
 
