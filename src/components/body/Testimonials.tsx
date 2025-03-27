@@ -1,4 +1,5 @@
 import React from 'react';
+import { motion } from 'framer-motion';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { Navigation, Pagination, Autoplay } from 'swiper/modules';
 import 'swiper/css';
@@ -41,7 +42,25 @@ const testimonials: Testimonial[] = [
 
 const TestimonialCarousel: React.FC = () => {
     return (
-        <div className="bg-pink-500 text-white py-12 w-[100%] flex justify-center">
+        <motion.div initial={{ 
+            opacity: 0, 
+            y: 10 
+          }}
+          whileInView={{ 
+            opacity: 1, 
+            y: 0,
+            transition: {
+              type: "spring",
+              damping: 30,
+              stiffness: 180,
+              mass: 1,
+              delay: 0.2,
+            }
+          }}
+          viewport={{
+            amount: 0.2, // Changed from "some" to a numeric value
+            once: true,
+          }} className="bg-pink-500 text-white py-12 w-[100%] flex justify-center">
             <div className='w-[90%]'>
                 <span>
                     <p className="text-[18px] font-[500] text-[white] font-montserrat leading-[30px] p-0 max-[650px]:text-center max-[650px]:text-[14px] max-[650px]:leading-[20px] mt-[20px]">Reviews</p>
@@ -79,7 +98,7 @@ const TestimonialCarousel: React.FC = () => {
                     ))}
                 </Swiper>
             </div>
-        </div>
+        </motion.div>
     );
 };
 

@@ -1,4 +1,5 @@
 import { MdDelete } from "react-icons/md";
+import { motion } from "framer-motion";
 import { useCart } from "../../context/CartCaontex";
 
 interface CartProps {
@@ -10,7 +11,26 @@ const Cart = ({ onCheckout }: CartProps) => {
     const total = getTotalAmount();
 
     return (
-        <div className="w-full">
+        <motion.div initial={{ 
+            opacity: 0, 
+            y: 10 
+          }}
+          whileInView={{ 
+            opacity: 1, 
+            y: 0,
+            transition: {
+              type: "spring",
+              damping: 30,
+              stiffness: 180,
+              mass: 1,
+              delay: 0.2,
+            }
+          }}
+          viewport={{
+            amount: 0.2, // Changed from "some" to a numeric value
+            once: true,
+          }}
+          className="w-full">
             {cart.length > 0 && (
                 <div className="flex flex-col lg:flex-row gap-6 p-4">
                     <div className="w-full lg:w-2/3">
@@ -92,7 +112,7 @@ const Cart = ({ onCheckout }: CartProps) => {
                     </div>
                 </div>
             )}
-        </div>
+        </motion.div>
     );
 };
 

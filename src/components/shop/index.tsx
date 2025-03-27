@@ -2,6 +2,7 @@ import { useState } from "react";
 import { products } from "./data";
 import { useNavigate } from "react-router-dom";
 import { useCart } from "../../context/CartCaontex";
+import { motion } from "framer-motion";
 
 const ShopPage = () => {
     const navigate = useNavigate()
@@ -43,7 +44,25 @@ const ShopPage = () => {
     };
 
     return (
-        <div className="w-full flex flex-col items-center justify-center gap-5">
+        <motion.div initial={{ 
+            opacity: 0, 
+            y: 10 
+          }}
+          whileInView={{ 
+            opacity: 1, 
+            y: 0,
+            transition: {
+              type: "spring",
+              damping: 30,
+              stiffness: 180,
+              mass: 1,
+              delay: 0.2,
+            }
+          }}
+          viewport={{
+            amount: 0.2, // Changed from "some" to a numeric value
+            once: true,
+          }} className="w-full flex flex-col items-center justify-center gap-5">
             <div className="w-full flex justify-center items-center mt-24">
                 <div className="flex ml-8 w-4/5 flex-col items-center bg-[url('/shop-page.svg')] h-[60vh] bg-no-repeat max-[650px]:ml-0 max-[650px]:w-[90%]">
                     <span className="flex flex-col items-center justify-center h-[70%] text-center max-[650px]:p-2">
@@ -107,7 +126,7 @@ const ShopPage = () => {
                     </div>
                 ))}
             </div>
-        </div>
+        </motion.div>
     );
 };
 

@@ -3,7 +3,7 @@
 const Footer = () => {
     const date = new Date().getFullYear();
     return (
-        <div className='w-full bg-[#1053D4] h-[500px] flex items-center justify-center pb-[10px]'>
+        <div className='w-full bg-[#1053D4] h-[60vh] flex items-center justify-center pb-[10px]'>
             <div className='w-[90%] flex flex-col items-center gap-[20px] max-[650px]:w-full '>
                 <div className="flex items-center justify-between w-[100%] max-[650px]:justify-center">
                     <img src="/footerlogo.svg" alt="" />
@@ -12,7 +12,7 @@ const Footer = () => {
                     </span>
                 </div>
                 <span className="flex w-[95%] h-[2px] bg-[#3C7FFF] "></span>
-                <div className="flex justify-between  pt-[30px] pb-[30px] w-full max-[650px]:flex-col max-[650px]:items-center max-[650px]:gap-[30px]">
+                <div className="flex justify-between pt-[20px] pb-[20px] w-full max-[650px]:flex-col max-[650px]:items-center max-[650px]:gap-[30px]">
                     <span className="text-white flex flex-col gap-[10px] ml-[40px] max-[650px]:items-center max-[650px]:ml-0" >
                         <p className="text-[20px] cursor-pointer">Company</p>
                         <p className="text-[12px] cursor-pointer">About us</p>
