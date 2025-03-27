@@ -11,7 +11,6 @@ const Products = () => {
 
     const ProductsData = useQuery("products", getAdminProduct, {
         onSuccess: (fetchedData) => {
-            console.log("Fetched products:", fetchedData.data.products);
             setProducts(fetchedData.data.products);
         },
     });
@@ -126,6 +125,7 @@ const Products = () => {
             }}
             filterOptions={filterOptions}
             filterKey="status"
+            rowUrl={(product) => `/admin/product/${product.product_id}`}
         />
     );
 };

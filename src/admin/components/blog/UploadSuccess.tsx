@@ -1,6 +1,15 @@
-import React from 'react';
+import React, { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const BlogPostSuccess: React.FC = () => {
+    const navigate = useNavigate()
+    useEffect(() => {
+      setTimeout(() => {
+          navigate('/admin/blog');
+      }
+      , 5000);
+    }
+    , []);
     return (
         <div className="flex flex-col items-center justify-center h-[85vh] w-full">
             <div className="bg-white p-8 rounded-lg shadow-lg text-center w-[80%] h-full relative">

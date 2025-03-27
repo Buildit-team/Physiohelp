@@ -91,7 +91,7 @@ export type ColumnT<T> = {
     render?: (value: any, item: T) => React.ReactNode;
 };
 
-export type TablePropsT<T> = {
+export type TablePropsT<T extends DataItemT> = {
     data?: T[];
     columns: ColumnT<T>[];
     actions?: {
@@ -106,4 +106,5 @@ export type TablePropsT<T> = {
     filterKey?: keyof T;
     dateFilterKey?: keyof T;
     itemsPerPage?: number;
+    rowUrl?: (item: T) => string;
 };

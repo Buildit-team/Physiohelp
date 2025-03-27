@@ -3,6 +3,7 @@ import { ChevronUp, ChevronDown, Pencil, Trash2, Eye, Search, Calendar, ChevronL
 import { format, isWithinInterval, parseISO } from 'date-fns';
 import { DataItemT, TablePropsT, DateRange, ButtonPropsT, ImageWithTextConfig } from '../interface/addProduct';
 import { Key } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 
 
@@ -15,22 +16,30 @@ const ImageWithTextCell = <T extends DataItemT>({
 }) => {
   const [imageError, setImageError] = useState(false);
 
-  const imageSrc = item[config.imageKey] && item[config.imageKey].length > 0
-    ? item[config.imageKey][0].image_url
-    : config.imageConfig?.fallbackSrc;
+  let imageSrc: string | undefined;
+  const imageValue = item[config.imageKey];
+
+  if (Array.isArray(imageValue) && imageValue.length > 0) {
+    imageSrc = imageValue[0]?.image_url;
+  } else if (typeof imageValue === 'object' && imageValue !== null) {
+    imageSrc = imageValue.image_url;
+  } else {
+    imageSrc = config.imageConfig?.fallbackSrc;
+  }
 
   return (
     <div className="flex items-center gap-3">
       <img
-        src={imageError && config.imageConfig?.fallbackSrc ?
-          config.imageConfig.fallbackSrc :
-          imageSrc as string
+        src={
+          imageError && config.imageConfig?.fallbackSrc
+            ? config.imageConfig.fallbackSrc
+            : (imageSrc as string)
         }
         alt={String(item[config.textKey])}
         className={`object-cover rounded-md ${config.imageConfig?.className || ''}`}
         style={{
           width: config.imageConfig?.width || '40px',
-          height: config.imageConfig?.height || '40px'
+          height: config.imageConfig?.height || '40px',
         }}
         onError={() => setImageError(true)}
       />
@@ -50,7 +59,9 @@ const Table = <T extends DataItemT>({
   filterKey,
   dateFilterKey,
   itemsPerPage = 10,
+  rowUrl = () => '',
 }: TablePropsT<T>) => {
+  const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
   const [activeFilter, setActiveFilter] = useState<string>('all');
   const [date, setDate] = useState<DateRange>({ from: undefined, to: undefined });
@@ -73,6 +84,12 @@ const Table = <T extends DataItemT>({
     });
   };
 
+  const handleRowClick = (item: T) => {
+    const url = rowUrl(item);
+    if (url) {
+      navigate(url);
+    }
+  };
   const filteredData = React.useMemo(() => {
     let filtered = data;
 
@@ -257,11 +274,12 @@ const Table = <T extends DataItemT>({
           </thead>
           <tbody className="bg-white divide-y divide-gray-200">
             {paginatedData.map((item: T, rowIndex: Key | null | undefined) => (
-              <tr key={rowIndex}>
+              <tr key={rowIndex} >
                 {columns.map((column, colIndex) => (
                   <td
                     key={`${String(column.key)}-${rowIndex}-${colIndex}`}
-                    className="px-6 py-4 whitespace-wrap  text-sm text-gray-500"
+                    className="px-6 py-4 whitespace-wrap  text-sm text-gray-500 cursor-pointer" 
+                    onClick={() => handleRowClick(item)} 
                   >
                     {column.isImageWithText && column.imageWithTextConfig ? (
                       <ImageWithTextCell
@@ -316,7 +334,9 @@ const Table = <T extends DataItemT>({
       {/* Card-Based Layout for Mobile */}
       <div className="md:hidden w-full">
         {paginatedData.map((item, rowIndex) => (
-          <div key={rowIndex} className="bg-white p-4 rounded-lg shadow-md mb-4">
+          <div key={rowIndex} className="bg-white p-4 rounded-lg shadow-md mb-4"
+            onClick={() => handleRowClick(item)}
+          >
             {columns.map((column, colIndex) => (
               <div key={`${String(column.key)}-${rowIndex}-${colIndex}`} className="mb-3 flex justify-between">
                 <div className="text-sm font-medium text-gray-500">{column.header}</div>

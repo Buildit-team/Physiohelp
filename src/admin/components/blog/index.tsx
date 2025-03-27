@@ -2,21 +2,23 @@ import { useNavigate } from "react-router-dom";
 import { ColumnT } from "../../../interface/addProduct";
 import Table from "../../../utils/Table";
 import { IBlog } from "../../../interface/blog";
-import { blogs } from "./data";
+import { useQuery } from 'react-query';
+import { getBlogs } from '../../services/api-service';
+import toast from 'react-hot-toast';
+import { useState } from "react";
 
-// Types for the blog data
 
-// Table column configuration
+
 const columns: ColumnT<IBlog>[] = [
   {
-    key: 'name',
+    key: 'blog_topic',
     header: 'Blog Name',
     sortable: true,
     searchable: true,
     isImageWithText: true,
     imageWithTextConfig: {
-      imageKey: 'image',
-      textKey: 'name',
+      imageKey: 'cover_image',
+      textKey: 'blog_topic',
       imageConfig: {
         width: '40px',
         height: '40px',
@@ -26,31 +28,39 @@ const columns: ColumnT<IBlog>[] = [
     }
   },
   {
-    key: 'date',
+    key: 'created_at',
     header: 'Date',
     sortable: true,
     searchable: true
   },
-  {
-    key: 'totalViews',
-    header: 'Total Views',
-    sortable: true,
-    searchable: true
-  }
 ];
 
 const BlogManagment: React.FC = () => {
   const navigate = useNavigate()
+
+  const [blogs, setBlogs] = useState<IBlog[]>([]);  
+
+  useQuery('blogs', getBlogs, {
+    onSuccess: (fetchedData) => {
+      console.log("Fetched products:", fetchedData);
+      setBlogs(fetchedData);
+    },
+    onError: (error: any) => {
+      toast.error('Failed to fetch blogs');
+      console.error('Error fetching blogs:', error);
+    }
+  });
+
   const handleView = (blog: IBlog) => {
-    console.log('Viewing blog:', blog.name);
+    console.log('Viewing blog:', blog.blog_topic);
   };
 
   const handleEdit = (blog: IBlog) => {
-    console.log('Editing blog:', blog.name);
+    console.log('Editing blog:', blog.blog_topic);
   };
 
   const handleDelete = (blog: IBlog) => {
-    console.log('Deleting blog:', blog.name);
+    console.log('Deleting blog:', blog.blog_topic);
   };
   const filterOption = [
     { label: 'All', value: 'all' },
@@ -76,7 +86,7 @@ const BlogManagment: React.FC = () => {
       }}
       searchPlaceholder="Search blogs..."
       itemsPerPage={5}
-      dateFilterKey="date"
+      dateFilterKey="created_at"
       filterOptions={filterOption}
       buttons={buttons}
     />

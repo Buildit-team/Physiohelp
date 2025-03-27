@@ -31,12 +31,11 @@ export const getAdmin = async () => {
     return response.data;
 }
 
-export const uploadProduct = async(uploadData: ProductFormData) => {
+export const uploadProduct = async (uploadData: ProductFormData) => {
     const response = await axios.post(`${VITE_ENDPOINT}/products`, uploadData, {
         headers: {
-            Authorization: `Bearer ${
-                VITE_TOKEN
-            }`
+            Authorization: `Bearer ${VITE_TOKEN
+                }`
         }
     })
     return response.data;
@@ -62,3 +61,19 @@ export const uploadProductImage = async (formData: FormData, id: string) => {
     });
     return response.data;
 };
+
+
+export const uploadBlog = async (blogData: FormData) => {
+    const response = await axios.post(`${VITE_ENDPOINT}/blogs`, blogData, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`,
+            "Content-Type": "multipart/form-data",
+        },
+    });
+    return response.data;
+};
+
+export const getBlogs = async () => {
+    const response =  await axios.get(`${VITE_ENDPOINT}/blogs`);
+    return response.data.data;
+}
