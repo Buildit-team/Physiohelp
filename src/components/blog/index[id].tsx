@@ -7,7 +7,7 @@ import "react-loading-skeleton/dist/skeleton.css";
 import { useQuery } from 'react-query';
 
 const BlogDetailsPage: React.FC = () => {
-    const { id } = useParams<{ id: string }>(); 
+    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { data: blog, isLoading, error } = useQuery(
         ["blog", id],
@@ -24,21 +24,21 @@ const BlogDetailsPage: React.FC = () => {
     );
 
     if (isLoading) {
-         return (
-      <div className="w-[100%] mt-[100px] h-auto pb-[50px] flex justify-center bg-[#F3F5F7]">
-        <div className="w-[90%] flex flex-col items-center gap-[20px]">
-          <Skeleton height={40} width={400} />
-          <div className="w-[50%] max-w-[500px] mt-4">
-            <Skeleton height={200} />
-          </div>
-          <div className="mt-4 w-full">
-            <Skeleton count={5} /> 
-          </div>
-          <Skeleton height={20} width={150} className="mt-4" /> 
-          <Skeleton height={40} width={120} className="mt-4" />
-        </div>
-      </div>
-    );
+        return (
+            <div className="w-[100%] mt-[100px] h-auto pb-[50px] flex justify-center bg-[#F3F5F7]">
+                <div className="w-[90%] flex flex-col items-center gap-[20px]">
+                    <Skeleton height={40} width={400} />
+                    <div className="w-[50%] max-w-[500px] mt-4">
+                        <Skeleton height={200} />
+                    </div>
+                    <div className="mt-4 w-full">
+                        <Skeleton count={5} />
+                    </div>
+                    <Skeleton height={20} width={150} className="mt-4" />
+                    <Skeleton height={40} width={120} className="mt-4" />
+                </div>
+            </div>
+        );
     }
 
     if (error) {
@@ -50,28 +50,27 @@ const BlogDetailsPage: React.FC = () => {
     }
 
     return (
-        <div className="w-[100%] mt-[100px] h-auto pb-[50px] flex justify-center bg-[#F3F5F7]">
+        <div className="w-[100%] mt-[100px] h-auto pb-[50px] flex justify-center">
             <div className="w-[90%] flex flex-col items-center gap-[20px]">
-                <h1 className="text-[30px] font-bold text-[#1053D4]">{blog.blog_topic}</h1>
-                {blog.cover_image?.image_url && (
+                <div className='w-[100%]'>
                     <img
-                        src={blog.cover_image.image_url}
+                        src={blog?.cover_image?.image_url}
                         alt={blog.blog_topic}
-                        className="w-[50%] max-w-[500px] object-cover rounded-md shadow-md"
+                        className="object-cover rounded-md shadow-md w-[100%] h-[450px]"
                     />
-                )}
-                <div className="mt-4 prose" dangerouslySetInnerHTML={{ __html: blog.blog_content }} />
-                <p className="mt-4 font-light text-[12px]">
-                    Published on:{' '}
-                    {new Date(blog.created_at).toLocaleDateString('en-US', {
-                        day: 'numeric',
-                        month: 'long',
-                        year: 'numeric',
-                    })}
-                </p>
-                <button onClick={() => navigate('/blog')} className="py-2 px-4 mt-4 text-white bg-blue-500 rounded-md">
-                    Back to Blogs
-                </button>
+                </div>
+                <div className='w-[60%]'>
+                    <h1 className='text-[50px] p-0 font-700'>{blog?.blog_topic}</h1>
+                    <p className="mt-0 font-light text-[12px] p-0">
+                        Published on:{' '}
+                        {new Date(blog.created_at).toLocaleDateString('en-US', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                        })}
+                    </p>
+                </div>
+                <div className="mt-4 prose w-[60%]" dangerouslySetInnerHTML={{ __html: blog.blog_content }} />
             </div>
         </div>
     );
