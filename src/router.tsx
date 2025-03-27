@@ -24,6 +24,8 @@ import Login from "./admin/auth/login";
 import VerifyEmail from "./admin/auth/verify";
 import UploadImage from "./admin/components/products/uploadImage";
 import ProductDetails from "./admin/components/products/index[id]";
+import BlogPage from "./components/blog";
+import BlogDetailsPage from "./components/blog/index[id]";
 
 
 export const Routes = createBrowserRouter([
@@ -42,6 +44,24 @@ export const Routes = createBrowserRouter([
             <ScrollToTop>
                 <Layout>
                     <ShopPage />
+                </Layout>
+            </ScrollToTop>
+    },
+    {
+        path: '/blog',
+        element:
+            <ScrollToTop>
+                <Layout>
+                    <BlogPage />
+                </Layout>
+            </ScrollToTop>
+    },
+    {
+        path: '/blog/:id',
+        element:
+            <ScrollToTop>
+                <Layout>
+                    <BlogDetailsPage />
                 </Layout>
             </ScrollToTop>
     },

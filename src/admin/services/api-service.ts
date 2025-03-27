@@ -77,3 +77,8 @@ export const getBlogs = async () => {
     const response =  await axios.get(`${VITE_ENDPOINT}/blogs`);
     return response.data.data;
 }
+
+export const getBlogsId = async (id: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/blogs/${id}`);
+    return response.data.data;
+}

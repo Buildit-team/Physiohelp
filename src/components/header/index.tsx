@@ -58,7 +58,12 @@ const Header = () => {
                 >
                     Shop
                 </p>
-                <p className={`cursor-pointer ${navItemClass}`}>Blog</p>
+                <p
+                    className={`cursor-pointer ${navItemClass}`}
+                    onClick={() => navigate("/blog")}
+                >
+                    Blog
+                </p>
             </span>
             <span className="w-[20%] flex gap-[30px] max-[650px]:w-[55%] justify-center items-center max-[650px]:justify-end max-[650px]:gap-[10px]">
                 {
@@ -73,7 +78,7 @@ const Header = () => {
                                     </span>
                                 )}
                             </div>
-                            <CiMenuBurger onClick={toggleMenu} className="cursor-pointer hidden max-[650px]:flex"  />
+                            <CiMenuBurger onClick={toggleMenu} className="cursor-pointer hidden max-[650px]:flex" />
                         </>
                         :
                         <>
