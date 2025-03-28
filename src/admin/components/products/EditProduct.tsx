@@ -1,37 +1,16 @@
 import React, { useState } from 'react';
-import { useMutation } from 'react-query';
-import { uploadProduct } from '../../services/api-service';
+import { useMutation, useQuery } from 'react-query';
+import { getProductById, updateProduct } from '../../services/api-service';
 import toast from 'react-hot-toast';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
+import { IProduct } from '../../../interface/addProduct';
 
-export interface IProduct {
-    product_name: string;
-    description: string;
-    price: {
-        basic_price: number;
-        discounted_rate: number;
-        vat: number;
-    };
-    inventory: {
-        quantity: number;
-        sku_id: string;
-        barcode: string;
-    };
-    shipping_details: {
-        weight: number;
-        width: number;
-        height: number;
-        length: number;
-    };
-    status: string;
-}
-
-const AddProduct: React.FC = () => {
+const EditProduct: React.FC = () => {
+    const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [formData, setFormData] = useState<IProduct>({
         product_name: '',
         description: '',
-        status: 'Low Stock',
         price: {
             basic_price: 0,
             discounted_rate: 0,
@@ -48,58 +27,81 @@ const AddProduct: React.FC = () => {
             height: 0,
             length: 0,
         },
+        status: 'published',
     });
 
-    const mutation = useMutation(async (newProduct: any) => {
-        const response = await uploadProduct(newProduct);
-        return response;
+    const { isLoading } = useQuery([`PRODUCT_${id}`], () => getProductById(id!), {
+        onSuccess: (data) => {
+            setFormData({
+                product_name: data.product_name,
+                description: data.description,
+                price: {
+                    basic_price: data.price.basic_price,
+                    discounted_rate: data.price.discounted_rate,
+                    vat: data.price.vat,
+                },
+                inventory: {
+                    quantity: data.inventory.quantity,
+                    sku_id: data.inventory.sku_id,
+                    barcode: data.inventory.barcode,
+                },
+                shipping_details: {
+                    weight: data.shipping_details.weight,
+                    width: data.shipping_details.width,
+                    height: data.shipping_details.height,
+                    length: data.shipping_details.length,
+                },
+                status: data.status,
+            });
+        },
+    });
+
+    const mutation = useMutation(async (updatedProduct: IProduct) => { return updateProduct(id!, updatedProduct); }, {
+        onSuccess: () => {
+            toast.success('Product updated successfully');
+            navigate('/admin/product');
+        },
+        onError: (error) => {
+            console.error('Error updating product:', error);
+            toast.error('Failed to update product');
+        },
     });
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        mutation.mutate(formData, {
-            onSuccess: (data) => {
-                toast.success(data.message);
-                navigate(`/admin/add-product-image/${data?.product?.product_id}`);
-            },
-            onError: (error) => {
-                console.error('Error adding product:', error);
-            },
-        });
+        mutation.mutate(formData);
     };
-
     const handleInputChange = (
-        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>
+        e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>
     ) => {
         const { name, value } = e.target;
         if (name.startsWith('price.')) {
-            const priceField = name.split('.')[1];
-            setFormData(prev => ({
+            const [, priceKey] = name.split('.');
+            setFormData((prev) => ({
                 ...prev,
                 price: {
                     ...prev.price,
-                    [priceField]: Number(value) || 0, // Ensure numeric, handle empty string
-                }
+                    [priceKey]: Number(value), // Assuming price values are numbers
+                },
             }));
         } else if (name.startsWith('inventory.')) {
-            const inventoryField = name.split('.')[1];
-            setFormData(prev => ({
+            const [, inventoryKey] = name.split('.');
+            setFormData((prev) => ({
                 ...prev,
                 inventory: {
                     ...prev.inventory,
-                    [inventoryField]: name === 'inventory.quantity' ? Number(value) : value, // Corrected
-                }
+                    [inventoryKey]: value,
+                },
             }));
-        }
-        else if (name.startsWith('shipping_details.')) {
-            const shippingField = name.split('.')[1];
-            setFormData(prev => ({
+        } else if (name.startsWith('shipping_details.')) {
+            const [, shippingKey] = name.split('.');
+            setFormData((prev) => ({
                 ...prev,
                 shipping_details: {
                     ...prev.shipping_details,
-                    [shippingField]: Number(value) || 0, // Ensure numeric
-                }
+                    [shippingKey]: Number(value), 
+                },
             }));
         }
         else {
@@ -110,8 +112,12 @@ const AddProduct: React.FC = () => {
         }
     };
 
+    if (isLoading) {
+        return <div>Loading...</div>;
+    }
+
     return (
-        <form onSubmit={handleSubmit}  className="w-[100%] mx-auto p-4 max-[650px]:p-0 overflow-scroll flex max-[650px]:flex-col">
+        <form onSubmit={handleSubmit} className="w-[100%] mx-auto p-4 max-[650px]:p-0 overflow-scroll flex max-[650px]:flex-col">
             <div className='w-[60%] mt-[30px] max-[650px]:w-full '>
                 <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">General Information</h2>
@@ -120,7 +126,7 @@ const AddProduct: React.FC = () => {
                             <label className="block text-sm font-lgiht text-[#777980] mb-1">Product Name</label>
                             <input
                                 type="text"
-                                name="product_name"
+                                name="product_name" 
                                 value={formData.product_name}
                                 onChange={handleInputChange}
                                 placeholder="Type product name here..."
@@ -148,7 +154,7 @@ const AddProduct: React.FC = () => {
                         <label className="block text-sm font-lgiht text-[#777980] mb-1">Base Price</label>
                         <input
                             type="number"
-                            name="price.basic_price"
+                            name="price.basic_price" 
                             value={formData.price.basic_price}
                             onChange={handleInputChange}
                             placeholder="Type base price here..."
@@ -179,7 +185,6 @@ const AddProduct: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Inventory Section */}
                 <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">Inventory</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
@@ -198,7 +203,7 @@ const AddProduct: React.FC = () => {
                             <label className="block text-sm font-lgiht text-[#777980] mb-1">Barcode</label>
                             <input
                                 type="text"
-                                name="inventory.barcode"
+                                name="inventory.barcode" 
                                 value={formData.inventory.barcode}
                                 onChange={handleInputChange}
                                 placeholder="Product barcode..."
@@ -209,7 +214,7 @@ const AddProduct: React.FC = () => {
                             <label className="block text-sm font-lgiht text-[#777980] mb-1">Quantity</label>
                             <input
                                 type="number"
-                                name="inventory.quantity"
+                                name="inventory.quantity" 
                                 value={formData.inventory.quantity}
                                 onChange={handleInputChange}
                                 placeholder="Type product quantity here..."
@@ -219,7 +224,6 @@ const AddProduct: React.FC = () => {
                     </div>
                 </div>
 
-                {/* Shipping and Delivery Section */}
                 <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">Shipping and Delivery</h2>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
@@ -227,7 +231,7 @@ const AddProduct: React.FC = () => {
                             <label className="block text-sm font-lgiht text-[#777980] mb-1">Weight</label>
                             <input
                                 type="number"
-                                name="shipping_details.weight"
+                                name="shipping_details.weight" 
                                 value={formData.shipping_details.weight}
                                 onChange={handleInputChange}
                                 placeholder="Product weight..."
@@ -260,7 +264,7 @@ const AddProduct: React.FC = () => {
                             <label className="block text-sm font-lgiht text-[#777980] mb-1">Width</label>
                             <input
                                 type="number"
-                                name="shipping_details.width"
+                                name="shipping_details.width" // Use shipping_details.width
                                 value={formData.shipping_details.width}
                                 onChange={handleInputChange}
                                 placeholder="Width (cm)..."
@@ -271,10 +275,10 @@ const AddProduct: React.FC = () => {
                 </div>
             </div>
             <div className=" w-[40%] flex justify-end gap-4 max-[650px]:w-full max-[650px]:justify-center max-[650px]:mb-[10px]">
-                {/* <div> */}
                 <button
                     type="button"
                     className="px-4 py-2 h-[40px] bg-gray-200 text-gray-700 rounded-md hover:bg-gray-300"
+                    onClick={() => navigate('/admin/products')}
                 >
                     Cancel
                 </button>
@@ -282,19 +286,11 @@ const AddProduct: React.FC = () => {
                     type="submit"
                     className="px-4 py-2 h-[40px] bg-blue-600 text-white rounded-md hover:bg-blue-700"
                 >
-                    {mutation.isLoading ? 'Adding...' : 'Add Product'}
+                    {mutation.isLoading ? 'Updating...' : 'Update Product'}
                 </button>
-                {/* </div> */}
-                {/* <div>
-                    <select name="" id="">
-                        <option value="">Published</option>
-                        <option value="">Low St</option>
-                    </select>
-                </div> */}
             </div>
         </form>
     );
 };
 
-export default AddProduct;
-
+export default EditProduct;

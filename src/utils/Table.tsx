@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { ChevronUp, ChevronDown, Pencil, Trash2, Eye, Search, Calendar, ChevronLeft, ChevronRight } from 'lucide-react';
+import { ChevronUp, ChevronDown, Pencil, Trash2, Eye, Search, Calendar, ChevronLeft, ChevronRight, Loader2 } from 'lucide-react';
 import { format, isWithinInterval, parseISO } from 'date-fns';
 import { DataItemT, TablePropsT, DateRange, ButtonPropsT, ImageWithTextConfig } from '../interface/addProduct';
 import { Key } from 'react';
@@ -60,6 +60,8 @@ const Table = <T extends DataItemT>({
   dateFilterKey,
   itemsPerPage = 10,
   rowUrl = () => '',
+  isLoading = false,
+  emptyStateMessage = '',
 }: TablePropsT<T>) => {
   const navigate = useNavigate();
   const [searchQuery, setSearchQuery] = useState('');
@@ -90,6 +92,82 @@ const Table = <T extends DataItemT>({
       navigate(url);
     }
   };
+
+  const LoadingState = () => (
+    <div className="w-full flex flex-col gap-[20px]">
+      {/* Preserve the search and filter sections */}
+      <div className="flex flex-col gap-4 max-[650px]:mt-[40px]">
+        <div className="flex flex-col md:flex-row md:items-center gap-4 w-full">
+          <div className="relative flex-grow w-full md:w-[50%]">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <input
+              type="text"
+              placeholder={searchPlaceholder}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 pr-4 py-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-100"
+              disabled
+            />
+          </div>
+          <div className="flex gap-2 w-full md:w-[30%] justify-end">
+            {buttons.map((button, index) => (
+              <button
+                key={index}
+                disabled
+                className="px-4 py-2 rounded-md text-sm font-medium bg-gray-200 text-gray-400 cursor-not-allowed"
+              >
+                {button.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full flex justify-center items-center py-16">
+        <div className="flex flex-col items-center gap-4">
+          <Loader2 className="h-12 w-12 text-blue-500 animate-spin" />
+          <p className="text-gray-500 text-lg">Loading data...</p>
+        </div>
+      </div>
+    </div>
+  );
+
+  const EmptyState = () => (
+    <div className="w-full flex flex-col gap-[20px]">
+      <div className="flex flex-col gap-4 max-[650px]:mt-[40px]">
+        <div className="flex flex-col md:flex-row md:items-center gap-4 w-full">
+          <div className="relative flex-grow w-full md:w-[50%]">
+            <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 h-4 w-4" />
+            <input
+              type="text"
+              placeholder={searchPlaceholder}
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              className="pl-10 pr-4 py-2 w-full border rounded-md focus:outline-none focus:ring-2 focus:ring-gray-100"
+            />
+          </div>
+          <div className="flex gap-2 w-full md:w-[30%] justify-end">
+            {buttons.map((button, index) => (
+              <button
+                key={index}
+                onClick={button.onClick}
+                className="px-4 py-2 rounded-md text-sm font-medium bg-blue-600 text-white hover:bg-blue-700"
+              >
+                {button.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      <div className="w-full flex flex-col justify-center items-center py-48 text-center">
+        <div className="bg-gray-100 rounded-full p-6 mb-4">
+          <Search className="h-12 w-12 text-gray-500" />
+        </div>
+        <h3 className="text-xl font-semibold text-gray-800 mb-2">{emptyStateMessage}</h3>
+      </div>
+    </div>
+  );
   const filteredData = React.useMemo(() => {
     let filtered = data;
 
@@ -156,14 +234,6 @@ const Table = <T extends DataItemT>({
     setCurrentPage(page);
   };
 
-  if (!data || data.length === 0) {
-    return (
-      <div className="w-full text-center py-8 text-gray-500">
-        No data available
-      </div>
-    );
-  };
-
   const TableButton = ({ label, onClick, variant = 'primary' }: ButtonPropsT) => {
     const baseStyles = "px-4 py-2 rounded-md text-sm font-medium transition-colors";
     const variantStyles = {
@@ -181,6 +251,14 @@ const Table = <T extends DataItemT>({
       </button>
     );
   };
+
+  if (isLoading) {
+    return <LoadingState />;
+  }
+
+  if (!data || data.length === 0) {
+    return <EmptyState />;
+  }
 
   return (
     <div className="w-full flex flex-col gap-[20px]">

@@ -1,18 +1,23 @@
-export interface ProductFormData {
-    name: string;
+export interface IProduct {
+    product_name: string;
     description: string;
+    price: {
+        basic_price: number;
+        discounted_rate: number;
+        vat: number;
+    };
+    inventory: {
+        quantity: number;
+        sku_id: string;
+        barcode: string;
+    };
+    shipping_details: {
+        weight: number;
+        width: number;
+        height: number;
+        length: number;
+    };
     status: string;
-    basePrice: number;
-    discountPercentage: number;
-    taxClass?: string;
-    vatAmount: number;
-    sku: string;
-    barcode: string;
-    quantity: number;
-    weight: number;
-    height: number;
-    length: number;
-    width: number;
 }
 export interface ProductImage{
     images: File[];
@@ -24,7 +29,7 @@ export type Product = {
     admin_id: string;
     product_name: string;
     description: string;
-    product_image: { image_id: string; image_url: string; }[] | null; // Changed to array of image objects or null
+    product_image: { image_id: string; image_url: string; }[] | null;
     price: {
         vat: number;
         basic_price: number;
@@ -44,7 +49,7 @@ export type Product = {
         length: number;
         weight: number;
     };
-    status: string; // Changed to string
+    status: string;
     created_at: string;
     updated_at: string;
 };
@@ -107,4 +112,7 @@ export type TablePropsT<T extends DataItemT> = {
     dateFilterKey?: keyof T;
     itemsPerPage?: number;
     rowUrl?: (item: T) => string;
+    isLoading?: boolean;
+    emptyStateMessage?: string
+    emptyStateSubMessage?: string
 };

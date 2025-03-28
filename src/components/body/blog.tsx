@@ -9,10 +9,8 @@ import toast from "react-hot-toast";
 import { useQuery } from "react-query";
 import { getBlogs } from "../../admin/services/api-service";
 import { IBlog } from "../../interface/blog";
-// import { useNavigate } from "react-router-dom";
 
 const Blog: React.FC = () => {
-  // const navigate = useNavigate()
 
 
   const [blogs, setBlogs] = useState<IBlog[]>([]);

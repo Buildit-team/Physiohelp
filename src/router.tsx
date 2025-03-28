@@ -26,6 +26,8 @@ import UploadImage from "./admin/components/products/uploadImage";
 import ProductDetails from "./admin/components/products/index[id]";
 import BlogPage from "./components/blog";
 import BlogDetailsPage from "./components/blog/index[id]";
+import Sessions from "./admin/components/session";
+import EditProduct from "./admin/components/products/EditProduct";
 
 
 export const Routes = createBrowserRouter([
@@ -131,6 +133,10 @@ export const Routes = createBrowserRouter([
                 element: <UploadImage />
             },
             {
+                path: '/admin/products/:id/edit',
+                element: <EditProduct/>
+            },
+            {
                 path: '/admin/order',
                 element: <OrderManagement />
             },
@@ -161,6 +167,10 @@ export const Routes = createBrowserRouter([
             {
                 path: '/admin/blog-upload-success',
                 element: <BlogPostSuccess />
+            },
+            {
+                path: '/admin/session',
+                element: <Sessions />
             },
 
         ]

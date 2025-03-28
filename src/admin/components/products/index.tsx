@@ -1,22 +1,39 @@
 import { useNavigate } from "react-router-dom";
 import Table from "../../../utils/Table";
 import { ColumnT, Product } from "../../../interface/addProduct";
-import React from "react";
-import { useQuery } from "react-query";
-import { getAdminProduct } from "../../services/api-service";
+import React, { useState } from "react";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { deleteProduct, getAdminProduct } from "../../services/api-service";
+import toast from "react-hot-toast";
 
 const Products = () => {
     const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const [products, setProducts] = React.useState<Product[]>([]);
+    const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
+    const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
 
-    const ProductsData = useQuery("products", getAdminProduct, {
+    const { isLoading } = useQuery("PRODUCTS", getAdminProduct, {
         onSuccess: (fetchedData) => {
             setProducts(fetchedData.data.products);
         },
     });
-    React.useEffect(() => {
-        ProductsData
-    })
+
+    const { mutate, isLoading: deleteIsLoading } = useMutation((id: string) => deleteProduct(id), {
+        onSuccess: () => {
+            toast.success('Product deleted successfully');
+            queryClient.invalidateQueries('PRODUCTS');
+            setIsDeleteConfirmationOpen(false);
+            setSelectedProduct(null);
+        },
+        onError: (error: any) => {
+            toast.error(error?.response?.data?.message || 'Failed to delete product');
+        }
+    });
+
+
+
+
     const columns: ColumnT<Product>[] = [
         {
             key: "product_name",
@@ -38,14 +55,14 @@ const Products = () => {
             key: "inventory",
             header: "SKU",
             sortable: true,
-            render: (inventory) => inventory?.sku_id || 'N/A', 
+            render: (inventory) => inventory?.sku_id || 'N/A',
 
         },
         {
             key: "inventory",
             header: "Stock",
             sortable: true,
-            render: (inventory) => inventory?.quantity || 0, 
+            render: (inventory) => inventory?.quantity || 0,
 
         },
         {
@@ -58,7 +75,7 @@ const Products = () => {
             key: "status",
             header: "Status",
             render: (value) => {
-                const statusText = value || "N/A"; 
+                const statusText = value || "N/A";
                 let className = "";
                 if (statusText.toLowerCase() === "low stock") {
                     className = "bg-red-100 text-red-800";
@@ -87,15 +104,26 @@ const Products = () => {
     ];
 
     const handleEdit = (product: Product) => {
-        console.log("Edit product:", product);
+        navigate(`/admin/products/${product?.product_id}/edit`);
     };
-
     const handleDelete = (product: Product) => {
-        console.log("Delete product:", product);
+        setSelectedProduct(product);
+        setIsDeleteConfirmationOpen(true);
     };
 
+
+    const confirmDelete = () => {
+        if (selectedProduct?.product_id) {
+            mutate(selectedProduct.product_id);
+        }
+    };
+
+    const closeDeleteConfirmation = () => {
+        setIsDeleteConfirmationOpen(false);
+        setSelectedProduct(null);
+    };
     const handleView = (product: Product) => {
-       navigate(`/admin/product/${product.product_id}`);
+        navigate(`/admin/product/${product.product_id}`);
     };
 
     const buttons = [
@@ -112,21 +140,68 @@ const Products = () => {
         { label: "Low Stock", value: "low stock" },
     ];
 
+    const DeleteConfirmationModal = () => {
+        if (!isDeleteConfirmationOpen) return null;
+
+        return (
+            <div
+                className="fixed inset-0 bg-black bg-opacity-50 z-50 flex justify-center items-center"
+                onClick={closeDeleteConfirmation}
+            >
+                <div
+                    className="bg-white rounded-lg shadow-xl p-6 w-96"
+                    onClick={(e) => e.stopPropagation()}
+                >
+                    <h2 className="text-xl font-semibold mb-4 text-gray-800">
+                        Confirm Delete
+                    </h2>
+                    <p className="mb-6 text-gray-600">
+                        Are you sure you want to delete the product "{selectedProduct?.product_name}"?
+                        This action cannot be undone.
+                    </p>
+                    <div className="flex justify-end space-x-3">
+                        <button
+                            onClick={closeDeleteConfirmation}
+                            disabled={deleteIsLoading}
+                            className="px-4 py-2 bg-gray-200 text-gray-800 rounded-md hover:bg-gray-300 
+                                       disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                            Cancel
+                        </button>
+                        <button
+                            onClick={confirmDelete}
+                            disabled={deleteIsLoading}
+                            className="px-4 py-2 bg-red-600 text-white rounded-md 
+                                       hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-red-500 
+                                       disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        >
+                            {deleteIsLoading ? 'Deleting...' : 'Delete'}
+                        </button>
+                    </div>
+                </div>
+            </div>
+        );
+    };
     return (
-        <Table
-            data={products}
-            columns={columns}
-            searchPlaceholder="Search Products..."
-            buttons={buttons}
-            actions={{
-                onEdit: handleEdit,
-                onDelete: handleDelete,
-                onView: handleView,
-            }}
-            filterOptions={filterOptions}
-            filterKey="status"
-            rowUrl={(product) => `/admin/product/${product.product_id}`}
-        />
+        <>
+            <Table
+                data={products}
+                columns={columns}
+                searchPlaceholder="Search Products..."
+                buttons={buttons}
+                actions={{
+                    onEdit: handleEdit,
+                    onDelete: handleDelete,
+                    onView: handleView,
+                }}
+                filterOptions={filterOptions}
+                filterKey="status"
+                rowUrl={(product) => `/admin/product/${product.product_id}`}
+                isLoading={isLoading}
+                emptyStateMessage="No products found."
+            />
+            <DeleteConfirmationModal />
+        </>
     );
 };
 

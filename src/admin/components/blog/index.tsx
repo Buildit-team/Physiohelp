@@ -40,7 +40,7 @@ const BlogManagment: React.FC = () => {
 
   const [blogs, setBlogs] = useState<IBlog[]>([]);  
 
-  useQuery('blogs', getBlogs, {
+ const {isLoading} =  useQuery('blogs', getBlogs, {
     onSuccess: (fetchedData) => {
       console.log("Fetched products:", fetchedData);
       setBlogs(fetchedData);
@@ -89,6 +89,8 @@ const BlogManagment: React.FC = () => {
       dateFilterKey="created_at"
       filterOptions={filterOption}
       buttons={buttons}
+      isLoading={isLoading}
+      emptyStateMessage="No blogs found."
     />
   );
 };

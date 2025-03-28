@@ -1,6 +1,6 @@
 import axios from "axios";
 import { SignUpData, LoginData, VerificationData } from "../type/types";
-import { ProductFormData } from "../../interface/addProduct";
+import { IProduct } from "../../interface/addProduct";
 
 const { VITE_ENDPOINT } = import.meta.env;
 
@@ -31,7 +31,7 @@ export const getAdmin = async () => {
     return response.data;
 }
 
-export const uploadProduct = async (uploadData: ProductFormData) => {
+export const uploadProduct = async (uploadData: IProduct) => {
     const response = await axios.post(`${VITE_ENDPOINT}/products`, uploadData, {
         headers: {
             Authorization: `Bearer ${VITE_TOKEN
@@ -52,16 +52,35 @@ export const getProductById = async (productId: string) => {
     const response = await axios.get(`${VITE_ENDPOINT}/products/${productId}`);
     return response?.data?.data?.product;
 };
+
 export const uploadProductImage = async (formData: FormData, id: string) => {
     const response = await axios.post(`${VITE_ENDPOINT}/products/${id}/uploads`, formData, {
         headers: {
             Authorization: `Bearer ${VITE_TOKEN}`,
-            "Content-Type": "multipart/form-data", // Ensure correct header
+            "Content-Type": "multipart/form-data",
         },
     });
     return response.data;
 };
 
+export const deleteProduct = async (id: string) => {
+    const response = await axios.delete(`${VITE_ENDPOINT}/products/${id}`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`,
+            "Content-Type": "multipart/form-data",
+        },
+    });
+    return response.data;
+};
+
+export const updateProduct = async (id: string, uploadEditedData: IProduct) => {
+    const response = await axios.patch(`${VITE_ENDPOINT}/products/${id}`, uploadEditedData, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`,
+        },
+    });
+    return response.data;
+};
 
 export const uploadBlog = async (blogData: FormData) => {
     const response = await axios.post(`${VITE_ENDPOINT}/blogs`, blogData, {
@@ -74,11 +93,32 @@ export const uploadBlog = async (blogData: FormData) => {
 };
 
 export const getBlogs = async () => {
-    const response =  await axios.get(`${VITE_ENDPOINT}/blogs`);
+    const response = await axios.get(`${VITE_ENDPOINT}/blogs`);
     return response.data.data;
 }
+
 
 export const getBlogsId = async (id: string) => {
     const response = await axios.get(`${VITE_ENDPOINT}/blogs/${id}`);
     return response.data.data;
+}
+
+
+export const getAllAppointment = async () => {
+    const response = await axios.get(`${VITE_ENDPOINT}/sessions`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    });
+    return response.data.data
+}
+
+
+export const AddAppointmentType = async (type: string, amount: string) => {
+    const response = await axios.post(`${VITE_ENDPOINT}/sessions/types`, { type, amount }, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    });
+    return response.data.data
 }
