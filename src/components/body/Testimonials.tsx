@@ -58,7 +58,7 @@ const TestimonialCarousel: React.FC = () => {
             }
           }}
           viewport={{
-            amount: 0.2, // Changed from "some" to a numeric value
+            amount: 0.2,
             once: true,
           }} className="bg-pink-500 text-white py-12 w-[100%] flex justify-center">
             <div className='w-[90%]'>

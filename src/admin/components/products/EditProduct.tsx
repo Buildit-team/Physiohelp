@@ -9,8 +9,10 @@ const EditProduct: React.FC = () => {
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const [formData, setFormData] = useState<IProduct>({
-        product_name: '',
-        description: '',
+        product: {
+            product_name: 'New table ',
+            description: 'Nice one ',
+        },
         price: {
             basic_price: 0,
             discounted_rate: 0,
@@ -30,31 +32,7 @@ const EditProduct: React.FC = () => {
         status: 'published',
     });
 
-    const { isLoading } = useQuery([`PRODUCT_${id}`], () => getProductById(id!), {
-        onSuccess: (data) => {
-            setFormData({
-                product_name: data.product_name,
-                description: data.description,
-                price: {
-                    basic_price: data.price.basic_price,
-                    discounted_rate: data.price.discounted_rate,
-                    vat: data.price.vat,
-                },
-                inventory: {
-                    quantity: data.inventory.quantity,
-                    sku_id: data.inventory.sku_id,
-                    barcode: data.inventory.barcode,
-                },
-                shipping_details: {
-                    weight: data.shipping_details.weight,
-                    width: data.shipping_details.width,
-                    height: data.shipping_details.height,
-                    length: data.shipping_details.length,
-                },
-                status: data.status,
-            });
-        },
-    });
+    const { isLoading } = useQuery([`PRODUCT_${id}`], () => getProductById(id!), {});
 
     const mutation = useMutation(async (updatedProduct: IProduct) => { return updateProduct(id!, updatedProduct); }, {
         onSuccess: () => {
@@ -82,7 +60,7 @@ const EditProduct: React.FC = () => {
                 ...prev,
                 price: {
                     ...prev.price,
-                    [priceKey]: Number(value), // Assuming price values are numbers
+                    [priceKey]: Number(value),
                 },
             }));
         } else if (name.startsWith('inventory.')) {
@@ -100,7 +78,16 @@ const EditProduct: React.FC = () => {
                 ...prev,
                 shipping_details: {
                     ...prev.shipping_details,
-                    [shippingKey]: Number(value), 
+                    [shippingKey]: Number(value),
+                },
+            }));
+        } else if (name.startsWith('product.')) {
+            const [, productkey] = name.split('.');
+            setFormData((prev) => ({
+                ...prev,
+                product: {
+                    ...prev.product,
+                    [productkey]: value,
                 },
             }));
         }
@@ -126,8 +113,8 @@ const EditProduct: React.FC = () => {
                             <label className="block text-sm font-lgiht text-[#777980] mb-1">Product Name</label>
                             <input
                                 type="text"
-                                name="product_name" 
-                                value={formData.product_name}
+                                name="product.product_name"
+                                value={formData.product.product_name}
                                 onChange={handleInputChange}
                                 placeholder="Type product name here..."
                                 className="w-full p-2 border border-gray-300 rounded-md text-[12px] focus:outline-none focus:ring-2 focus:ring-blue-100"
@@ -137,8 +124,8 @@ const EditProduct: React.FC = () => {
                         <div>
                             <label className="block text-sm font-lgiht text-[#777980] mb-1">Description</label>
                             <textarea
-                                name="description"
-                                value={formData.description}
+                                name="product.description"
+                                value={formData.product.description}
                                 onChange={handleInputChange}
                                 placeholder="Type product description here..."
                                 rows={4}
@@ -148,13 +135,13 @@ const EditProduct: React.FC = () => {
                     </div>
                 </div>
 
-                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] flex flex-col gap-[10px]  max-[650px]:shadow-none">
+                {/* <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] flex flex-col gap-[10px]  max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">Pricing</h2>
                     <div>
                         <label className="block text-sm font-lgiht text-[#777980] mb-1">Base Price</label>
                         <input
                             type="number"
-                            name="price.basic_price" 
+                            name="price.basic_price"
                             value={formData.price.basic_price}
                             onChange={handleInputChange}
                             placeholder="Type base price here..."
@@ -183,9 +170,9 @@ const EditProduct: React.FC = () => {
                             className="w-full p-2 border border-gray-300 rounded-md text-[12px] focus:outline-none focus:ring-2 focus:ring-gray-100"
                         />
                     </div>
-                </div>
+                </div> */}
 
-                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
+                {/* <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">Inventory</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
@@ -203,7 +190,7 @@ const EditProduct: React.FC = () => {
                             <label className="block text-sm font-lgiht text-[#777980] mb-1">Barcode</label>
                             <input
                                 type="text"
-                                name="inventory.barcode" 
+                                name="inventory.barcode"
                                 value={formData.inventory.barcode}
                                 onChange={handleInputChange}
                                 placeholder="Product barcode..."
@@ -214,7 +201,7 @@ const EditProduct: React.FC = () => {
                             <label className="block text-sm font-lgiht text-[#777980] mb-1">Quantity</label>
                             <input
                                 type="number"
-                                name="inventory.quantity" 
+                                name="inventory.quantity"
                                 value={formData.inventory.quantity}
                                 onChange={handleInputChange}
                                 placeholder="Type product quantity here..."
@@ -222,16 +209,16 @@ const EditProduct: React.FC = () => {
                             />
                         </div>
                     </div>
-                </div>
+                </div> */}
 
-                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
+                {/* <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">Shipping and Delivery</h2>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
                             <label className="block text-sm font-lgiht text-[#777980] mb-1">Weight</label>
                             <input
                                 type="number"
-                                name="shipping_details.weight" 
+                                name="shipping_details.weight"
                                 value={formData.shipping_details.weight}
                                 onChange={handleInputChange}
                                 placeholder="Product weight..."
@@ -272,7 +259,7 @@ const EditProduct: React.FC = () => {
                             />
                         </div>
                     </div>
-                </div>
+                </div> */}
             </div>
             <div className=" w-[40%] flex justify-end gap-4 max-[650px]:w-full max-[650px]:justify-center max-[650px]:mb-[10px]">
                 <button

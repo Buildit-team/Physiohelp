@@ -21,7 +21,7 @@ const Discount = () => {
             }
           }}
           viewport={{
-            amount: 0.2, // Changed from "some" to a numeric value
+            amount: 0.2,
             once: true,
           }} className="w-[100%] h-auto pt-[80px] pb-[50px] flex flex-col justify-center mt-[30px] gap-[20px] bg-[#F3F5F7]">
             <div className="w-full h-auto flex flex-col gap-[30px]">

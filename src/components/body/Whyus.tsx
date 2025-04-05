@@ -19,14 +19,14 @@ const Whyus = () => {
         },
       }}
       viewport={{
-        amount: 0.2, // Changed from "some" to a numeric value
+        amount: 0.2, 
         once: true,
       }}
       className="w-[90%] h-auto pt-[80px] pb-[50px] flex justify-center mt-[30px] gap-[20px]"
     >
       <div className="w-[90%] flex justify-center gap-[10px] max-[650px]:flex-col">
         <div className="w-[50%] flex flex-col gap-[20px] max-[650px]:w-full">
-          <p className="text-[18px] font-[300] text-[#D64779] font-montserrat leading-[30px] p-0 max-[650px]:text-center max-[650px]:text-[14px] max-[650px]:leading-[20px] mt-[20px] font-bold">
+          <p className="text-[18px] font-[300] text-[#D64779] font-montserrat leading-[30px] p-0 max-[650px]:text-center max-[650px]:text-[14px] max-[650px]:leading-[20px] mt-[20px]">
             Why Us?
           </p>
           <h1 className="text-[70px] p-0 m-0 max-[650px]:text-[50px] max-[425px]:text-[40px] max-[650px]:text-center text-[#1053D4] font-Cormorant leading-none font-bold">

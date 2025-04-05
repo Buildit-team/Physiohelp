@@ -23,7 +23,7 @@ const Carousel = () => {
             }
           }}
           viewport={{
-            amount: 0.2, // Changed from "some" to a numeric value
+            amount: 0.2,
             once: true,
           }} className="w-[100%] flex justify-center items-center max-[650px]:h-[300px]">
             <div className='w-[90%] flex items-center justify-center h-[300px]'>

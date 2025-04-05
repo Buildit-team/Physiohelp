@@ -1,6 +1,8 @@
 export interface IProduct {
-    product_name: string;
-    description: string;
+    product: {
+        product_name: string;
+        description: string;
+    },
     price: {
         basic_price: number;
         discounted_rate: number;
@@ -19,7 +21,7 @@ export interface IProduct {
     };
     status: string;
 }
-export interface ProductImage{
+export interface ProductImage {
     images: File[];
 }
 
