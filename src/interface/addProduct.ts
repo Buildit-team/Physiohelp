@@ -117,4 +117,7 @@ export type TablePropsT<T extends DataItemT> = {
     isLoading?: boolean;
     emptyStateMessage?: string
     emptyStateSubMessage?: string
+    onPageChange?: (page: number) => void;
+    currentPage?: number;
+    totalItems?: number;
 };

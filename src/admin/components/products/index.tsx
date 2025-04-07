@@ -12,17 +12,34 @@ const Products = () => {
     const [products, setProducts] = React.useState<Product[]>([]);
     const [selectedProduct, setSelectedProduct] = useState<Product | null>(null);
     const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
-
-    const { isLoading } = useQuery("PRODUCTS", getAdminProduct, {
-        onSuccess: (fetchedData) => {
-            setProducts(fetchedData.data.products);
-        },
+    const [pagination, setPagination] = useState({
+        currentPage: 1,
+        limit: 10,
+        totalItems: 0
     });
+    const offset = (pagination.currentPage - 1) * pagination.limit;
+
+    const { isLoading } = useQuery(
+        ["PRODUCTS", offset, pagination.limit],
+        () => getAdminProduct(offset, pagination.limit),
+        {
+            onSuccess: (fetchedData) => {
+                setProducts(fetchedData.data.products);
+                if (fetchedData.data.length) {
+                    setPagination(prev => ({
+                        ...prev,
+                        totalItems: fetchedData.data.length
+                    }));
+                }
+            },
+            keepPreviousData: true
+        }
+    );
 
     const { mutate, isLoading: deleteIsLoading } = useMutation((id: string) => deleteProduct(id), {
         onSuccess: () => {
             toast.success('Product deleted successfully');
-            queryClient.invalidateQueries('PRODUCTS');
+            queryClient.invalidateQueries(['PRODUCTS']);
             setIsDeleteConfirmationOpen(false);
             setSelectedProduct(null);
         },
@@ -31,15 +48,13 @@ const Products = () => {
         }
     });
 
-
-
-
     const columns: ColumnT<Product>[] = [
         {
             key: "product_name",
             header: "Products",
             sortable: false,
             isImageWithText: true,
+            searchable: true,
             imageWithTextConfig: {
                 imageKey: "product_image",
                 textKey: "product_name",
@@ -55,15 +70,14 @@ const Products = () => {
             key: "inventory",
             header: "SKU",
             sortable: true,
+            searchable: true, // Enable search on SKU
             render: (inventory) => inventory?.sku_id || 'N/A',
-
         },
         {
             key: "inventory",
             header: "Stock",
             sortable: true,
             render: (inventory) => inventory?.quantity || 0,
-
         },
         {
             key: "price",
@@ -74,6 +88,7 @@ const Products = () => {
         {
             key: "status",
             header: "Status",
+            searchable: true, 
             render: (value) => {
                 const statusText = value || "N/A";
                 let className = "";
@@ -82,7 +97,7 @@ const Products = () => {
                 } else if (statusText.toLowerCase() === "published") {
                     className = "bg-yellow-100 text-yellow-800";
                 } else {
-                    className = "bg-gray-100 text-gray-800"; // Default
+                    className = "bg-gray-100 text-gray-800";
                 }
                 return (
                     <span className={`px-2 py-1 rounded-full text-xs uppercase ${className}`}>
@@ -106,11 +121,11 @@ const Products = () => {
     const handleEdit = (product: Product) => {
         navigate(`/admin/products/${product?.product_id}/edit`);
     };
+
     const handleDelete = (product: Product) => {
         setSelectedProduct(product);
         setIsDeleteConfirmationOpen(true);
     };
-
 
     const confirmDelete = () => {
         if (selectedProduct?.product_id) {
@@ -122,8 +137,17 @@ const Products = () => {
         setIsDeleteConfirmationOpen(false);
         setSelectedProduct(null);
     };
+
     const handleView = (product: Product) => {
         navigate(`/admin/product/${product.product_id}`);
+    };
+
+
+    const handlePageChange = (newPage: any) => {
+        setPagination(prev => ({
+            ...prev,
+            currentPage: newPage
+        }));
     };
 
     const buttons = [
@@ -182,6 +206,7 @@ const Products = () => {
             </div>
         );
     };
+
     return (
         <>
             <Table
@@ -199,6 +224,11 @@ const Products = () => {
                 rowUrl={(product) => `/admin/product/${product.product_id}`}
                 isLoading={isLoading}
                 emptyStateMessage="No products found."
+                // Add pagination props
+                itemsPerPage={pagination.limit}
+                totalItems={pagination.totalItems}
+                currentPage={pagination.currentPage}
+                onPageChange={handlePageChange}
             />
             <DeleteConfirmationModal />
         </>

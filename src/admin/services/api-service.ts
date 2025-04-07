@@ -4,8 +4,8 @@ import { IProduct } from "../../interface/addProduct";
 
 const { VITE_ENDPOINT } = import.meta.env;
 
-const { VITE_TOKEN } = import.meta.env;
-// const token = localStorage.getItem('token')
+// const { VITE_TOKEN } = import.meta.env;
+const VITE_TOKEN = localStorage.getItem('token')
 
 export const CreateAccount = async (userData: SignUpData) => {
     const response = await axios.post(`${VITE_ENDPOINT}/admins/auth`, userData);
@@ -40,8 +40,9 @@ export const uploadProduct = async (uploadData: IProduct) => {
     })
     return response.data;
 }
-export const getAdminProduct = async () => {
-    const response = await axios.get(`${VITE_ENDPOINT}/admins/products`, {
+export const getAdminProduct = async (page : number, itemsPerPage: number) => {
+    const offset = page;
+    const response = await axios.get(`${VITE_ENDPOINT}/admins/products/?offset=${offset}&limit=${itemsPerPage}`, {
         headers: {
             Authorization: `Bearer ${VITE_TOKEN}`
         }
