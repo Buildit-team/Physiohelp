@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import { MapPin, Phone, Mail, Package, Calendar, PieChartIcon, ShoppingCartIcon } from "lucide-react";
+import { MapPin, Phone, Mail, Package, PieChartIcon, ShoppingCartIcon } from "lucide-react";
 import { useParams } from "react-router-dom";
 import { ColumnT } from "../../../interface/addProduct";
 import { Customer, CustomerOrderStats, CustomerOrderTransactionHistory } from "../../../interface/customer";
@@ -138,12 +138,6 @@ const CustomerDetailsPage = () => {
                             <div>
                                 <p className="text-sm text-gray-500">Phone Number</p>
                                 <p className="font-medium">{customer?.phone_number}</p>
-                            </div>
-                        </div>
-
-                        <div className="flex items-center space-x-3 text-gray-600">
-                            <div className="flex items-center justify-center w-8 h-8 bg-gray-50 rounded-lg">
-                                <Calendar className="w-4 h-4" />
                             </div>
                         </div>
                     </div>
