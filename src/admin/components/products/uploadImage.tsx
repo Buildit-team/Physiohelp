@@ -1,10 +1,12 @@
 import { useState } from "react";
 import { ProductImage } from "../../../interface/addProduct";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { uploadProductImage } from "../../services/api-service";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 const UploadImage = () => {
+    const navigate = useNavigate();
+    const queryClient = useQueryClient();
     const { id } = useParams<{ id: string }>();
     const [formData, setFormData] = useState<ProductImage>({
         images: [],
@@ -35,7 +37,7 @@ const UploadImage = () => {
             throw new Error("Product ID is required to upload images");
         }
 
-        const response = await uploadProductImage(formData, id);  // Pass formData directly
+        const response = await uploadProductImage(formData, id);
 
         if (!response) {
             throw new Error("Failed to upload images");
@@ -45,7 +47,14 @@ const UploadImage = () => {
     };
 
 
-    const { mutate: upload, isLoading, isError, isSuccess } = useMutation(uploadImages);
+    const { mutate: upload, isLoading, isError, isSuccess } = useMutation(uploadImages ,  {
+        onSuccess: () => {
+            setPhotoPreviews([]);
+            setFormData({ images: [] });
+            queryClient.invalidateQueries(['PRODUCTS']);
+            navigate('/admin/product');
+        }
+    }) ;
 
     const handleUpload = () => {
         if (formData.images.length > 0) {

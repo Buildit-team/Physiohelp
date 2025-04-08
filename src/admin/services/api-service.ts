@@ -1,12 +1,13 @@
 import axios from "axios";
 import { SignUpData, LoginData, VerificationData } from "../type/types";
-import { ProductFormData } from "../../interface/addProduct";
+import { CartItems, CustomerInfo, IProduct } from "../../interface/addProduct";
 
 const { VITE_ENDPOINT } = import.meta.env;
 
-const { VITE_TOKEN } = import.meta.env;
-// const token = localStorage.getItem('token')
+// const { VITE_TOKEN } = import.meta.env;
+const VITE_TOKEN = localStorage.getItem('token')
 
+/// ADMIN
 export const CreateAccount = async (userData: SignUpData) => {
     const response = await axios.post(`${VITE_ENDPOINT}/admins/auth`, userData);
     return response.data;
@@ -31,7 +32,7 @@ export const getAdmin = async () => {
     return response.data;
 }
 
-export const uploadProduct = async (uploadData: ProductFormData) => {
+export const uploadProduct = async (uploadData: IProduct) => {
     const response = await axios.post(`${VITE_ENDPOINT}/products`, uploadData, {
         headers: {
             Authorization: `Bearer ${VITE_TOKEN
@@ -40,28 +41,49 @@ export const uploadProduct = async (uploadData: ProductFormData) => {
     })
     return response.data;
 }
-export const getAdminProduct = async () => {
-    const response = await axios.get(`${VITE_ENDPOINT}/admins/products`, {
+export const getAdminProduct = async (page : number, itemsPerPage: number) => {
+    const offset = page;
+    const response = await axios.get(`${VITE_ENDPOINT}/admins/products/?offset=${offset}&limit=${itemsPerPage}`, {
         headers: {
             Authorization: `Bearer ${VITE_TOKEN}`
         }
     });
     return response.data;
 }
+
 export const getProductById = async (productId: string) => {
     const response = await axios.get(`${VITE_ENDPOINT}/products/${productId}`);
     return response?.data?.data?.product;
 };
+
 export const uploadProductImage = async (formData: FormData, id: string) => {
     const response = await axios.post(`${VITE_ENDPOINT}/products/${id}/uploads`, formData, {
         headers: {
             Authorization: `Bearer ${VITE_TOKEN}`,
-            "Content-Type": "multipart/form-data", // Ensure correct header
+            "Content-Type": "multipart/form-data",
         },
     });
     return response.data;
 };
 
+export const deleteProduct = async (id: string) => {
+    const response = await axios.delete(`${VITE_ENDPOINT}/products/${id}`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`,
+            "Content-Type": "multipart/form-data",
+        },
+    });
+    return response.data;
+};
+
+export const updateProduct = async (id: string, uploadEditedData: IProduct) => {
+    const response = await axios.patch(`${VITE_ENDPOINT}/products/${id}`, uploadEditedData, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`,
+        },
+    });
+    return response.data;
+};
 
 export const uploadBlog = async (blogData: FormData) => {
     const response = await axios.post(`${VITE_ENDPOINT}/blogs`, blogData, {
@@ -74,6 +96,97 @@ export const uploadBlog = async (blogData: FormData) => {
 };
 
 export const getBlogs = async () => {
-    const response =  await axios.get(`${VITE_ENDPOINT}/blogs`);
+    const response = await axios.get(`${VITE_ENDPOINT}/blogs`);
     return response.data.data;
+}
+
+
+export const getBlogsId = async (id: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/blogs/${id}`);
+    return response.data.data;
+}
+
+
+export const getAllAppointment = async () => {
+    const response = await axios.get(`${VITE_ENDPOINT}/sessions`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    });
+    return response.data.data
+}
+
+
+export const AddAppointmentType = async (type: string, amount: string) => {
+    const response = await axios.post(`${VITE_ENDPOINT}/sessions/types`, { type, amount }, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    });
+    return response.data.data
+}
+
+export const getAllCustomer = async () => {
+    const response = await axios.get(`${VITE_ENDPOINT}/customers`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        } 
+    })
+    return response.data.data
+}
+
+export const getCustomerById = async (id : string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/customers/${id}`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+
+export const getCustomerSummaryById = async (id: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/customers/${id}/summary`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+
+export const getCustomerTransactionById = async (id: string,type: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/customers/${id}/transactions?type=${type}`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+
+////USER
+
+export const getUserProduct = async (page: number, itemsPerPage: number) => {
+    const offset = page;
+    const response = await axios.get(`${VITE_ENDPOINT}/products/?offset=${offset}&limit=${itemsPerPage}`);
+    return response.data;
+}
+
+export const getUserProductDetails = async (productId: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/products/${productId}`);
+    return response?.data?.data?.product;
+};
+
+export const createCart = async (items: CartItems[], totalPrice: number) => {
+    const response = await axios.post(`${VITE_ENDPOINT}/carts`, { items, totalPrice },);
+    return response.data;
+}
+
+export const createOrder = async (customer_info: CustomerInfo, id: string) => { 
+    const response = await axios.post(`${VITE_ENDPOINT}/orders/carts/${id}`, { customer_info })
+        return response.data;
+}
+
+
+export const completeOrder = async (id: string) => {
+    const response = await axios.post(`${VITE_ENDPOINT}/payments/orders/${id}`)
+    return response.data;
 }

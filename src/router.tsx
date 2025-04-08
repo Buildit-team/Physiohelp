@@ -10,12 +10,12 @@ import BookAppointment from "./components/appointment/BookAppointment";
 import AppointmentPreview from "./components/appointment/AppointmentPreview";
 import Admin from "./admin";
 import CustomerManagement from "./admin/components/customer";
-import OrderManagement from "./admin/components/order";
+// import OrderManagement from "./admin/components/order";
 import Products from "./admin/components/products";
 import ReportManagement from "./admin/components/report";
 import BlogManagment from "./admin/components/blog";
 import AddProduct from "./admin/components/products/AddProduct";
-import CustomerDetailsPage from "./admin/components/customer/DetailsPage";
+import CustomerDetailsPage from "./admin/components/customer/index[id]";
 import BlogUploadPage from "./admin/components/blog/AddBlog";
 import BlogPreviewPage from "./admin/components/blog/BlogPreview";
 import BlogPostSuccess from "./admin/components/blog/UploadSuccess";
@@ -24,6 +24,11 @@ import Login from "./admin/auth/login";
 import VerifyEmail from "./admin/auth/verify";
 import UploadImage from "./admin/components/products/uploadImage";
 import ProductDetails from "./admin/components/products/index[id]";
+import BlogPage from "./components/blog";
+import BlogDetailsPage from "./components/blog/index[id]";
+import Sessions from "./admin/components/session";
+import EditProduct from "./admin/components/products/EditProduct";
+import OrderSuccessPage from "./components/cart/orderSuccessPage";
 
 
 export const Routes = createBrowserRouter([
@@ -42,6 +47,33 @@ export const Routes = createBrowserRouter([
             <ScrollToTop>
                 <Layout>
                     <ShopPage />
+                </Layout>
+            </ScrollToTop>
+    },
+    {
+        path: '/order-success',
+        element:
+            <ScrollToTop>
+                <Layout>
+                    <OrderSuccessPage />
+                </Layout>
+            </ScrollToTop>
+    },
+    {
+        path: '/blog',
+        element:
+            <ScrollToTop>
+                <Layout>
+                    <BlogPage />
+                </Layout>
+            </ScrollToTop>
+    },
+    {
+        path: '/blog/:id',
+        element:
+            <ScrollToTop>
+                <Layout>
+                    <BlogDetailsPage />
                 </Layout>
             </ScrollToTop>
     },
@@ -111,9 +143,13 @@ export const Routes = createBrowserRouter([
                 element: <UploadImage />
             },
             {
-                path: '/admin/order',
-                element: <OrderManagement />
+                path: '/admin/products/:id/edit',
+                element: <EditProduct/>
             },
+            // {
+            //     path: '/admin/order',
+            //     element: <OrderManagement />
+            // },
             {
                 path: '/admin/customer',
                 element: <CustomerManagement />
@@ -141,6 +177,10 @@ export const Routes = createBrowserRouter([
             {
                 path: '/admin/blog-upload-success',
                 element: <BlogPostSuccess />
+            },
+            {
+                path: '/admin/session',
+                element: <Sessions />
             },
 
         ]

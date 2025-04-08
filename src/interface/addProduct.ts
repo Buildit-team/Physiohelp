@@ -1,20 +1,27 @@
-export interface ProductFormData {
-    name: string;
-    description: string;
+export interface IProduct {
+    product: {
+        product_name: string;
+        description: string;
+    },
+    price: {
+        basic_price: number;
+        discounted_rate: number;
+        vat: number;
+    };
+    inventory: {
+        quantity: number;
+        sku_id: string;
+        barcode: string;
+    };
+    shipping_details: {
+        weight: number;
+        width: number;
+        height: number;
+        length: number;
+    };
     status: string;
-    basePrice: number;
-    discountPercentage: number;
-    taxClass?: string;
-    vatAmount: number;
-    sku: string;
-    barcode: string;
-    quantity: number;
-    weight: number;
-    height: number;
-    length: number;
-    width: number;
 }
-export interface ProductImage{
+export interface ProductImage {
     images: File[];
 }
 
@@ -24,7 +31,7 @@ export type Product = {
     admin_id: string;
     product_name: string;
     description: string;
-    product_image: { image_id: string; image_url: string; }[] | null; // Changed to array of image objects or null
+    product_image: { image_id: string; image_url: string; }[] | null;
     price: {
         vat: number;
         basic_price: number;
@@ -44,12 +51,15 @@ export type Product = {
         length: number;
         weight: number;
     };
-    status: string; // Changed to string
+    status: string;
     created_at: string;
     updated_at: string;
 };
 
-
+export interface ProductImgae {
+    image_id: string; 
+    image_url: string;
+}
 
 export type ImageWithTextConfig = {
     imageKey: string;
@@ -107,4 +117,25 @@ export type TablePropsT<T extends DataItemT> = {
     dateFilterKey?: keyof T;
     itemsPerPage?: number;
     rowUrl?: (item: T) => string;
+    isLoading?: boolean;
+    emptyStateMessage?: string
+    emptyStateSubMessage?: string
+    onPageChange?: (page: number) => void;
+    currentPage?: number;
+    totalItems?: number;
 };
+
+
+
+export interface CartItems {
+    product_id: string;
+    quantity: number;
+    sub_total: number;
+}
+
+export interface CustomerInfo {
+    name: string;
+    email: string;
+    phone_number: string;
+    address: string;
+}

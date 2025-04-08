@@ -1,16 +1,18 @@
 import React, { useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
-import { useQuery } from "react-query";
-import { getProductById } from "../../services/api-service";
+import { useMutation, useQuery, useQueryClient } from "react-query";
+import { deleteProduct, getProductById } from "../../services/api-service";
 import Skeleton from "react-loading-skeleton";
 import "react-loading-skeleton/dist/skeleton.css";
 import { LiaTimesSolid } from "react-icons/lia";
+import toast from "react-hot-toast";
 
 const ProductDetails = () => {
+    const queryClient = useQueryClient();
     const { id } = useParams<{ id: string }>();
     const navigate = useNavigate();
     const { data: product, isLoading, error } = useQuery(
-        ["product", id],
+        [`PRODUCT_${id}`],
         () => getProductById(id!),
         {
             enabled: !!id,
@@ -18,10 +20,25 @@ const ProductDetails = () => {
         }
     );
 
+
+    const deleteProductMutation = useMutation(
+        (productId: string) => deleteProduct(productId),
+        {
+            onSuccess: () => {
+                toast.success('Product deleted successfully');
+                queryClient.invalidateQueries(`PRODUCT_${id}`);
+                navigate('/admin/product');
+            },
+            onError: (error: any) => {
+                toast.error(error?.response?.data?.message || 'Failed to delete product');
+            }
+        }
+    );
+
     const [mainImage, setMainImage] = useState<string | undefined>(product?.product_image?.[0]?.image_url);
     const [isManageModalOpen, setIsManageModalOpen] = useState(false);
     const [isDeleteConfirmationOpen, setIsDeleteConfirmationOpen] = useState(false);
-    // Update mainImage when product data loads or changes
+
     React.useEffect(() => {
         if (product?.product_image?.[0]?.image_url) {
             setMainImage(product.product_image[0].image_url);
@@ -41,25 +58,25 @@ const ProductDetails = () => {
     };
 
     const handleEditClick = () => {
-        console.log("Edit clicked for product ID:", id);
-        Example: navigate(`/admin/products/${id}/edit`);
+        navigate(`/admin/products/${id}/edit`);
         closeManageModal();
     };
 
     const handleDeleteClick = () => {
-        setIsManageModalOpen(false); // Optionally close the main manage modal
+        setIsManageModalOpen(false);
         setIsDeleteConfirmationOpen(true);
     };
 
     const closeDeleteConfirmation = () => {
         setIsDeleteConfirmationOpen(false);
-        // setIsManageModalOpen(true); 
     };
+
     const confirmDelete = () => {
-        console.log("Confirm Delete clicked for product ID:", id);
-        // In a real application, you would trigger the actual delete API call
-        closeDeleteConfirmation();
+        if (id) {
+            deleteProductMutation.mutate(id);
+        }
     };
+
 
     if (isLoading) {
         return (
@@ -243,11 +260,11 @@ const ProductDetails = () => {
                 </div>
             </div>
             {isManageModalOpen && (
-                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
+                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
                     <div className="bg-white rounded-lg shadow-lg p-8 flex flex-col gap-[10px] relative">
                         <button
                             onClick={closeManageModal}
-                            className= "text-gray-800 right-4 top-4 font-semibold  absolute  rounded focus:outline-none focus:shadow-outline"
+                            className="absolute right-4 top-4 text-gray-800 hover:text-gray-600"
                         >
                             <LiaTimesSolid />
                         </button>
@@ -270,27 +287,33 @@ const ProductDetails = () => {
                 </div>
             )}
             {isDeleteConfirmationOpen && (
-                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center">
-                    <div className="bg-white rounded-lg shadow-lg p-8">
-                        <h2 className="text-lg font-semibold text-gray-800 mb-4">Are you sure you want to delete?</h2>
-                        <p className="text-gray-700 mb-4">This action cannot be undone.</p>
+                <div className="fixed inset-0 bg-gray-500 bg-opacity-75 flex items-center justify-center z-50">
+                    <div className="bg-white rounded-lg shadow-lg p-8 max-w-md w-full">
+                        <h2 className="text-lg font-semibold text-gray-800 mb-4">Confirm Delete</h2>
+                        <p className="text-gray-700 mb-4">
+                            Are you sure you want to delete the product "{product?.product_name}"?
+                            This action cannot be undone.
+                        </p>
                         <div className="flex justify-end gap-4">
                             <button
-                                onClick={confirmDelete}
-                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                onClick={closeDeleteConfirmation}
+                                disabled={deleteProductMutation.isLoading}
+                                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:opacity-50"
                             >
-                                Yes, Delete
+                                Cancel
                             </button>
                             <button
-                                onClick={closeDeleteConfirmation}
-                                className="bg-gray-300 hover:bg-gray-400 text-gray-800 font-semibold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+                                onClick={confirmDelete}
+                                disabled={deleteProductMutation.isLoading}
+                                className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline disabled:opacity-50"
                             >
-                                No, Cancel
+                                {deleteProductMutation.isLoading ? 'Deleting...' : 'Delete'}
                             </button>
                         </div>
                     </div>
                 </div>
             )}
+
         </div>
     );
 };

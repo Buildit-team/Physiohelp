@@ -7,6 +7,7 @@ import { IoReaderOutline } from "react-icons/io5";
 import { useNavigate } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { CiWallet } from "react-icons/ci";
+import { SiSession } from "react-icons/si";
 
 const Sidebar = ({ onClose }: { onClose: () => void }) => {
     const navigate = useNavigate();
@@ -24,7 +25,7 @@ const Sidebar = ({ onClose }: { onClose: () => void }) => {
                 <span>
                     <img src="/newlogo.svg" alt="Logo" />
                 </span>
-                <div className="w-full mt-[40px] flex flex-col items-center gap-[30px]">
+                <div className="w-full mt-[40px] flex flex-col items-center gap-[10px]">
                     <span
                         className="w-[80%] h-[60px] cursor-pointer flex gap-[10px] items-center text-white"
                         onClick={() => {
@@ -54,6 +55,16 @@ const Sidebar = ({ onClose }: { onClose: () => void }) => {
                     >
                         <SiHackthebox />
                         <p>Product Management</p>
+                    </span>
+                    <span
+                        className="w-[80%] h-[60px] cursor-pointer flex gap-[10px] items-center text-white"
+                        onClick={() => {
+                            navigate("/admin/session")
+                            onClose()
+                        }}
+                    >
+                        <SiSession />
+                        <p>Session Management</p>
                     </span>
                     <span
                         className="w-[80%] h-[60px] cursor-pointer flex gap-[10px] items-center text-white"

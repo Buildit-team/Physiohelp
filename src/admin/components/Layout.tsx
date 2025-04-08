@@ -9,24 +9,21 @@ import { getAdmin } from '../services/api-service';
 
 const Layout = () => {
     const location = useLocation();
-    const [currentTitle, setCurrentTitle] = useState("Dashboard");
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-    const [name, setName] = useState()
 
-    const { data } = useQuery('user', () => getAdmin(), {
-        onSuccess: () => {
-            setName(data?.data?.name)
-        }
-    })
+    const { data } = useQuery('user', () => getAdmin());
+
     useEffect(() => {
         const title = routeTitleMap[location.pathname] || "Admin";
-        setCurrentTitle(title);
         document.title = title;
     }, [location.pathname]);
 
     const toggleSidebar = () => {
         setIsSidebarOpen(!isSidebarOpen);
     };
+
+    const currentTitle = routeTitleMap[location.pathname] || "Admin";
+    const adminName = data?.data?.name;
 
     return (
         <div className="w-full flex h-screen">
@@ -47,7 +44,7 @@ const Layout = () => {
                         </span>
                         <div className="flex-1 md:w-[80%] flex justify-end gap-3 md:gap-[10px] items-center">
                             <span className="flex items-center justify-center px-3 py-1.5 rounded-[8px] bg-[#E1E6FF]">
-                                <p className="text-sm md:text-base">{name}</p>
+                                <p className="text-sm md:text-base">{adminName}</p>
                             </span>
                             <button className="p-2 rounded-full hover:bg-gray-100">
                                 <IoMdNotificationsOutline className="w-6 h-6" />
@@ -56,7 +53,7 @@ const Layout = () => {
                     </div>
                 </div>
                 <div className="w-full h-auto flex justify-center">
-                    <div className="flex w-[95%] h-full">
+                    <div className="flex w-[95%] h-full max-[650px]:w-full">
                         <Outlet />
                     </div>
                 </div>
@@ -71,4 +68,3 @@ const Layout = () => {
 };
 
 export default Layout;
-
