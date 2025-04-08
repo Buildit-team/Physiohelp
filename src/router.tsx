@@ -10,7 +10,7 @@ import BookAppointment from "./components/appointment/BookAppointment";
 import AppointmentPreview from "./components/appointment/AppointmentPreview";
 import Admin from "./admin";
 import CustomerManagement from "./admin/components/customer";
-import OrderManagement from "./admin/components/order";
+// import OrderManagement from "./admin/components/order";
 import Products from "./admin/components/products";
 import ReportManagement from "./admin/components/report";
 import BlogManagment from "./admin/components/blog";
@@ -146,10 +146,10 @@ export const Routes = createBrowserRouter([
                 path: '/admin/products/:id/edit',
                 element: <EditProduct/>
             },
-            {
-                path: '/admin/order',
-                element: <OrderManagement />
-            },
+            // {
+            //     path: '/admin/order',
+            //     element: <OrderManagement />
+            // },
             {
                 path: '/admin/customer',
                 element: <CustomerManagement />
