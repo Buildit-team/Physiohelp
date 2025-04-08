@@ -15,7 +15,7 @@ import Products from "./admin/components/products";
 import ReportManagement from "./admin/components/report";
 import BlogManagment from "./admin/components/blog";
 import AddProduct from "./admin/components/products/AddProduct";
-import CustomerDetailsPage from "./admin/components/customer/DetailsPage";
+import CustomerDetailsPage from "./admin/components/customer/index[id]";
 import BlogUploadPage from "./admin/components/blog/AddBlog";
 import BlogPreviewPage from "./admin/components/blog/BlogPreview";
 import BlogPostSuccess from "./admin/components/blog/UploadSuccess";

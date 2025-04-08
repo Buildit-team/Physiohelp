@@ -7,6 +7,7 @@ const { VITE_ENDPOINT } = import.meta.env;
 // const { VITE_TOKEN } = import.meta.env;
 const VITE_TOKEN = localStorage.getItem('token')
 
+/// ADMIN
 export const CreateAccount = async (userData: SignUpData) => {
     const response = await axios.post(`${VITE_ENDPOINT}/admins/auth`, userData);
     return response.data;
@@ -124,6 +125,44 @@ export const AddAppointmentType = async (type: string, amount: string) => {
     });
     return response.data.data
 }
+
+export const getAllCustomer = async () => {
+    const response = await axios.get(`${VITE_ENDPOINT}/customers`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        } 
+    })
+    return response.data.data
+}
+
+export const getCustomerById = async (id : string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/customers/${id}`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+
+export const getCustomerSummaryById = async (id: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/customers/${id}/summary`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+
+export const getCustomerTransactionById = async (id: string,type: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/customers/${id}/transactions?type=${type}`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+
+////USER
 
 export const getUserProduct = async (page: number, itemsPerPage: number) => {
     const offset = page;

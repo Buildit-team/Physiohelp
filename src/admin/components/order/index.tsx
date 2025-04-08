@@ -1,7 +1,6 @@
 import { useMemo, useCallback } from "react";
 import Table from "../../../utils/Table";
 import { ColumnT, Product } from "../../../interface/addProduct";
-import { products } from "../products/data";
 
 const OrderManagement = () => {
   const columns: ColumnT<Product>[] = useMemo(() => [

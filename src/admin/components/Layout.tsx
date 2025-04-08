@@ -53,7 +53,7 @@ const Layout = () => {
                     </div>
                 </div>
                 <div className="w-full h-auto flex justify-center">
-                    <div className="flex w-[95%] h-full">
+                    <div className="flex w-[95%] h-full max-[650px]:w-full">
                         <Outlet />
                     </div>
                 </div>
