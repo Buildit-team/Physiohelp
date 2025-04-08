@@ -131,6 +131,10 @@ export const getUserProduct = async (page: number, itemsPerPage: number) => {
     return response.data;
 }
 
+export const getUserProductDetails = async (productId: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/products/${productId}`);
+    return response?.data?.data?.product;
+};
 
 export const createCart = async (items: CartItems[], totalPrice: number) => {
     const response = await axios.post(`${VITE_ENDPOINT}/carts`, { items, totalPrice },);

@@ -134,7 +134,7 @@ const ShopPage = () => {
                 ) : (
                     filteredProducts.map((i) => (
                         <div
-                            key={i.id}
+                            key={i.product_id}
                             className="flex flex-col p-2 gap-2 bg-white"
                         >
                             <div
@@ -142,9 +142,12 @@ const ShopPage = () => {
                             >
                                 <img src={i.product_image?.[0]?.image_url || ""} alt={i.product_name} className="w-full h-full object-contain" />
                                 <div className="flex flex-col absolute inset-0 w-full h-[90%] justify-between items-end opacity-0 group-hover:opacity-100 transition-opacity duration-300">
-                                    <span className="flex w-full h-[80%]" onClick={() => navigate(`/shop/${i.id}`)} />
+                                    <span className="flex w-full h-[80%]" onClick={() => navigate(`/shop/${i.product_id}`)} />
                                     <button
-                                        onClick={() => addToCart(i)}
+                                        onClick={() => {
+                                            addToCart(i)
+                                            console.log(i)
+                                        }}
                                         className="w-[90%] h-10 bg-white rounded max-[650px]:h-8 max-[650px]:text-xs">
                                         Add to cart
                                     </button>

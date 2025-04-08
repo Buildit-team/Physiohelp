@@ -56,7 +56,10 @@ export type Product = {
     updated_at: string;
 };
 
-
+export interface ProductImgae {
+    image_id: string; 
+    image_url: string;
+}
 
 export type ImageWithTextConfig = {
     imageKey: string;

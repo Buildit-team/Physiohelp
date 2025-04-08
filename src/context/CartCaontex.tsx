@@ -29,21 +29,36 @@ export function CartProvider({ children }: { children: ReactNode }) {
     }, [cart]);
 
     const addToCart = (product: Product) => {
-        const existingProductIndex = cart.findIndex(item => item.product.product_id === product.id.toString());
+        const existingProductIndex = cart.findIndex(
+            (item) => item.product.product_id === product.product_id
+        );
 
         if (existingProductIndex > -1) {
             const updatedCart = [...cart];
+            const existingItem = updatedCart[existingProductIndex];
+
             updatedCart[existingProductIndex] = {
-                ...updatedCart[existingProductIndex],
-                quantity: updatedCart[existingProductIndex].quantity + 1
+                ...existingItem,
+                quantity: existingItem.quantity + 1,
             };
+
             toast.success(`${product.product_name} quantity increased to ${updatedCart[existingProductIndex].quantity}`);
             setCart(updatedCart);
         } else {
-            setCart([...cart, { product, quantity: 1 }]);
+            if (!product.product_id) {
+                toast.error("Product ID missing. Cannot add to cart.");
+                return;
+            }
+            const newItem: CartItem = {
+                product,
+                quantity: 1,
+            };
+
+            setCart([...cart, newItem]);
             toast.success('Item added to cart successfully');
         }
     };
+
 
     const removeFromCart = (productId: string) => {
         setCart(cart.filter(item => item.product.product_id !== productId));
