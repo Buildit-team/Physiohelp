@@ -7,19 +7,12 @@ import { useCart } from "../../context/CartCaontex";
 
 const Carting = () => {
   const [activeTab, setActiveTab] = useState<
-    "Shopping Cart" | "checkout" | "order"
+    "Shopping Cart" | "checkout" | "order" | "processing-payment"
   >("Shopping Cart");
   const [orderDetails, setOrderDetails] = useState<any>(null);
   const { cart, getTotalAmount } = useCart();
   const total = getTotalAmount();
 
-  const handleCheckoutSubmit = (formData: any) => {
-    setOrderDetails(formData);
-    setActiveTab("order");
-    localStorage.setItem("orderDetails", JSON.stringify(formData));
-    localStorage.setItem("cart", JSON.stringify(cart));
-    localStorage.setItem("total", JSON.stringify(total));
-  };
 
   return (
     <motion.div
@@ -39,84 +32,97 @@ const Carting = () => {
         },
       }}
       viewport={{
-        amount: 0.2, // Changed from "some" to a numeric value
+        amount: 0.2,
         once: true,
       }}
-      className="w-[100%] mt-[100px] flex flex-col items-center bg-white slideInRight"
+      className="w-full mt-20 flex flex-col items-center bg-white slideInRight"
     >
-      <span className="w-full flex justify-between p-[10px] h-[100px] items-center">
-        <p className="w-full flex justify-center text-[30px]">Cart</p>
+      <span className="w-full flex justify-between p-2.5 h-24 items-center">
+        <p className="w-full flex justify-center text-3xl">Cart</p>
       </span>
-      <span className="w-full flex justify-center gap-[30px] p-[10px] items-center">
+      
+      <div className="w-full flex justify-center gap-8 p-2.5 items-center border-b">
         <button
-          className={`font-bold ${
-            activeTab === "Shopping Cart"
-              ? "text-black border-b-2 border-black"
-              : "text-gray-500"
+          className={`font-bold pb-2 relative ${
+            activeTab === "Shopping Cart" ? "text-black" : "text-gray-500"
           } md:block hidden`}
           onClick={() => setActiveTab("Shopping Cart")}
         >
           Shopping Cart
+          {activeTab === "Shopping Cart" && (
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black" />
+          )}
         </button>
         <button
-          className={`font-bold ${
-            activeTab === "checkout"
-              ? "text-black border-b-2 border-black"
-              : "text-gray-500"
+          className={`font-bold pb-2 relative ${
+            activeTab === "checkout" ? "text-black" : "text-gray-500"
           } md:block hidden`}
           onClick={() => setActiveTab("checkout")}
+          disabled={cart.length === 0}
         >
-          Checkout details
+          Checkout Details
+          {activeTab === "checkout" && (
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black" />
+          )}
         </button>
         <button
-          className={`font-bold ${
-            activeTab === "order"
-              ? "text-black border-b-2 border-black"
-              : "text-gray-500"
+          className={`font-bold pb-2 relative ${
+            activeTab === "order" ? "text-black" : "text-gray-500"
           } md:block hidden`}
           onClick={() => setActiveTab("order")}
+          disabled={!orderDetails}
         >
           Order Summary
+          {activeTab === "order" && (
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black" />
+          )}
         </button>
-      </span>
-      <div className="md:hidden w-full flex justify-center gap-[30px] p-[10px] items-center">
+      </div>
+      
+      <div className="md:hidden w-full flex justify-center gap-8 p-2.5 items-center border-b">
         <button
-          className={`font-bold ${
-            activeTab === "Shopping Cart"
-              ? "text-black border-b-2 border-black"
-              : "text-gray-500"
+          className={`font-bold pb-2 relative ${
+            activeTab === "Shopping Cart" ? "text-black" : "text-gray-500"
           }`}
           onClick={() => setActiveTab("Shopping Cart")}
         >
           Cart
+          {activeTab === "Shopping Cart" && (
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black" />
+          )}
         </button>
         <button
-          className={`font-bold ${
-            activeTab === "checkout"
-              ? "text-black border-b-2 border-black"
-              : "text-gray-500"
+          className={`font-bold pb-2 relative ${
+            activeTab === "checkout" ? "text-black" : "text-gray-500"
           }`}
           onClick={() => setActiveTab("checkout")}
+          disabled={cart.length === 0}
         >
           Checkout
+          {activeTab === "checkout" && (
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black" />
+          )}
         </button>
         <button
-          className={`font-bold ${
-            activeTab === "order"
-              ? "text-black border-b-2 border-black"
-              : "text-gray-500"
+          className={`font-bold pb-2 relative ${
+            activeTab === "order" ? "text-black" : "text-gray-500"
           }`}
           onClick={() => setActiveTab("order")}
+          disabled={!orderDetails}
         >
           Summary
+          {activeTab === "order" && (
+            <span className="absolute bottom-0 left-0 w-full h-0.5 bg-black" />
+          )}
         </button>
       </div>
-      <div className="w-[80%] max-[650px]:w-[100%]">
+      
+      <div className="w-4/5 max-[650px]:w-full">
         {activeTab === "Shopping Cart" && (
-          <Cart onCheckout={() => setActiveTab("checkout")} />
+          <Cart setActiveTab={setActiveTab} />
         )}
         {activeTab === "checkout" && (
-          <Checkout onCheckoutSubmit={handleCheckoutSubmit} />
+          <Checkout setOrderDetails={setOrderDetails} setActiveTab={setActiveTab} />
         )}
         {activeTab === "order" && (
           <SummaryPage orderDetails={orderDetails} cart={cart} total={total} />

@@ -1,6 +1,6 @@
 import axios from "axios";
 import { SignUpData, LoginData, VerificationData } from "../type/types";
-import { IProduct } from "../../interface/addProduct";
+import { CartItems, CustomerInfo, IProduct } from "../../interface/addProduct";
 
 const { VITE_ENDPOINT } = import.meta.env;
 
@@ -49,6 +49,7 @@ export const getAdminProduct = async (page : number, itemsPerPage: number) => {
     });
     return response.data;
 }
+
 export const getProductById = async (productId: string) => {
     const response = await axios.get(`${VITE_ENDPOINT}/products/${productId}`);
     return response?.data?.data?.product;
@@ -122,4 +123,27 @@ export const AddAppointmentType = async (type: string, amount: string) => {
         }
     });
     return response.data.data
+}
+
+export const getUserProduct = async (page: number, itemsPerPage: number) => {
+    const offset = page;
+    const response = await axios.get(`${VITE_ENDPOINT}/products/?offset=${offset}&limit=${itemsPerPage}`);
+    return response.data;
+}
+
+
+export const createCart = async (items: CartItems[], totalPrice: number) => {
+    const response = await axios.post(`${VITE_ENDPOINT}/carts`, { items, totalPrice },);
+    return response.data;
+}
+
+export const createOrder = async (customer_info: CustomerInfo, id: string) => { 
+    const response = await axios.post(`${VITE_ENDPOINT}/orders/carts/${id}`, { customer_info })
+        return response.data;
+}
+
+
+export const completeOrder = async (id: string) => {
+    const response = await axios.post(`${VITE_ENDPOINT}/payments/orders/${id}`)
+    return response.data;
 }

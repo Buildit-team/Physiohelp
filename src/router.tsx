@@ -28,6 +28,7 @@ import BlogPage from "./components/blog";
 import BlogDetailsPage from "./components/blog/index[id]";
 import Sessions from "./admin/components/session";
 import EditProduct from "./admin/components/products/EditProduct";
+import OrderSuccessPage from "./components/cart/orderSuccessPage";
 
 
 export const Routes = createBrowserRouter([
@@ -46,6 +47,15 @@ export const Routes = createBrowserRouter([
             <ScrollToTop>
                 <Layout>
                     <ShopPage />
+                </Layout>
+            </ScrollToTop>
+    },
+    {
+        path: '/order-success',
+        element:
+            <ScrollToTop>
+                <Layout>
+                    <OrderSuccessPage />
                 </Layout>
             </ScrollToTop>
     },

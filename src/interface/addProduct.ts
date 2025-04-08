@@ -121,3 +121,18 @@ export type TablePropsT<T extends DataItemT> = {
     currentPage?: number;
     totalItems?: number;
 };
+
+
+
+export interface CartItems {
+    product_id: string;
+    quantity: number;
+    sub_total: number;
+}
+
+export interface CustomerInfo {
+    name: string;
+    email: string;
+    phone_number: string;
+    address: string;
+}

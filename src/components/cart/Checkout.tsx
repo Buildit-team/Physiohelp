@@ -1,19 +1,22 @@
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
+import { useMutation } from 'react-query';
+import { CustomerInfo } from '../../interface/addProduct';
+import { createOrder } from '../../admin/services/api-service';
+
 
 interface CheckoutProps {
-    onCheckoutSubmit: (formData: any) => void;
+    setOrderDetails: (details: { firstName: string; lastName: string; address: string; email: string; phone_number: string; }) => void;
+    setActiveTab: React.Dispatch<React.SetStateAction<"Shopping Cart" | "checkout" | "order" | "processing-payment">>;
 }
 
-const Checkout: React.FC<CheckoutProps> = ({ onCheckoutSubmit }) => {
+const Checkout: React.FC<CheckoutProps> = ({ setOrderDetails, setActiveTab }) => {
     const [formData, setFormData] = useState({
         firstName: '',
         lastName: '',
         address: '',
-        country: '',
-        homePhone: '',
-        state: '',
-        email: ''
+        email: '',
+        phone_number: ''
     });
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -23,10 +26,23 @@ const Checkout: React.FC<CheckoutProps> = ({ onCheckoutSubmit }) => {
             [name]: value
         });
     };
-
+    const cartId = localStorage.getItem("cartId");
+    const createOrderMutation = useMutation(({ customer_info }: { customer_info: CustomerInfo; }) => createOrder(customer_info, cartId || ''),{
+        onSuccess: (data) =>{
+            setOrderDetails(formData)
+            console.log(data);
+            localStorage.setItem("orderId", data.data.order.order_id);
+            setActiveTab("order");
+        }
+    } )
     const handleSubmit = (e: React.FormEvent) => {
         e.preventDefault();
-        onCheckoutSubmit(formData);
+        createOrderMutation.mutate({
+            customer_info: {
+                ...formData,
+                name: `${formData.firstName} ${formData.lastName}`,
+            }
+        });
     };
 
     return (
@@ -99,8 +115,8 @@ const Checkout: React.FC<CheckoutProps> = ({ onCheckoutSubmit }) => {
                 <label className="block text-sm font-medium text-gray-700">Phone number *</label>
                 <input
                     type="text"
-                    name="homePhone"
-                    value={formData.homePhone}
+                    name="phone_number"
+                    value={formData.phone_number}
                     onChange={handleChange}
                     className="mt-1 block w-full border border-gray-300 rounded-md shadow-sm p-2 outline-none"
                     placeholder='0900000000'
@@ -111,7 +127,7 @@ const Checkout: React.FC<CheckoutProps> = ({ onCheckoutSubmit }) => {
                     type="submit"
                     className="w-[] bg-blue-500 text-white py-2 px-4 rounded-md hover:bg-blue-600"
                 >
-                    Submit
+                   {createOrderMutation.isLoading ? "Processing..." : "Continue to Order Summary"}
                 </button>
             </div>
         </motion.form>
