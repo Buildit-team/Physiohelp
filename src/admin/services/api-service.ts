@@ -1,6 +1,7 @@
 import axios from "axios";
 import { SignUpData, LoginData, VerificationData } from "../type/types";
 import { CartItems, CustomerInfo, IProduct } from "../../interface/addProduct";
+import { AppointmentData } from "../../components/appointment/AppointmentPreview";
 
 const { VITE_ENDPOINT } = import.meta.env;
 
@@ -162,11 +163,21 @@ export const getCustomerTransactionById = async (id: string,type: string) => {
     return response.data.data
 }
 
+export const getAllOrder = async (page: number, limit: number) => {
+    const offset = page;
+    const response = await axios.get(`${VITE_ENDPOINT}/orders/?offset=${offset}&limit=${limit}`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+
 ////USER
 
-export const getUserProduct = async (page: number, itemsPerPage: number) => {
+export const getUserProduct = async (page: number, limit: number) => {
     const offset = page;
-    const response = await axios.get(`${VITE_ENDPOINT}/products/?offset=${offset}&limit=${itemsPerPage}`);
+    const response = await axios.get(`${VITE_ENDPOINT}/products/?offset=${offset}&limit=${limit}`);
     return response.data;
 }
 
@@ -189,4 +200,14 @@ export const createOrder = async (customer_info: CustomerInfo, id: string) => {
 export const completeOrder = async (id: string) => {
     const response = await axios.post(`${VITE_ENDPOINT}/payments/orders/${id}`)
     return response.data;
+}
+
+export const getAllSessionType = async () => {
+    const response = await axios.get(`${VITE_ENDPOINT}/sessions/types`)
+    return response.data.data
+}
+
+export const bookAppointment = async (data: AppointmentData) => {
+    const response = await axios.post(`${VITE_ENDPOINT}/sessions`, data)
+    return response.data
 }

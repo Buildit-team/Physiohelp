@@ -70,7 +70,7 @@ const BlogDetailsPage: React.FC = () => {
                         })}
                     </p>
                 </div>
-                <div className="mt-4 prose w-[60%]" dangerouslySetInnerHTML={{ __html: blog.blog_content }} />
+                <div className="mt-4 prose w-[60%] max-[650px]:w-[95%]" dangerouslySetInnerHTML={{ __html: blog.blog_content }} />
             </div>
         </div>
     );

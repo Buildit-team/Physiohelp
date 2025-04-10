@@ -10,7 +10,7 @@ import BookAppointment from "./components/appointment/BookAppointment";
 import AppointmentPreview from "./components/appointment/AppointmentPreview";
 import Admin from "./admin";
 import CustomerManagement from "./admin/components/customer";
-// import OrderManagement from "./admin/components/order";
+import OrderManagement from "./admin/components/order";
 import Products from "./admin/components/products";
 import ReportManagement from "./admin/components/report";
 import BlogManagment from "./admin/components/blog";
@@ -29,6 +29,8 @@ import BlogDetailsPage from "./components/blog/index[id]";
 import Sessions from "./admin/components/session";
 import EditProduct from "./admin/components/products/EditProduct";
 import OrderSuccessPage from "./components/cart/orderSuccessPage";
+import AppointmentSuccess from "./components/appointment/AppoinntmentSuccess";
+import PayForAppointment from "./components/appointment/payForAppointment";
 
 
 export const Routes = createBrowserRouter([
@@ -123,6 +125,24 @@ export const Routes = createBrowserRouter([
             </ScrollToTop>
     },
     {
+        path: '/appointment-success',
+        element:
+            <ScrollToTop>
+                <Layout>
+                    <AppointmentSuccess />
+                </Layout>
+            </ScrollToTop>
+    },
+    {
+        path: '/appointment-payment/:id',
+        element:
+            <ScrollToTop>
+                <Layout>
+                    <PayForAppointment />
+                </Layout>
+            </ScrollToTop>
+    },
+    {
         path: '/admin',
         element: <Admin />,
         children: [
@@ -146,10 +166,10 @@ export const Routes = createBrowserRouter([
                 path: '/admin/products/:id/edit',
                 element: <EditProduct/>
             },
-            // {
-            //     path: '/admin/order',
-            //     element: <OrderManagement />
-            // },
+            {
+                path: '/admin/order',
+                element: <OrderManagement />
+            },
             {
                 path: '/admin/customer',
                 element: <CustomerManagement />

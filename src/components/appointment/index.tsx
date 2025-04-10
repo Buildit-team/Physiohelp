@@ -1,21 +1,39 @@
 import { useState } from 'react';
+import { useQuery } from 'react-query';
 import { useNavigate } from 'react-router-dom';
+import { getAllSessionType } from '../../admin/services/api-service';
 
+interface SessionType {
+    type_id: string;
+    session_type: string;
+    amount: string;
+    session_price: string;
+    created_at: string;
+    updated_at: string;
+}
 const Appointment = () => {
-    const [services, setServices] = useState('');
-    const [painLocation, setPainLocation] = useState('');
-    const [limitation, setLimitation] = useState('');
-    const [painDuration, setPainDuration] = useState('');
+    const [service_needed, setServices] = useState('');
+    const [allService, setAllService] = useState<SessionType[]>([])
+    const [where_it_hurts, setPainLocation] = useState('');
+    const [limitaions, setLimitation] = useState('');
+    const [pain_durations, setPainDuration] = useState('');
     const navigate = useNavigate();
 
+    useQuery(['ALLSESSION'], getAllSessionType, {
+        onSuccess: (data) => {
+            console.log(data)
+            setAllService(data)
+        }
+    }
+    )
 
     const handleSubmit = (e: { preventDefault: () => void; }) => {
         e.preventDefault();
         const formData = {
-            services,
-            painLocation,
-            limitation,
-            painDuration,
+            service_needed,
+            where_it_hurts,
+            limitaions,
+            pain_durations,
         };
         localStorage.setItem('appointmentData', JSON.stringify(formData));
         navigate('/book-appointment');
@@ -32,24 +50,18 @@ const Appointment = () => {
                     <div className=''>
                         <label className="block text-[20px] text-[#1053D4] ">What service do you need?</label>
                         <div className="mt-2 space-y-2 bg-[#F9F9FC] p-[10px]">
-                            {[
-                                "20 Minute Online Therapy Session",
-                                "Physical Therapy Evaluation and Hands-On Treatment",
-                                "20 Minute Physical Therapy “Discover Session”",
-                                "Recommended Physiotherapy Tools",
-                                "Mobility & Injury-Risk Assessment",
-                                "Home service",
-                                "Other"
-                            ].map((service) => (
-                                <label key={service} className="flex items-center">
+                            {allService.map((service) => (
+                                <label key={service.type_id} className="flex items-center">
                                     <input
                                         type="radio"
-                                        value={service}
-                                        checked={services === service}
+                                        value={service.session_type}
+                                        checked={service_needed === service.session_type}
                                         onChange={(e) => setServices(e.target.value)}
                                         className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                                     />
-                                    <span className="ml-2 text-sm text-gray-700">{service}</span>
+                                    <span className="ml-2 text-sm text-gray-700">{service?.session_type}</span>
+                                    -
+                                    <span className="ml-2 text-sm text-gray-700">{service?.session_price}</span>
                                 </label>
                             ))}
                         </div>
@@ -60,7 +72,7 @@ const Appointment = () => {
                         <div className='bg-[#F9F9FC] p-[10px]'>
                             <input
                                 type="text"
-                                value={painLocation}
+                                value={where_it_hurts}
                                 onChange={(e) => setPainLocation(e.target.value)}
                                 placeholder="Let us know where it hurts "
                                 required
@@ -73,7 +85,7 @@ const Appointment = () => {
                         <label className="block text-[20px] text-[#1053D4]">What does it limit you from doing?</label>
                         <div className='bg-[#F9F9FC] p-[10px]'>
                             <textarea
-                                value={limitation}
+                                value={limitaions}
                                 onChange={(e) => setLimitation(e.target.value)}
                                 placeholder="Tell us what you can’t/can barely do since the pain started."
                                 required
@@ -97,7 +109,7 @@ const Appointment = () => {
                                     <input
                                         type="radio"
                                         value={option}
-                                        checked={painDuration === option}
+                                        checked={pain_durations === option}
                                         onChange={(e) => setPainDuration(e.target.value)}
                                         className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300"
                                     />
