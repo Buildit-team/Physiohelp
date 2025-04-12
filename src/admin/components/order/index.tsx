@@ -1,99 +1,127 @@
-// import { useMemo, useCallback } from "react";
-// import Table from "../../../utils/Table";
-// import { ColumnT, Product } from "../../../interface/addProduct";
+import { useMemo, useState, useEffect } from "react";
+import Table from "../../../utils/Table";
+import { ColumnT } from "../../../interface/addProduct";
+import { getAllOrder } from "../../services/api-service";
+import { useQuery } from "react-query";
+import { Order } from "../../../interface/order";
+import { formatNumber } from "../../../utils/formatNumbers";
 
-// const OrderManagement = () => {
-//   const columns: ColumnT<Product>[] = useMemo(() => [
-//     {
-//       key: 'id',
-//       header: 'Order ID',
-//       sortable: false,
-//     },
-//     {
-//       key: 'product_name',
-//       header: 'Products',
-//       sortable: false,
-//       isImageWithText: true,
-//       imageWithTextConfig: {
-//         imageKey: 'productImage',
-//         textKey: 'name',
-//         imageConfig: {
-//           width: '48px',
-//           height: '48px',
-//           className: 'rounded-md',
-//           fallbackSrc: '/placeholder-product.png'
-//         }
-//       }
-//     },
-//     {
-//       key: 'added',
-//       header: 'Added',
-//       sortable: true,
-//     },
-//     {
-//       key: 'customer',
-//       header: 'Customer',
-//       render: (value) => (
-//         <div className="flex flex-col">
-//           <span className="font-medium">{value.name}</span>
-//         </div>
-//       )
-//     },
-//     {
-//       key: 'price',
-//       header: 'Total',
-//       sortable: true,
-//       render: (value) => `$${value.toFixed(2)}`,
-//     },
-//     {
-//       key: 'status',
-//       header: 'Status',
-//       render: (value) => (
-//         <span
-//           className={`px-2 py-1 rounded-full text-xs ${value === 'Low Stock'
-//             ? 'bg-red-100 text-red-800'
-//             : 'bg-yellow-100 text-yellow-800'
-//             }`}
-//         >
-//           {value}
-//         </span>
-//       ),
-//     },
-//   ], []);
+const OrderManagement = () => {
+    const [order, setOrder] = useState<Order[]>([]);
+    const baseLimit = 10;
+    const [pagination, setPagination] = useState({
+        currentPage: 1,
+        limit: baseLimit,
+        totalItems: 0
+    })
 
-//   const filterOptions = useMemo(() => [
-//     { label: 'All Order', value: 'all' },
-//     { label: 'Processing', value: 'published' },
-//     { label: 'Delivered', value: 'low stock' },
-//     { label: 'Cancelled', value: 'low stock' }
-//   ], []);
+    const calculateOffset = (page: number) => (page - 1) * baseLimit;
 
-//   const handleEdit = useCallback((product: Product) => {
-//     console.log('Edit product:', product);
-//   }, []);
+    const offset = calculateOffset(pagination.currentPage);
+    const limit = offset + baseLimit;
 
-//   const handleDelete = useCallback((product: Product) => {
-//     console.log('Delete product:', product);
-//   }, []);
+    const { isLoading, data: apiResponse } = useQuery(
+        ["ORDER", offset, pagination.limit],
+        () => getAllOrder(offset, limit),
+        {
+            keepPreviousData: true
+        }
+    );
 
-//   const handleView = useCallback((product: Product) => {
-//     console.log('View product:', product);
-//   }, []);
+    useEffect(() => {
+        if (apiResponse) {
+            if (Array.isArray(apiResponse)) {
+                setOrder(apiResponse);
+                setPagination(prev => ({
+                    ...prev,
+                    totalItems: apiResponse.length
+                }));
+            } else if (apiResponse.data) {
+                setOrder(apiResponse.data);
+                const totalItems = apiResponse.total || apiResponse.totalItems || apiResponse.data.length;
+                setPagination(prev => ({
+                    ...prev,
+                    totalItems: totalItems
+                }));
+            } else {
+                console.error("Unexpected API response structure:", apiResponse);
+                setOrder([]);
+            }
+        }
+    }, [apiResponse]);
 
-//   return (
-//     <Table
-//       data={products}
-//       columns={columns}
-//       searchPlaceholder="Search Products..."
-//       actions={{
-//         onEdit: handleEdit,
-//         onDelete: handleDelete,
-//         onView: handleView,
-//       }}
-//       filterOptions={filterOptions}
-//       filterKey="status"
-//     />
-//   );
-// };
+    useEffect(() => {
+        console.log("Current order data:", order);
+        console.log("Pagination state:", pagination);
+    }, [order, pagination]);
 
-// export default OrderManagement;
+    const handlePageChange = (newPage: number) => {
+        setPagination(prev => ({
+            ...prev,
+            currentPage: newPage,
+            limit: baseLimit * newPage
+        }));
+    };
+
+    const columns: ColumnT<Order>[] = useMemo(() => [
+        {
+            key: 'order_track_id',
+            header: 'Order ID',
+            sortable: false,
+            searchable: true
+        },
+        {
+            key: 'total_price',
+            header: 'Total',
+            sortable: true,
+            render: (value) => `₦${formatNumber(value)}`,
+        },
+        {
+            key: 'order_status',
+            header: 'Status',
+            searchable: true,
+            render: (value) => (
+                <span
+                    className={`px-2 py-1 rounded-full text-xs ${value === 'pending'
+                            ? 'bg-red-100 text-red-800'
+                        : value === 'abandoned'
+                                ? 'bg-yellow-100 text-yellow-800'
+                                : value === 'completed'
+                                    ? 'bg-green-100 text-green-800'
+                                    : value === 'Cancelled'
+                                        ? 'bg-red-100 text-red-800'
+                                        : 'bg-gray-100 text-gray-800'
+                        }`}
+                >
+                    {value}
+                </span>
+            ),
+        },
+    ], []);
+
+    const filterOptions = useMemo(() => [
+        { label: 'All Order', value: 'all' },
+        { label: 'Processing', value: 'Processing' },
+        { label: 'Delivered', value: 'Delivered' },
+        { label: 'Cancelled', value: 'Cancelled' }
+    ], []);
+
+    return (
+        <div className="p-4 w-full">
+            <Table
+                data={order || []}
+                columns={columns}
+                searchPlaceholder="Search Orders..."
+                filterOptions={filterOptions}
+                filterKey="order_status"
+                isLoading={isLoading}
+                // itemsPerPage={baseLimit}
+                currentPage={pagination.currentPage}
+                onPageChange={handlePageChange}
+                emptyStateMessage="No orders found. Orders will appear here once they are created."
+            />
+        </div>
+    );
+};
+
+export default OrderManagement;

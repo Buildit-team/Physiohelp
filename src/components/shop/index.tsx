@@ -91,11 +91,19 @@ const ShopPage = () => {
                 once: true,
             }} className="w-full flex flex-col items-center justify-center gap-5">
             <div className="w-full flex justify-center items-center mt-24">
-                <div className="flex ml-8 w-4/5 flex-col items-center bg-[url('/shop-page.svg')] h-[60vh] max-[650px]:h-[40vh] bg-no-repeat max-[650px]:ml-0 max-[650px]:w-[90%]">
-                    <span className="flex flex-col items-center justify-center h-[100%] text-center max-[650px]:p-2">
-                        <h1 className="text-4xl">Shop Page</h1>
-                        <p>Experience the care and comfort you've always imagined</p>
-                    </span>
+                <div
+                    className="
+            w-4/5 max-w-6xl
+            flex flex-col items-center justify-center
+            bg-[url('/shop-page.svg')] bg-center bg-cover bg-no-repeat
+            h-[60vh] py-16 px-8 rounded-lg
+            max-[650px]:h-[40vh] max-[650px]:w-[90%] max-[650px]:px-4
+        "
+                >
+                    <div className="flex flex-col items-center justify-center text-center p-8 rounded-lg  max-[650px]:p-4">
+                        <h1 className="text-4xl font-bold mb-3 max-[650px]:text-3xl">Shop Page</h1>
+                        <p className="text-lg max-[650px]:text-base">Experience the care and comfort you've always imagined</p>
+                    </div>
                 </div>
             </div>
             <div className="flex w-4/5 justify-between mb-5 gap-4 max-[650px]:flex-col max-[650px]:w-[90%]">
@@ -146,7 +154,6 @@ const ShopPage = () => {
                                     <button
                                         onClick={() => {
                                             addToCart(i)
-                                            console.log(i)
                                         }}
                                         className="w-[90%] h-10 bg-white rounded max-[650px]:h-8 max-[650px]:text-xs">
                                         Add to cart

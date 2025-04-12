@@ -58,7 +58,7 @@ const Table = <T extends DataItemT>({
   filterOptions = [],
   filterKey,
   dateFilterKey,
-  itemsPerPage = 9,
+  itemsPerPage = 10,
   currentPage: controlledCurrentPage,
   totalItems: controlledTotalItems,
   onPageChange,
@@ -80,7 +80,7 @@ const Table = <T extends DataItemT>({
   const [internalCurrentPage, setInternalCurrentPage] = useState(1);
   const currentPage = controlledCurrentPage || internalCurrentPage;
 
-  
+
   const handleSort = (key: keyof T) => {
     setSortConfig({
       key,
@@ -367,8 +367,8 @@ const Table = <T extends DataItemT>({
                 {columns.map((column, colIndex) => (
                   <td
                     key={`${String(column.key)}-${rowIndex}-${colIndex}`}
-                    className="px-6 py-4 whitespace-wrap  text-sm text-gray-500 cursor-pointer" 
-                    onClick={() => handleRowClick(item)} 
+                    className="px-6 py-4 whitespace-wrap  text-sm text-gray-500 cursor-pointer"
+                    onClick={() => handleRowClick(item)}
                   >
                     {column.isImageWithText && column.imageWithTextConfig ? (
                       <ImageWithTextCell
@@ -478,7 +478,7 @@ const Table = <T extends DataItemT>({
       </div>
       <div className="flex flex-col md:flex-row items-center justify-between mt-4 gap-4">
         <div className="text-sm text-gray-500">
-          Showing {(currentPage - 1) * itemsPerPage + 1} to {Math.min(currentPage * itemsPerPage, actualTotalItems)} of {actualTotalItems} entries
+          Showing {actualTotalItems > 0 ? (currentPage - 1) * itemsPerPage + 1 : 0} to {Math.min(currentPage * itemsPerPage, actualTotalItems)} of {actualTotalItems} entries
         </div>
         <div className="flex gap-2 items-center">
           <button
@@ -489,11 +489,11 @@ const Table = <T extends DataItemT>({
             <ChevronLeft className="h-4 w-4" />
           </button>
           <span className="text-sm text-gray-700">
-            Page {currentPage} of {totalPages || 1}
+            Page {currentPage} of {totalPages}
           </span>
           <button
             onClick={() => handlePageChange(currentPage + 1)}
-            disabled={currentPage === totalPages || totalPages === 0}
+            disabled={paginatedData.length < itemsPerPage}
             className="p-2 text-gray-700 bg-gray-100 rounded-md disabled:opacity-50 disabled:cursor-not-allowed hover:bg-gray-200"
           >
             <ChevronRight className="h-4 w-4" />

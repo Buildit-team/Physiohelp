@@ -70,7 +70,7 @@ const Products = () => {
             key: "inventory",
             header: "SKU",
             sortable: true,
-            searchable: true, // Enable search on SKU
+            searchable: true,
             render: (inventory) => inventory?.sku_id || 'N/A',
         },
         {
@@ -83,7 +83,7 @@ const Products = () => {
             key: "price",
             header: "Price",
             sortable: true,
-            render: (price) => `$${price?.basic_price?.toFixed(2) || 0}`,
+            render: (price) => `₦${price?.basic_price?.toFixed(2) || 0}`,
         },
         {
             key: "status",

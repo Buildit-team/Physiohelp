@@ -4,12 +4,12 @@ import { useNavigate } from 'react-router-dom';
 const BookAppointment = () => {
     const navigate = useNavigate();
     const [appointmentData, setAppointmentData] = useState(null);
-    const [selectedDate, setSelectedDate] = useState<string>('');
-    const [selectedTime, setSelectedTime] = useState<string>('');
-    const [fullName, setFullName] = useState<string>('');
-    const [phoneNumber, setPhoneNumber] = useState<string>('');
+    const [appointment_date, setSelectedDate] = useState<string>('');
+    const [appointment_time, setSelectedTime] = useState<string>('');
+    const [full_name, setFullName] = useState<string>('');
+    const [phone_number, setPhoneNumber] = useState<string>('');
     const [email, setEmail] = useState<string>('');
-    const [location, setLocation] = useState<string>('');
+    const [address, setLocation] = useState<string>('');
 
     const locations = ['Lekki Ajah VGC', 'Victoria Island'];
 
@@ -18,12 +18,12 @@ const BookAppointment = () => {
         if (data) {
             const parsedData = JSON.parse(data);
             setAppointmentData(parsedData);
-            setFullName(parsedData.fullName || '');
-            setPhoneNumber(parsedData.phoneNumber || '');
+            setFullName(parsedData.full_name || '');
+            setPhoneNumber(parsedData.phone_number || '');
             setEmail(parsedData.email || '');
-            setLocation(parsedData.location || '');
-            setSelectedDate(parsedData.date || '');
-            setSelectedTime(parsedData.time || '');
+            setLocation(parsedData.address || '');
+            setSelectedDate(parsedData.appointment_date || '');
+            setSelectedTime(parsedData.appointment_time || '');
         }
     }, []);
 
@@ -40,7 +40,7 @@ const BookAppointment = () => {
     };
 
     const handleContinue = () => {
-        if (!selectedDate || !selectedTime || !fullName || !phoneNumber || !email || !location) {
+        if (!appointment_date || !appointment_time || !full_name || !phone_number || !email || !address) {
             alert('Please fill in all fields');
             return;
         }
@@ -52,19 +52,19 @@ const BookAppointment = () => {
         }
 
         const phoneRegex = /^\+?[\d\s-]{10,}$/;
-        if (!phoneRegex.test(phoneNumber)) {
+        if (!phoneRegex.test(phone_number)) {
             alert('Please enter a valid phone number');
             return;
         }
 
         const updatedData = {
             ...(appointmentData || {}),
-            fullName,
-            phoneNumber,
+            full_name,
+            phone_number,
             email,
-            location,
-            date: selectedDate,
-            time: selectedTime,
+            address,
+            appointment_date: appointment_date,
+            appointment_time: appointment_time,
         };
         localStorage.setItem('appointmentData', JSON.stringify(updatedData));
         navigate('/appointment-preview');
@@ -79,7 +79,7 @@ const BookAppointment = () => {
                     <label className="block text-xl text-blue-600 mb-2">Full Name</label>
                     <input
                         type="text"
-                        value={fullName}
+                        value={full_name}
                         onChange={(e) => setFullName(e.target.value)}
                         className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-gray-300"
                         placeholder="Enter your full name"
@@ -90,7 +90,7 @@ const BookAppointment = () => {
                     <label className="block text-xl text-blue-600 mb-2">Phone Number</label>
                     <input
                         type="tel"
-                        value={phoneNumber}
+                        value={phone_number}
                         onChange={(e) => setPhoneNumber(e.target.value)}
                         className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-gray-300"
                         placeholder="Enter your phone number"
@@ -116,7 +116,7 @@ const BookAppointment = () => {
                                 <input
                                     type="radio"
                                     value={loc}
-                                    checked={location === loc}
+                                    checked={address === loc}
                                     onChange={handleLocationChange}
                                     className="form-radio h-4 w-4 text-blue-600"
                                 />
@@ -130,7 +130,7 @@ const BookAppointment = () => {
                     <label className="block text-xl text-blue-600 mb-2">Select Date</label>
                     <input
                         type="date"
-                        value={selectedDate}
+                        value={appointment_date}
                         onChange={handleDateChange}
                         className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-gray-300"
                     />
@@ -140,7 +140,7 @@ const BookAppointment = () => {
                     <label className="block text-xl text-blue-600 mb-2">Select Time</label>
                     <input
                         type="time"
-                        value={selectedTime}
+                        value={appointment_time}
                         onChange={handleTimeChange}
                         className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-gray-300"
                     />

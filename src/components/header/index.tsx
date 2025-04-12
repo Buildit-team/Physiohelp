@@ -110,7 +110,9 @@ const Header = () => {
                         >
                             Shop
                         </p>
-                        <p className={`cursor-pointer ${navItemClass} p-2`}>Blog</p>
+                        <p className={`cursor-pointer ${navItemClass} p-2`}
+                            onClick={() => { navigate("/blog"); toggleMenu(); }}
+                        >Blog</p>
                         {/* <p className={`cursor-pointer ${navItemClass} p-2`}>Contact us</p> */}
                     </div>
                 </div>
