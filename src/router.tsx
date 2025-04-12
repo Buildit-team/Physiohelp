@@ -30,7 +30,7 @@ import Sessions from "./admin/components/session";
 import EditProduct from "./admin/components/products/EditProduct";
 import OrderSuccessPage from "./components/cart/orderSuccessPage";
 import AppointmentSuccess from "./components/appointment/AppoinntmentSuccess";
-import PayForAppointment from "./components/appointment/payForAppointment";
+import PayForAppointment from "./components/appointment/PaymentForAppointment";
 
 
 export const Routes = createBrowserRouter([
