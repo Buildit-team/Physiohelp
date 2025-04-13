@@ -109,7 +109,7 @@ const BookAppointment = () => {
                 </div>
 
                 <div className="mb-6">
-                    <label className="block text-xl text-blue-600 mb-2"> Address</label>
+                    <label className="block text-xl text-blue-600 mb-2">Address</label>
                     <div className="flex flex-col space-y-2">
                         <label className="flex items-center space-x-2">
                             <input
