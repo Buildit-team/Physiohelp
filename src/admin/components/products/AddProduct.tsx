@@ -31,7 +31,7 @@ const AddProduct: React.FC = () => {
     const [formData, setFormData] = useState<IProduct>({
         product_name: '',
         description: '',
-        status: 'Low Stock',
+        status: 'available',
         price: {
             basic_price: 0,
             discounted_rate: 0,
