@@ -11,7 +11,7 @@ const BookAppointment = () => {
     const [email, setEmail] = useState<string>('');
     const [address, setLocation] = useState<string>('');
 
-    const locations = ['Lekki Ajah VGC', 'Victoria Island'];
+
 
     useEffect(() => {
         const data = localStorage.getItem('appointmentData');
@@ -109,20 +109,17 @@ const BookAppointment = () => {
                 </div>
 
                 <div className="mb-6">
-                    <label className="block text-xl text-blue-600 mb-2">Preferred Location</label>
+                    <label className="block text-xl text-blue-600 mb-2">Address</label>
                     <div className="flex flex-col space-y-2">
-                        {locations.map((loc) => (
-                            <label key={loc} className="flex items-center space-x-2">
-                                <input
-                                    type="radio"
-                                    value={loc}
-                                    checked={address === loc}
-                                    onChange={handleLocationChange}
-                                    className="form-radio h-4 w-4 text-blue-600"
-                                />
-                                <span>{loc}</span>
-                            </label>
-                        ))}
+                        <label className="flex items-center space-x-2">
+                            <input
+                                type="text"
+                                value={address}
+                                onChange={handleLocationChange}
+                                className="w-full p-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-black focus:border-gray-300"
+                                placeholder='Where is your location'
+                            />
+                        </label>
                     </div>
                 </div>
 
