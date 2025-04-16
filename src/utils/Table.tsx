@@ -100,7 +100,6 @@ const Table = <T extends DataItemT>({
 
   const LoadingState = () => (
     <div className="w-full flex flex-col gap-[20px]">
-      {/* Preserve the search and filter sections */}
       <div className="flex flex-col gap-4 max-[650px]:mt-[40px]">
         <div className="flex flex-col md:flex-row md:items-center gap-4 w-full">
           <div className="relative flex-grow w-full md:w-[50%]">
@@ -411,6 +410,14 @@ const Table = <T extends DataItemT>({
                           <Trash2 className="h-4 w-4" />
                         </button>
                       )}
+                      {actions.onAssign &&  (
+                        <button
+                          onClick={() => actions.onAssign?.(item)}
+                          className="text-red-600 hover:text-red-900"
+                        >
+                          <p>{actions.assignText}</p>
+                        </button>
+                      )}
                     </div>
                   </td>
                 )}
@@ -469,6 +476,14 @@ const Table = <T extends DataItemT>({
                     className="text-red-600 hover:text-red-900"
                   >
                     <Trash2 className="h-4 w-4" />
+                  </button>
+                )}
+                {actions.onAssign && (
+                  <button
+                    onClick={() => actions.onAssign?.(item)}
+                    className="text-red-600 hover:text-red-900"
+                  >
+                    <p>{actions.assignText}</p>
                   </button>
                 )}
               </div>

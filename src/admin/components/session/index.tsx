@@ -1,6 +1,6 @@
 import Table from "../../../utils/Table"
 import { useQuery } from "react-query";
-import { getAllAppointment } from "../../services/api-service";
+import { getAllAppointment, getAllPaidAppointment } from "../../services/api-service";
 import React from "react";
 import { ColumnT } from "../../../interface/addProduct";
 import { ISession } from "../../../interface/session";
@@ -9,27 +9,33 @@ import Addsessiontype from "./Addsessiontype";
 const Sessions = () => {
     const [session, setSession] = React.useState<ISession[]>([]);
     const [showAddAppointmentType, setShowAddAppointmentType] = React.useState(false);
+
     const { isLoading } = useQuery("appointments", getAllAppointment, {
         retry: false,
         onSuccess: (fetchedData) => {
-            setSession(fetchedData.data);
+            setSession(fetchedData);
         },
     });
+
+   useQuery("paid_appointments", getAllPaidAppointment, {
+        retry: false,
+        onSuccess: () => {
+        //   console.log(fetchedData);
+        },
+    });
+
     const Columns: ColumnT<ISession>[] = [
         {
             key: "full_name",
             header: "Full Name",
-            sortable: true,
         },
         {
             key: "email",
             header: "Email",
-            sortable: true,
         },
         {
             key: "phone_number",
             header: "Phone Number",
-            sortable: true,
         },
         {
             key: "service_needed",
@@ -37,26 +43,10 @@ const Sessions = () => {
             sortable: false,
         },
         {
-            key: "appointment_date",
-            header: "Appointment Date",
-            sortable: true,
-            render: (session) => {
-                if (!session.appointment_date) return 'N/A';
-                const date = new Date(session.appointment_date);
-                return date.toLocaleDateString();
-            },
-        },
-        {
-            key: "appointment_time",
-            header: "Appointment Time",
-            sortable: true,
-        },
-        {
             key: "session_status",
             header: "Status",
-            sortable: true,
             render: (session) => {
-                const statusText = session.session_status || "N/A";
+                const statusText = session || "N/A";
                 let className = "";
                 if (statusText.toLowerCase() === "pending") {
                     className = "bg-yellow-100 text-yellow-800";
@@ -65,7 +55,7 @@ const Sessions = () => {
                 } else if (statusText.toLowerCase() === "cancelled") {
                     className = "bg-red-100 text-red-800";
                 } else {
-                    className = "bg-gray-100 text-gray-800"; // Default
+                    className = "bg-gray-100 text-gray-800";
                 }
                 return (
                     <span className={`px-2 py-1 rounded-full text-xs uppercase ${className}`}>
@@ -77,20 +67,14 @@ const Sessions = () => {
         {
             key: "assignee",
             header: "Assignee",
-            sortable: true,
-            render: (session) => session.assignee || 'Not Assigned',
+            render: (session) => session?.assignee || 'Not Assigned',
         },
     ]
 
-    const handleEdit = () => {
-    };
-
-    const handleDelete = () => {
-    };
-
-    const handleView = () => {
+    const handleAssignDoctor = () => {
 
     };
+
     const buttons = [
         {
             label: "Add Appointment Type",
@@ -99,19 +83,19 @@ const Sessions = () => {
         },
     ];
     return (
-        <div className="w-full">
+        <div className="w-full max-[650px]:p-2">
             <Table
                 data={session}
                 columns={Columns}
                 searchPlaceholder="Search Appointment..."
                 buttons={buttons}
                 actions={{
-                    onEdit: handleEdit,
-                    onDelete: handleDelete,
-                    onView: handleView,
+                    onAssign: handleAssignDoctor,
+                    assignText: 'Assign Doctor'
                 }}
                 emptyStateMessage="No appointments found."
                 isLoading={isLoading}
+                
             />
 
             {
