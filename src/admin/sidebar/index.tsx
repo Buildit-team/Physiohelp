@@ -64,7 +64,7 @@ const Sidebar = ({ onClose }: { onClose: () => void }) => {
                         }}
                     >
                         <SiSession />
-                        <p>Session Management</p>
+                        <p>Appoinntment Management</p>
                     </span>
                     <span
                         className="w-[80%] h-[60px] cursor-pointer flex gap-[10px] items-center text-white"

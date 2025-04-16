@@ -28,12 +28,12 @@ const Layout = () => {
     return (
         <div className="w-full flex h-screen">
             <div
-                className={`fixed md:fixed top-0 left-0 w-[20%] max-[650px]:w-[80%] h-screen bg-[#1053D4] transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+                className={`fixed md:fixed top-0 left-0 w-[22%] max-[650px]:w-[80%] h-screen bg-[#1053D4] transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
                     } z-40`}
             >
                 <Sidebar onClose={() => setIsSidebarOpen(false)} />
             </div>
-            <div className="flex w-full md:w-[80%] md:ml-[20%] flex-col gap-[20px]">
+            <div className="flex w-full md:w-[78%] md:ml-[22%] flex-col gap-[20px]">
                 <div className="sticky top-0 w-full h-auto min-h-[70px] flex justify-center bg-white shadow-sm z-100">
                     <div className="flex w-full px-4 md:w-[95%] h-full items-center py-3">
                         <span className="md:hidden flex items-center ml-8">

@@ -107,16 +107,22 @@ export const getBlogsId = async (id: string) => {
     return response.data.data;
 }
 
-
 export const getAllAppointment = async () => {
     const response = await axios.get(`${VITE_ENDPOINT}/sessions`, {
         headers: {
             Authorization: `Bearer ${VITE_TOKEN}`
         }
-    });
+    })
     return response.data.data
 }
-
+export const getAllPaidAppointment = async () => {
+    const response = await axios.get(`${VITE_ENDPOINT}/sessions/paid`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
 
 export const AddAppointmentType = async (type: string, amount: string) => {
     const response = await axios.post(`${VITE_ENDPOINT}/sessions/types`, { type, amount }, {
@@ -210,4 +216,9 @@ export const getAllSessionType = async () => {
 export const bookAppointment = async (data: AppointmentData) => {
     const response = await axios.post(`${VITE_ENDPOINT}/sessions`, data)
     return response.data
+}
+
+export const completeAppointmentBooking = async (id: string) => {
+    const response = await axios.post(`${VITE_ENDPOINT}/sessions/${id}/payments`)
+    return response.data;
 }

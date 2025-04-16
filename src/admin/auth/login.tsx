@@ -4,6 +4,7 @@ import { useNavigate } from 'react-router-dom';
 import { useMutation } from 'react-query';
 import { LoginUser } from '../services/api-service';
 import toast from 'react-hot-toast';
+import { AxiosError } from 'axios';
 
 const Login: React.FC = () => {
     const navigate = useNavigate();
@@ -17,9 +18,6 @@ const Login: React.FC = () => {
             toast.success('Login successful');
             navigate('/admin/verify');
         },
-        onError: (error: any) => {
-            console.error('Login failed', error);
-        }
     });
 
     const handleSubmit = async (event: React.FormEvent) => {
@@ -36,8 +34,8 @@ const Login: React.FC = () => {
                 </div>
                 <h2 className="w-[75%] text-2xl font-bold mb-6 max-[650px]:text-[16px] max-[650px]:text-center">Welcome back to PhysioHelp</h2>
                 {isError && (
-                    <div className="text-red-500 mb-4">
-                        {error instanceof Error ? error.message : 'An error occurred during login'}
+                    <div className="text-red-500 mb-4 text-center">
+                        {error instanceof AxiosError ? error?.response?.data?.message : 'An error occurred during login'}
                     </div>
                 )}
 
@@ -50,6 +48,7 @@ const Login: React.FC = () => {
                             onChange={(e) => setEmail(e.target.value)}
                             className="w-full px-3 py-3 border rounded-lg outline-none"
                             required
+                            placeholder='johndoe@gmail.com'
                         />
                     </div>
                     <div>
@@ -61,6 +60,7 @@ const Login: React.FC = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 className="w-full px-3 py-3 border rounded-lg outline-none"
                                 required
+                                placeholder='********'
                             />
                             <button
                                 type="button"

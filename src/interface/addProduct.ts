@@ -108,6 +108,10 @@ export type TablePropsT<T extends DataItemT> = {
         onEdit?: (item: T) => void;
         onDelete?: (item: T) => void;
         onView?: (item: T) => void;
+        onAssign?: (item: T) => void;
+        onApprove?: (item: T) => void;
+        onReject?: (item: T) => void;
+        assignText?: string
     };
     buttons?: ButtonPropsT[];
     className?: string;
