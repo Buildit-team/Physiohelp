@@ -88,15 +88,11 @@ const AppointmentPreview = () => {
     return (
         <div className="bg-gray-50 min-h-screen py-12 px-4 sm:px-6 lg:px-8 mt-[50px]">
             <div className="max-w-3xl mx-auto">
-                {/* Header */}
                 <div className="text-center mb-8">
                     <h1 className="text-3xl font-bold text-gray-900">Appointment Preview</h1>
                     <p className="mt-2 text-gray-600">Please review your appointment details before confirming</p>
                 </div>
-
-                {/* Main Content */}
                 <div className="bg-white rounded-xl shadow-lg overflow-hidden">
-                    {/* Appointment Summary Header */}
                     <div className="bg-blue-600 px-6 py-4 text-white">
                         <h2 className="text-xl max-[650px]:text-[14px] font-semibold flex items-center">
                             <Activity className="mr-2 h-5 w-5" />
@@ -107,8 +103,6 @@ const AppointmentPreview = () => {
                             {formatAppointmentDate()} at {appointmentData.appointment_time}
                         </p>
                     </div>
-
-                    {/* Price Tag */}
                     <div className="bg-blue-50 px-6 py-3 border-b border-blue-100">
                         <div className="flex justify-between items-center">
                             <span className="font-medium text-blue-800">Service Fee</span>
@@ -116,9 +110,7 @@ const AppointmentPreview = () => {
                         </div>
                     </div>
 
-                    {/* Details Sections */}
                     <div className="px-6 py-6 space-y-6">
-                        {/* Medical Details */}
                         <div className="rounded-lg bg-gray-50 p-4">
                             <h3 className="text-lg font-medium text-gray-900 mb-3 flex items-center">
                                 <Heart className="mr-2 h-5 w-5 text-red-500" />
@@ -140,7 +132,6 @@ const AppointmentPreview = () => {
                             </div>
                         </div>
 
-                        {/* Personal Information */}
                         <div>
                             <h3 className="text-lg font-medium text-gray-900 mb-3">Personal Information</h3>
                             <div className="space-y-3">
@@ -175,7 +166,6 @@ const AppointmentPreview = () => {
                             </div>
                         </div>
 
-                        {/* Appointment Time */}
                         <div className="rounded-lg bg-blue-50 p-4">
                             <h3 className="text-lg font-medium text-gray-900 mb-3 flex items-center">
                                 <Clock className="mr-2 h-5 w-5 text-blue-500" />
@@ -194,7 +184,6 @@ const AppointmentPreview = () => {
                         </div>
                     </div>
 
-                    {/* Buttons */}
                     <div className="px-6 py-4 bg-gray-50 flex flex-col sm:flex-row justify-center gap-4">
                         <button
                             onClick={() => navigate(-1)}

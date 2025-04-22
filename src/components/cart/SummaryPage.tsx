@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { CartItem, useCart } from "../../context/CartCaontex";
+import { CartItem } from "../../context/CartCaontex";
 import { motion } from "framer-motion";
 import { formatNumber } from "../../utils/formatNumbers";
 import { useMutation } from "react-query";
@@ -24,7 +24,6 @@ const SummaryPage: React.FC<SummaryPageProps> = ({
   cart,
   total,
 }) => {
-  const {clearCart} = useCart()
   const navigate = useNavigate()
   const [iframeUrl, setIframeUrl] = useState<string | null>(null);
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -35,9 +34,6 @@ const SummaryPage: React.FC<SummaryPageProps> = ({
   }>({ status: 'idle' });
 
   const orderId = localStorage.getItem("orderId");
-
-
-
   const completeOrderMutation = useMutation(
     () => completeOrder(orderId || ""),
     {
@@ -77,8 +73,9 @@ const SummaryPage: React.FC<SummaryPageProps> = ({
       switch (result) {
         case 'success':
           navigate('/order-success')
-          localStorage.clear()
-          clearCart()
+          localStorage.removeItem('orderId');
+          localStorage.removeItem('cartId');
+          localStorage.removeItem('cart')
           break;
         case 'failed':
           
@@ -187,7 +184,6 @@ const SummaryPage: React.FC<SummaryPageProps> = ({
         </div>
       )}
 
-      {/* Redirection Overlay */}
       {isRedirecting && (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-lg shadow-lg text-center max-w-md w-full">
@@ -336,7 +332,7 @@ const SummaryPage: React.FC<SummaryPageProps> = ({
       )}
       {iframeUrl && (
         <div className="fixed w-full inset-0 z-50 bg-black bg-opacity-50 flex items-center justify-center">
-          <div className="bg-white w-[70%] h-[90vh] rounded-lg shadow-lg max-[650px]:w-full max-[650px]:h-full">
+          <div className="bg-white w-[40%] h-[90vh] rounded-lg shadow-lg max-[650px]:w-full max-[650px]:h-full">
             <iframe
               src={iframeUrl}
               title="Payment"

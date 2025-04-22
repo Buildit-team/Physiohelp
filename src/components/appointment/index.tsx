@@ -60,8 +60,6 @@ const Appointment = () => {
                                         className="h-4 w-4 text-indigo-600 focus:ring-indigo-500 border-gray-300 rounded"
                                     />
                                     <span className="ml-2 text-sm text-gray-700">{service?.session_type}</span>
-                                    <span className='ml-[5px]'> -</span>
-                                    <span className="ml-2 text-sm text-gray-700">{service?.session_price}</span>
                                 </label>
                             ))}
                         </div>

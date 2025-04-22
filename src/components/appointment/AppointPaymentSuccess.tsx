@@ -2,7 +2,7 @@ import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { motion } from "framer-motion";
 
-const OrderSuccessPage = () => {
+const AppointmentPaymentSuccess = () => {
     const navigate = useNavigate();
     const currentDate = new Date().toLocaleDateString("en-US", {
         year: "numeric",
@@ -41,21 +41,21 @@ const OrderSuccessPage = () => {
                             </svg>
                         </div>
                         <h2 className="text-2xl font-extrabold text-white">
-                            Order Successful!
+                            Appointment Confirmed!
                         </h2>
                         <p className="mt-2 text-white opacity-90">
-                            Thank you for your purchase
+                            Your appointment has been successfully booked
                         </p>
                     </div>
 
-                    {/* Order Details */}
+                    {/* Appointment Details */}
                     <div className="py-6 px-8">
                         <div className="border-b border-gray-200 pb-4">
                             <h3 className="text-lg font-medium text-gray-900 mb-2">
-                                Order Summary
+                                Appointment Summary
                             </h3>
                             <div className="flex justify-between items-center mt-2">
-                                <div className="text-sm text-gray-600">Date</div>
+                                <div className="text-sm text-gray-600">Booking Date</div>
                                 <div className="text-sm font-medium text-gray-900">
                                     {currentDate}
                                 </div>
@@ -78,8 +78,7 @@ const OrderSuccessPage = () => {
                                     </div>
                                     <div className="ml-3">
                                         <p className="text-sm text-gray-700">
-                                            <span className="font-medium">Confirmation Email</span> - A
-                                            receipt has been sent to your email address.
+                                            <span className="font-medium">Appointment Preparation</span> - Our healthcare professional will review your information before your appointment.
                                         </p>
                                     </div>
                                 </div>
@@ -89,19 +88,8 @@ const OrderSuccessPage = () => {
                                     </div>
                                     <div className="ml-3">
                                         <p className="text-sm text-gray-700">
-                                            <span className="font-medium">Order Processing</span> - We
-                                            are preparing your order for shipping.
-                                        </p>
-                                    </div>
-                                </div>
-                                <div className="flex items-start">
-                                    <div className="flex-shrink-0 h-6 w-6 flex items-center justify-center rounded-full bg-green-100 text-green-800">
-                                        <span className="text-sm font-medium">3</span>
-                                    </div>
-                                    <div className="ml-3">
-                                        <p className="text-sm text-gray-700">
-                                            <span className="font-medium">Shipment</span> - You'll
-                                            receive a notification when your order ships.
+                                            <span className="font-medium">Reminder</span> - You'll
+                                            receive a notification 24 hours before your scheduled appointment.
                                         </p>
                                     </div>
                                 </div>
@@ -109,22 +97,22 @@ const OrderSuccessPage = () => {
                         </div>
                         <div className="mt-8 flex flex-col sm:flex-row gap-4">
                             <button
-                                onClick={() => navigate("/shop")}
+                                onClick={() => navigate("/")}
                                 className="w-full sm:w-auto bg-blue-600 hover:bg-blue-700 text-white font-medium py-3 px-6 rounded-lg transition duration-200"
                             >
-                                Continue Shopping
+                                Go Back Home
                             </button>
                             <button
-                                onClick={() => navigate("/account/orders")}
+                                onClick={() => navigate("/appointments")}
                                 className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-6 rounded-lg transition duration-200"
                             >
-                                View Order History
+                                View All Appointments
                             </button>
                         </div>
                     </div>
                     <div className="bg-gray-50 py-4 px-8 flex items-center justify-between border-t border-gray-200">
                         <div className="text-sm text-gray-600">
-                            Need help with your order?
+                            Need to reschedule your appointment?
                         </div>
                         <button
                             onClick={() => navigate("/contact")}
@@ -139,4 +127,4 @@ const OrderSuccessPage = () => {
     );
 };
 
-export default OrderSuccessPage;
+export default AppointmentPaymentSuccess;

@@ -69,7 +69,7 @@ const Header = () => {
                 {
                     (isHomePage && !hasScrolled) ?
                         <>
-                            <img src="/Vector.svg" alt="User" className="w-[20px]" />
+                            <img src="/Vector.svg" alt="User" className="w-[20px]" onClick={() => navigate('/user')} />
                             <div className="relative">
                                 <img src="/headericonBag.svg" alt="Cart" className="w-[20px] cursor-pointer" onClick={() => navigate('/cart')} />
                                 {cart.length > 0 && (
@@ -82,7 +82,7 @@ const Header = () => {
                         </>
                         :
                         <>
-                            <img src="/user.svg" alt="User" className="w-[20px]" />
+                            <img src="/user.svg" alt="User" className="w-[20px]" onClick={() => navigate('/user')} />
                             <div className="relative">
                                 <img src="/Cart.svg" alt="Cart" className="w-[40px] cursor-pointer" onClick={() => navigate('/cart')} />
                                 {cart.length > 0 && (
