@@ -1,26 +1,22 @@
 import Table from "../../../utils/Table"
 import { useQuery } from "react-query";
-import { getAllAppointment, getAllPaidAppointment } from "../../services/api-service";
-import React from "react";
+import { getAllAppointment } from "../../services/api-service";
+import React, { useState } from "react";
 import { ColumnT } from "../../../interface/addProduct";
 import { ISession } from "../../../interface/session";
 import Addsessiontype from "./Addsessiontype";
+import SelectDoctor from "./DoctorsList";
 
 const Sessions = () => {
     const [session, setSession] = React.useState<ISession[]>([]);
     const [showAddAppointmentType, setShowAddAppointmentType] = React.useState(false);
+    const [showSelectDoctor, setShowSelectDoctor] = useState(false);
+    const [selectedSessionId, setSelectedSessionId] = useState<string | null>(null);
 
-    const { isLoading } = useQuery("appointments", getAllAppointment, {
+    const { isLoading } = useQuery("GETALL_APPOINTMENTS", getAllAppointment, {
         retry: false,
         onSuccess: (fetchedData) => {
             setSession(fetchedData);
-        },
-    });
-
-   useQuery("paid_appointments", getAllPaidAppointment, {
-        retry: false,
-        onSuccess: () => {
-        //   console.log(fetchedData);
         },
     });
 
@@ -70,9 +66,14 @@ const Sessions = () => {
             render: (session) => session?.assignee || 'Not Assigned',
         },
     ]
-
-    const handleAssignDoctor = () => {
-
+    const handleAssignDoctor = (session: ISession) => {
+        setSelectedSessionId(session?.session_id);
+        console.log(session?.session_id)
+        setShowSelectDoctor(true);
+    };
+    const handleCloseSelectDoctor = () => {
+        setShowSelectDoctor(false);
+        setSelectedSessionId(null);
     };
 
     const buttons = [
@@ -82,6 +83,7 @@ const Sessions = () => {
             variant: "primary" as const,
         },
     ];
+
     return (
         <div className="w-full max-[650px]:p-2">
             <Table
@@ -95,7 +97,7 @@ const Sessions = () => {
                 }}
                 emptyStateMessage="No appointments found."
                 isLoading={isLoading}
-                
+
             />
 
             {
@@ -103,6 +105,11 @@ const Sessions = () => {
                     <Addsessiontype setShowAddAppointmentType={setShowAddAppointmentType} />
                 )
             }
+            <SelectDoctor
+                isOpen={showSelectDoctor}
+                onClose={handleCloseSelectDoctor}
+                sessionId={selectedSessionId ?? ''}
+            />
         </div>
     )
 }

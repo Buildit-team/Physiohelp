@@ -31,8 +31,13 @@ import EditProduct from "./admin/components/products/EditProduct";
 import OrderSuccessPage from "./components/cart/orderSuccessPage";
 import AppointmentSuccess from "./components/appointment/AppoinntmentSuccess";
 import PayForAppointment from "./components/appointment/PaymentForAppointment";
+import AppointmentPaymentSuccess from "./components/appointment/AppointPaymentSuccess";
 
-
+import AccountLayout from "./components/userAccont";
+import OrderHistory from "./components/userAccont/OrderHistory";
+import AccountOverview from "./components/userAccont/AccountOverview";
+import UserAppointment from "./components/userAccont/UserAppointment";
+import UserAddress from "./components/userAccont/UserAddress";
 export const Routes = createBrowserRouter([
     {
         path: '/',
@@ -143,6 +148,42 @@ export const Routes = createBrowserRouter([
             </ScrollToTop>
     },
     {
+        path: '/appointment-payment-success',
+        element:
+            <ScrollToTop>
+                <Layout>
+                    <AppointmentPaymentSuccess />
+                </Layout>
+            </ScrollToTop>
+    },
+    {
+        path: '/user',
+        element:
+            <ScrollToTop>
+                <Layout>
+                    <AccountLayout />
+                </Layout>
+            </ScrollToTop>,
+        children: [
+            {
+                path: '/user/account',
+                element: <AccountOverview />
+            },
+            {
+                path: '/user/account/orders',
+                element: <OrderHistory />
+            },
+            {
+                path: '/user/account/appointments',
+                element: <UserAppointment />
+            },
+            {
+                path: '/user/account/address',
+                element: <UserAddress />
+            },
+        ]
+    },
+    {
         path: '/admin',
         element: <Admin />,
         children: [
@@ -164,7 +205,7 @@ export const Routes = createBrowserRouter([
             },
             {
                 path: '/admin/products/:id/edit',
-                element: <EditProduct/>
+                element: <EditProduct />
             },
             {
                 path: '/admin/order',

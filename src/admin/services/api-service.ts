@@ -178,6 +178,23 @@ export const getAllOrder = async (page: number, limit: number) => {
     })
     return response.data.data
 }
+export const getAllDoctors = async () => {
+    const response = await axios.get(`${VITE_ENDPOINT}/admins/all`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+
+export const assignDoctor = async (adminId: string, sessionId: string) => {
+    const response = await axios.patch(`${VITE_ENDPOINT}/sessions/assign?adminId=${adminId}&sessionId=${sessionId}`, {}, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
 
 ////USER
 
@@ -221,4 +238,14 @@ export const bookAppointment = async (data: AppointmentData) => {
 export const completeAppointmentBooking = async (id: string) => {
     const response = await axios.post(`${VITE_ENDPOINT}/sessions/${id}/payments`)
     return response.data;
+}
+
+export const getSeesionData = async (id: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/sessions/${id}`)
+    return response.data.data
+}
+
+export const getCustomerActivity = async (email: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/customers/activiy/history?email=${email}`,)
+    return response.data.data
 }

@@ -32,6 +32,7 @@ const Checkout: React.FC<CheckoutProps> = ({ setOrderDetails, setActiveTab }) =>
             setOrderDetails(formData)
             console.log(data);
             localStorage.setItem("orderId", data.data.order.order_id);
+            localStorage.setItem("email", formData.email);
             setActiveTab("order");
         }
     } )
