@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from "react";
-import { CartItem } from "../../context/CartCaontex";
+import { CartItem, useCart } from "../../context/CartCaontex";
 import { motion } from "framer-motion";
 import { formatNumber } from "../../utils/formatNumbers";
-import { useMutation } from "react-query";
+import { useMutation, useQueryClient } from "react-query";
 import { completeOrder } from "../../admin/services/api-service";
 import { useNavigate } from "react-router-dom";
 
@@ -24,6 +24,8 @@ const SummaryPage: React.FC<SummaryPageProps> = ({
   cart,
   total,
 }) => {
+  const queryClient = useQueryClient()
+  const {clearCart} = useCart()
   const navigate = useNavigate()
   const [iframeUrl, setIframeUrl] = useState<string | null>(null);
   const [isRedirecting, setIsRedirecting] = useState(false);
@@ -76,6 +78,8 @@ const SummaryPage: React.FC<SummaryPageProps> = ({
           localStorage.removeItem('orderId');
           localStorage.removeItem('cartId');
           localStorage.removeItem('cart')
+          queryClient.invalidateQueries('customerActivity')
+          clearCart()
           break;
         case 'failed':
           

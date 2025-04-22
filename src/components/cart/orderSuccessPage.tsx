@@ -115,7 +115,7 @@ const OrderSuccessPage = () => {
                                 Continue Shopping
                             </button>
                             <button
-                                onClick={() => navigate("/account/orders")}
+                                onClick={() => navigate("/user/account/orders")}
                                 className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-6 rounded-lg transition duration-200"
                             >
                                 View Order History

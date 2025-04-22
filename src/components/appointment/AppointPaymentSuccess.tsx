@@ -103,14 +103,14 @@ const AppointmentPaymentSuccess = () => {
                                 Go Back Home
                             </button>
                             <button
-                                onClick={() => navigate("/appointments")}
+                                onClick={() => navigate("/user/account/appointments")}
                                 className="w-full sm:w-auto bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-3 px-6 rounded-lg transition duration-200"
                             >
                                 View All Appointments
                             </button>
                         </div>
                     </div>
-                    <div className="bg-gray-50 py-4 px-8 flex items-center justify-between border-t border-gray-200">
+                    {/* <div className="bg-gray-50 py-4 px-8 flex items-center justify-between border-t border-gray-200">
                         <div className="text-sm text-gray-600">
                             Need to reschedule your appointment?
                         </div>
@@ -120,7 +120,7 @@ const AppointmentPaymentSuccess = () => {
                         >
                             Contact Support
                         </button>
-                    </div>
+                    </div> */}
                 </motion.div>
             </div>
         </div>

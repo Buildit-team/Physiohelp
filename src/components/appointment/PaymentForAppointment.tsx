@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Calendar, Clock, MapPin, CreditCard, ShieldCheck, Check, User, Activity } from 'lucide-react';
 import { completeAppointmentBooking, getSeesionData } from '../../admin/services/api-service';
-import { useMutation, useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 
 interface SessionData {
     session_id: string;
@@ -32,6 +32,7 @@ interface SessionData {
 }
 
 const PayForAppointment = () => {
+    const queryClient = useQueryClient()
     const { id } = useParams();
     const navigate = useNavigate();
     const [isProcessing, setIsProcessing] = useState(false);
@@ -89,6 +90,7 @@ const PayForAppointment = () => {
                 case 'success':
                     navigate('/appointment-payment-success')
                     localStorage.removeItem('appointmentData');
+                    queryClient.invalidateQueries('customerActivity');
                     break;
                 case 'failed':
                     setPaymentStatus({
