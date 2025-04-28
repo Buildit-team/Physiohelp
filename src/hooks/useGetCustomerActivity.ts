@@ -39,10 +39,7 @@ interface Session {
 }
 const getEmailFromStorage = (): string => {
     const email = localStorage.getItem('email');
-    if (!email) {
-        throw new Error('User email not found in local storage');
-    }
-    return email;
+    return null !== email ? email : '';
 };
 /**
  * Custom hook using React Query to fetch customer activity data
