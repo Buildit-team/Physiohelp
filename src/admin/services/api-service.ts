@@ -228,6 +228,14 @@ export const getSessionDetails = async (id: string) => {
     })
     return response.data.data
 }
+export const updateSessionVisit = async (id: string, numberOfTimes: number) => {
+    const response = await axios.post(`${VITE_ENDPOINT}/sessions/${id}/create`, { numberOfTimes }, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
 
 ////USER
 

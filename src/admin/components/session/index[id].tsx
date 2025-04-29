@@ -1,62 +1,20 @@
-import { useQuery } from 'react-query';
+import { useMutation, useQuery, useQueryClient } from 'react-query';
 import { useParams, useNavigate } from 'react-router-dom';
 import { ArrowLeft, Calendar, Clock, User, MapPin, Phone, Mail, Activity, AlertCircle, CheckCircle, XCircle, ClipboardList, Award, PlusCircle, FileText } from 'lucide-react';
-import { getSessionDetails } from '../../services/api-service';
+import { getSessionDetails, updateSessionVisit } from '../../services/api-service';
+import { useState } from 'react';
+import { formatDate } from 'date-fns';
+import { formatTime, formatCurrency } from '../../../utils/formatNumbers';
+import FollowUpModal from './FollowUpSessionModal';
+import toast from 'react-hot-toast';
 
-const formatCurrency = (amount: any) => {
-    return new Intl.NumberFormat('en-US', {
-        style: 'currency',
-        currency: 'NGN',
-    }).format(Number(amount));
-};
 
-const formatDate = (dateString: string | number | Date) => {
-    const date = new Date(dateString);
-    return date.toLocaleDateString('en-US', {
-        weekday: 'long',
-        year: 'numeric',
-        month: 'long',
-        day: 'numeric'
-    });
-};
-
-const formatTime = (timeString: { split: (arg0: string) => [any, any]; }) => {
-    const [hours, minutes] = timeString.split(':');
-    const date = new Date();
-    date.setHours(parseInt(hours, 10));
-    date.setMinutes(parseInt(minutes, 10));
-
-    return date.toLocaleTimeString('en-US', {
-        hour: '2-digit',
-        minute: '2-digit',
-        hour12: true
-    });
-};
-
-const StatusBadge = ({ status }: { status: 'pending' | 'processing' | 'completed' | 'cancelled' | 'abandoned' }) => {
-    const statusConfig = {
-        pending: { color: "bg-yellow-100 text-yellow-800", icon: <Clock className="mr-1 h-4 w-4" /> },
-        confirmed: { color: "bg-blue-100 text-blue-800", icon: <CheckCircle className="mr-1 h-4 w-4" /> },
-        completed: { color: "bg-green-100 text-green-800", icon: <CheckCircle className="mr-1 h-4 w-4" /> },
-        cancelled: { color: "bg-red-100 text-red-800", icon: <XCircle className="mr-1 h-4 w-4" /> },
-        processing: { color: "bg-orange-100 text-orange-800", icon: <Clock className="mr-1 h-4 w-4" /> },
-        abandoned: { color: "bg-gray-100 text-gray-800", icon: <AlertCircle className="mr-1 h-4 w-4" /> },
-    };
-
-    const config = statusConfig[status] || statusConfig.pending;
-
-    return (
-        <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
-            {config.icon}
-            {status.charAt(0).toUpperCase() + status.slice(1)}
-        </span>
-    );
-};
 
 const SessionDetails = () => {
+    const queryclient = useQueryClient()
     const { id } = useParams();
     const navigate = useNavigate();
-
+    const [showFollowUpModal, setShowFollowUpModal] = useState(false);
     const { data, isLoading, error } = useQuery(
         [`SESSION_${id}`],
         () => getSessionDetails(id ?? ''),
@@ -66,6 +24,43 @@ const SessionDetails = () => {
         }
     );
 
+    const updateSessionMutation = useMutation(
+        (data: number) => updateSessionVisit(id ?? '', data),
+        {
+            onSuccess: () => {
+                queryclient.invalidateQueries([`SESSION_${id}`]);
+                setShowFollowUpModal(false);
+                toast.success('Follow-up appointment added successfully');
+            },
+            onError: (error) => {
+                console.error('Error updating session:', error);
+            }
+        }
+    );
+    const handleFollowUpSubmit = ({ numberOfTimes }: { numberOfTimes: number }) => {
+
+        updateSessionMutation.mutate(numberOfTimes);
+    };
+
+    const StatusBadge = ({ status }: { status: 'pending' | 'processing' | 'completed' | 'cancelled' | 'abandoned' }) => {
+        const statusConfig = {
+            pending: { color: "bg-yellow-100 text-yellow-800", icon: <Clock className="mr-1 h-4 w-4" /> },
+            confirmed: { color: "bg-blue-100 text-blue-800", icon: <CheckCircle className="mr-1 h-4 w-4" /> },
+            completed: { color: "bg-green-100 text-green-800", icon: <CheckCircle className="mr-1 h-4 w-4" /> },
+            cancelled: { color: "bg-red-100 text-red-800", icon: <XCircle className="mr-1 h-4 w-4" /> },
+            processing: { color: "bg-orange-100 text-orange-800", icon: <Clock className="mr-1 h-4 w-4" /> },
+            abandoned: { color: "bg-gray-100 text-gray-800", icon: <AlertCircle className="mr-1 h-4 w-4" /> },
+        };
+
+        const config = statusConfig[status] || statusConfig.pending;
+
+        return (
+            <span className={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${config.color}`}>
+                {config.icon}
+                {status.charAt(0).toUpperCase() + status.slice(1)}
+            </span>
+        );
+    };
     if (isLoading) {
         return (
             <div className="flex items-center justify-center h-screen w-full">
@@ -95,7 +90,7 @@ const SessionDetails = () => {
     const session = data;
 
     const appointmentDate = session?.appointment_date
-        ? formatDate(session.appointment_date)
+        ? formatDate(session.appointment_date, 'yyyy-MM-dd')
         : 'Not scheduled';
 
     return (
@@ -111,7 +106,7 @@ const SessionDetails = () => {
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between">
                     <div>
                         <h1 className="text-2xl font-bold text-gray-900">Session Details</h1>
-                        <p className="text-gray-500">Created on {formatDate(session?.created_at)}</p>
+                        <p className="text-gray-500">Created on {formatDate(session?.created_at, 'yyyy-MM-dd')}</p>
                     </div>
                     <div className="mt-4 md:mt-0">
                         <StatusBadge status={session?.session_status} />
@@ -283,7 +278,7 @@ const SessionDetails = () => {
                                     <div className="ml-4">
                                         <h3 className="text-sm font-medium text-gray-900">Session Created</h3>
                                         <p className="mt-1 text-sm text-gray-500">
-                                            {formatDate(session?.created_at)} at {new Date(session?.created_at).toLocaleTimeString()}
+                                            {formatDate(session?.created_at, 'yyyy-MM-dd')} at {new Date(session?.created_at).toLocaleTimeString()}
                                         </p>
                                     </div>
                                 </div>
@@ -312,7 +307,7 @@ const SessionDetails = () => {
                                         <div className="ml-4">
                                             <h3 className="text-sm font-medium text-gray-900">Last Updated</h3>
                                             <p className="mt-1 text-sm text-gray-500">
-                                                {formatDate(session?.updated_at)} at {new Date(session?.updated_at).toLocaleTimeString()}
+                                                {formatDate(session?.updated_at, 'yyyy-MM-dd')} at {new Date(session?.updated_at).toLocaleTimeString()}
                                             </p>
                                         </div>
                                     </div>
@@ -324,20 +319,22 @@ const SessionDetails = () => {
                             <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
                                 <Calendar className="mr-2 h-4 w-4" /> Reschedule Appointment
                             </button>
-
-                            <button className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-green-600 hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500">
-                                <CheckCircle className="mr-2 h-4 w-4" /> {session?.session_status === 'completed' ? 'Mark as Pending' : 'Mark as Completed'}
+                            <button
+                                onClick={() => setShowFollowUpModal(true)}
+                                className="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md shadow-sm text-white bg-blue-600 hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+                                <CheckCircle className="mr-2 h-4 w-4" /> Add Follow up Appointment
                             </button>
-
-                            {session?.session_status !== 'cancelled' && (
-                                <button className="inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500">
-                                    <XCircle className="mr-2 h-4 w-4 text-red-500" /> Cancel Session
-                                </button>
-                            )}
                         </div>
                     </div>
                 </div>
             </div>
+            <FollowUpModal
+                isOpen={showFollowUpModal}
+                onClose={() => setShowFollowUpModal(false)}
+                onSubmit={handleFollowUpSubmit}
+                currentVisits={session?.number_of_times || 0}
+                isLoading={updateSessionMutation.isLoading}
+            />
         </div>
     );
 };
