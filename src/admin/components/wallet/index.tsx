@@ -1,0 +1,211 @@
+import { useState } from 'react';
+import {
+    ArrowDownCircle,
+    Clock,
+    CheckCircle,
+    XCircle,
+    Wallet as WalletIcon
+} from 'lucide-react';
+import Table from '../../../utils/Table';
+import { ColumnT } from '../../../interface/addProduct';
+import { useQuery } from 'react-query';
+import { getAdminBalance } from '../../services/api-service';
+import WithdrawalModal from './WithdrawalModal';
+
+const Wallet = () => {
+    const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
+    const [withdrawAmount, setWithdrawAmount] = useState('');
+    const [withdrawalMethod, setWithdrawalMethod] = useState('bank');
+    const [isLoading, setIsLoading] = useState(false);
+    const [walletBalance, setWalletBalance] = useState(2547.63);
+
+    useQuery(['GETWALLETBALANCE'], getAdminBalance, {
+        onSuccess: (balance) => {
+            setWalletBalance(balance)
+        }
+    })
+    const availableBalance = walletBalance
+
+    const withdrawalHistory = [
+        {
+            id: 'WD-12345',
+            amount: 250.00,
+            date: '2025-04-20T14:32:00Z',
+            status: 'completed',
+            method: 'Bank Transfer',
+            reference: 'REF123456'
+        },
+        {
+            id: 'WD-12344',
+            amount: 150.00,
+            date: '2025-04-15T09:15:00Z',
+            status: 'pending',
+            method: 'PayPal',
+            reference: 'REF123455'
+        },
+        {
+            id: 'WD-12343',
+            amount: 500.00,
+            date: '2025-04-01T16:45:00Z',
+            status: 'completed',
+            method: 'Bank Transfer',
+            reference: 'REF123454'
+        },
+        {
+            id: 'WD-12342',
+            amount: 180.00,
+            date: '2025-03-28T11:20:00Z',
+            status: 'failed',
+            method: 'PayPal',
+            reference: 'REF123453'
+        },
+        {
+            id: 'WD-12341',
+            amount: 320.00,
+            date: '2025-03-15T15:10:00Z',
+            status: 'completed',
+            method: 'Bank Transfer',
+            reference: 'REF123452'
+        }
+    ];
+
+    const tableColumns: ColumnT<{ id: string; amount: number; date: string; status: string; method: string; reference: string; }>[] = [
+        {
+            key: 'id',
+            header: 'Reference ID',
+            sortable: true,
+            searchable: true,
+            render: (value: string) => (
+                <span className="font-medium text-gray-900">{value}</span>
+            )
+        },
+        {
+            key: 'amount',
+            header: 'Amount',
+            sortable: true,
+            searchable: true,
+            render: (value: number) => (
+                <span className="font-medium text-gray-900">${value.toFixed(2)}</span>
+            )
+        },
+        {
+            key: 'method',
+            header: 'Method',
+            sortable: true,
+            searchable: true
+        },
+        {
+            key: 'date',
+            header: 'Date',
+            sortable: true,
+            searchable: false
+        },
+        {
+            key: 'status',
+            header: 'Status',
+            sortable: true,
+            searchable: true,
+            render: (value: string) => {
+                if (value === 'completed') {
+                    return (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-green-100 text-green-800">
+                            <CheckCircle className="w-3 h-3 mr-1" /> Completed
+                        </span>
+                    );
+                } else if (value === 'pending') {
+                    return (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-yellow-100 text-yellow-800">
+                            <Clock className="w-3 h-3 mr-1" /> Pending
+                        </span>
+                    );
+                } else {
+                    return (
+                        <span className="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-red-100 text-red-800">
+                            <XCircle className="w-3 h-3 mr-1" /> Failed
+                        </span>
+                    );
+                }
+            }
+        }
+    ];
+
+    const filterOptions = [
+        { label: 'All', value: 'all' },
+        { label: 'Completed', value: 'completed' },
+        { label: 'Pending', value: 'pending' },
+        { label: 'Failed', value: 'failed' }
+    ];
+
+    const handleWithdraw = () => {
+        setIsLoading(true);
+
+        setTimeout(() => {
+            setIsLoading(false);
+            setIsWithdrawModalOpen(false);
+            setWithdrawAmount('');
+        }, 1500);
+    };
+
+
+
+    return (
+        <div className=" px-4 sm:px-6 lg:px-8 py-8 w-full">
+            <div className="mb-8">
+                <h1 className="text-2xl font-bold text-gray-900 flex items-center mb-1">
+                    <WalletIcon className="mr-2 h-6 w-6" /> My Wallet
+                </h1>
+                <p className="text-gray-500">Manage your funds and track your withdrawals</p>
+            </div>
+
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
+
+                <div className="bg-white rounded-lg shadow-md p-6 flex flex-col">
+                    <div className="text-gray-500 mb-1 flex items-center">
+                        <ArrowDownCircle className="h-4 w-4 mr-1" /> Available for Withdrawal
+                    </div>
+                    <div className="text-3xl font-bold text-gray-900">
+                        ₦{availableBalance.toFixed(2)}
+                    </div>
+                    <button
+                        onClick={() => setIsWithdrawModalOpen(true)}
+                        className="mt-4 flex items-center justify-center gap-2 bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-md transition-colors"
+                    >
+                        <ArrowDownCircle className="h-4 w-4" />
+                        Withdraw Funds
+                    </button>
+                </div>
+            </div>
+
+            <div className=" rounded-lg ">
+                <h2 className="text-xl font-semibold mb-6 flex items-center">
+                    <Clock className="mr-2 h-5 w-5" /> Withdrawal History
+                </h2>
+
+                <Table
+                    data={withdrawalHistory}
+                    columns={tableColumns}
+                    searchPlaceholder="Search withdrawals..."
+                    filterOptions={filterOptions}
+                    filterKey="status"
+                    dateFilterKey="date"
+                    itemsPerPage={5}
+                    emptyStateMessage="No withdrawal history found"
+                />
+            </div>
+
+            <WithdrawalModal
+                isOpen={isWithdrawModalOpen}
+                onClose={() => setIsWithdrawModalOpen(false)}
+                availableBalance={availableBalance}
+                withdrawAmount={withdrawAmount}
+                setWithdrawAmount={setWithdrawAmount}
+                withdrawalMethod={withdrawalMethod}
+                setWithdrawalMethod={setWithdrawalMethod}
+                onWithdraw={handleWithdraw}
+                isLoading={isLoading}
+            />
+        </div>
+    );
+};
+
+export default Wallet;

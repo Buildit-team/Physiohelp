@@ -203,6 +203,14 @@ export const getAdminDashboard = async () => {
     })
     return response.data.data
 }
+export const getAdminBalance = async () => {
+    const response = await axios.get(`${VITE_ENDPOINT}/admins/balance`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
 
 ////USER
 

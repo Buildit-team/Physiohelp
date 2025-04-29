@@ -39,6 +39,7 @@ import AccountOverview from "./components/userAccont/AccountOverview";
 import UserAppointment from "./components/userAccont/UserAppointment";
 import UserAddress from "./components/userAccont/UserAddress";
 import Dashboard from "./admin/components/dashboard";
+import Wallet from "./admin/components/wallet";
 export const Routes = createBrowserRouter([
     {
         path: '/',
@@ -191,6 +192,10 @@ export const Routes = createBrowserRouter([
             {
                 path: '',
                 element: <Dashboard />
+            },
+            {
+                path: '/admin/wallet',
+                element: <Wallet />
             },
             {
                 path: '/admin/product',

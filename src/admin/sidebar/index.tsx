@@ -39,7 +39,7 @@ const Sidebar = ({ onClose }: { onClose: () => void }) => {
                     <span
                         className="w-[80%] h-[60px] cursor-pointer flex gap-[10px] items-center text-white"
                         onClick={() => {
-                            navigate("/admin")
+                            navigate("/admin/wallet")
                             onClose()
                         }}
                     >

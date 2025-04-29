@@ -49,7 +49,6 @@ const Dashboard: React.FC = () => {
                     mainStat={{
                         label: "Customers",
                         value: value?.customer ?? 0,
-                        change: "+15.80%"
                     }}
                     timeFrame={timeFrame}
                 />
@@ -80,7 +79,6 @@ const Dashboard: React.FC = () => {
                             <div className="text-gray-500 text-sm">Completed</div>
                             <div className="flex items-end mt-1">
                                 <div className="text-2xl font-semibold">{value?.completedOrders}</div>
-                                <div className="text-green-500 text-xs ml-1">+0.00%</div>
                             </div>
                         </div>
                     </div>
