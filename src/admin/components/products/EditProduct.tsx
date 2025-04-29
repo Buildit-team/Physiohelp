@@ -10,8 +10,8 @@ const EditProduct: React.FC = () => {
     const navigate = useNavigate();
     const [formData, setFormData] = useState<IProduct>({
         product: {
-            product_name: 'New table ',
-            description: 'Nice one ',
+            product_name: '',
+            description: '',
         },
         price: {
             basic_price: 0,
@@ -32,7 +32,39 @@ const EditProduct: React.FC = () => {
         status: 'published',
     });
 
-    const { isLoading } = useQuery([`PRODUCT_${id}`], () => getProductById(id!), {});
+    const { isLoading } = useQuery([`PRODUCT_${id}`], () => getProductById(id!), {
+        onSuccess: (data) => {
+            if (data) {
+                setFormData({
+                    product: {
+                        product_name: data.product_name,
+                        description: data.description,
+                    },
+                    price: {
+                        basic_price: data.price.basic_price,
+                        discounted_rate: data.price.discounted_rate,
+                        vat: data.price.vat,
+                    },
+                    inventory: {
+                        quantity: data.inventory.quantity,
+                        sku_id: data.inventory.sku_id,
+                        barcode: data.inventory.barcode,
+                    },
+                    shipping_details: {
+                        weight: data.shipping_details.weight,
+                        width: data.shipping_details.width,
+                        height: data.shipping_details.height,
+                        length: data.shipping_details.length,
+                    },
+                    status: 'published',
+                });
+            }
+        },
+        onError: (error) => {
+            console.error('Error fetching product:', error);
+            toast.error('Failed to fetch product');
+        },
+    });
 
     const mutation = useMutation(async (updatedProduct: IProduct) => { return updateProduct(id!, updatedProduct); }, {
         onSuccess: () => {
@@ -135,7 +167,7 @@ const EditProduct: React.FC = () => {
                     </div>
                 </div>
 
-                {/* <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] flex flex-col gap-[10px]  max-[650px]:shadow-none">
+                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] flex flex-col gap-[10px]  max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">Pricing</h2>
                     <div>
                         <label className="block text-sm font-lgiht text-[#777980] mb-1">Base Price</label>
@@ -170,9 +202,9 @@ const EditProduct: React.FC = () => {
                             className="w-full p-2 border border-gray-300 rounded-md text-[12px] focus:outline-none focus:ring-2 focus:ring-gray-100"
                         />
                     </div>
-                </div> */}
+                </div>
 
-                {/* <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
+                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">Inventory</h2>
                     <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                         <div>
@@ -209,9 +241,9 @@ const EditProduct: React.FC = () => {
                             />
                         </div>
                     </div>
-                </div> */}
+                </div>
 
-                {/* <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
+                <div className="mb-6 bg-white rounded-lg shadow-md p-6 w-[100%] max-[650px]:shadow-none">
                     <h2 className="text-xl font-semibold mb-4">Shipping and Delivery</h2>
                     <div className="grid grid-cols-1 md:grid-cols-4 gap-4">
                         <div>
@@ -259,7 +291,7 @@ const EditProduct: React.FC = () => {
                             />
                         </div>
                     </div>
-                </div> */}
+                </div>
             </div>
             <div className=" w-[40%] flex justify-end gap-4 max-[650px]:w-full max-[650px]:justify-center max-[650px]:mb-[10px]">
                 <button

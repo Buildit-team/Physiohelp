@@ -212,6 +212,23 @@ export const getAdminBalance = async () => {
     return response.data.data
 }
 
+export const getOrderDetails = async (id: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/orders/${id}`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+export const getSessionDetails = async (id: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/sessions/${id}`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+
 ////USER
 
 export const getUserProduct = async (page: number, limit: number) => {

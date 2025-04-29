@@ -88,7 +88,7 @@ const Products = () => {
         {
             key: "status",
             header: "Status",
-            searchable: true, 
+            searchable: true,
             render: (value) => {
                 const statusText = value || "N/A";
                 let className = "";
@@ -208,7 +208,7 @@ const Products = () => {
     };
 
     return (
-        <>
+        <div className="p-4 w-full">
             <Table
                 data={products}
                 columns={columns}
@@ -224,14 +224,13 @@ const Products = () => {
                 rowUrl={(product) => `/admin/product/${product.product_id}`}
                 isLoading={isLoading}
                 emptyStateMessage="No products found."
-                // Add pagination props
                 itemsPerPage={pagination.limit}
                 totalItems={pagination.totalItems}
                 currentPage={pagination.currentPage}
                 onPageChange={handlePageChange}
             />
             <DeleteConfirmationModal />
-        </>
+        </div>
     );
 };
 

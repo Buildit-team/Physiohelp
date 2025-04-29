@@ -40,6 +40,7 @@ import UserAppointment from "./components/userAccont/UserAppointment";
 import UserAddress from "./components/userAccont/UserAddress";
 import Dashboard from "./admin/components/dashboard";
 import Wallet from "./admin/components/wallet";
+import OrderDetails from "./admin/components/order/index[id]";
 export const Routes = createBrowserRouter([
     {
         path: '/',
@@ -220,6 +221,10 @@ export const Routes = createBrowserRouter([
             {
                 path: '/admin/order',
                 element: <OrderManagement />
+            },
+            {
+                path: '/admin/order/:id',
+                element: <OrderDetails />
             },
             {
                 path: '/admin/customer',

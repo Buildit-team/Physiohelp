@@ -28,7 +28,7 @@ const Layout = () => {
     return (
         <div className="w-full flex h-screen">
             <div
-                className={`fixed md:fixed top-0 left-0 w-[22%] max-[650px]:w-[80%] h-screen bg-[#1053D4] transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
+                className={`fixed md:fixed top-0 left-0 w-[22%] max-[650px]:w-[100%] h-screen bg-[#1053D4] transform transition-transform duration-300 ease-in-out ${isSidebarOpen ? "translate-x-0" : "-translate-x-full md:translate-x-0"
                     } z-40`}
             >
                 <Sidebar onClose={() => setIsSidebarOpen(false)} />
