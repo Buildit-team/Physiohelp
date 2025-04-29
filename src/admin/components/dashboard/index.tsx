@@ -3,41 +3,33 @@ import { ChevronDown, ShoppingCart, Users, ShoppingBag } from 'lucide-react';
 import StatCard from './StatCard';
 import OrderCard from './OrderCard';
 import SalesBarChart from './SalesChart';
-import { Order, SalesDataPoint } from '../../../interface/dashboard';
-
+import { orders, salesData } from './dummyData';
+import { useQuery } from 'react-query';
+import { getAdminDashboard } from '../../services/api-service';
+interface DashboardData {
+    abandonedOrders: number;
+    completedOrders: number
+    customer: number;
+    orders: number;
+    pendingOrders: number;
+}
 
 const Dashboard: React.FC = () => {
     const [timeFrame] = useState('This Week');
     const [activeTab, setActiveTab] = useState('Sales');
     const [daysRange] = useState('Last 7 Days');
     const [orderFilter, setOrderFilter] = useState('All');
+    const [value, setValue] = useState<DashboardData | null>(null)
 
-    const orders: Order[] = [
-        { id: 1, product: 'Massage Chair', price: 126000, status: 'Pending', date: '23 Feb 2024', image: 'chair-black' },
-        { id: 2, product: 'Massage Chair', price: 126000, status: 'Completed', date: '23 Feb 2024', image: 'chair-controller' },
-        { id: 3, product: 'Massage Chair', price: 126000, status: 'Pending', date: '23 Feb 2024', image: 'chair-black' },
-        { id: 4, product: 'Massage Chair', price: 126000, status: 'Completed', date: '23 Feb 2024', image: 'chair-round' },
-        { id: 5, product: 'Massage Chair', price: 126000, status: 'Completed', date: '23 Feb 2024', image: 'chair-controller' },
-        { id: 6, product: 'Massage Chair', price: 126000, status: 'Completed', date: '23 Feb 2024', image: 'chair-controller' },
-        { id: 7, product: 'Massage Chair', price: 126000, status: 'Pending', date: '23 Feb 2024', image: 'chair-round' },
-        { id: 8, product: 'Massage Chair', price: 126000, status: 'Completed', date: '23 Feb 2024', image: 'chair-black' },
-        { id: 9, product: 'Massage Chair', price: 126000, status: 'Pending', date: '23 Feb 2024', image: 'chair-round' },
-    ];
-
-    const salesData: SalesDataPoint[] = [
-        { day: 'Sept 10', value: 50 },
-        { day: 'Sept 11', value: 65 },
-        { day: 'Sept 12', value: 70 },
-        { day: 'Sept 13', value: 30 },
-        { day: 'Sept 14', value: 25 },
-        { day: 'Sept 15', value: 35 },
-        { day: 'Sept 16', value: 50 },
-    ];
-
+    useQuery(['GETADMINDASHBOARD'], getAdminDashboard, {
+        onSuccess: (data) => {
+            setValue(data)
+        }
+    })
     const filteredOrders = orderFilter === 'All'
         ? orders
         : orders.filter(order => order.status === orderFilter);
-
+    console.log(value)
     return (
         <div className="bg-gray-50 min-h-screen p-6 w-full">
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
@@ -46,12 +38,7 @@ const Dashboard: React.FC = () => {
                     icon={<ShoppingCart className="text-blue-600" size={20} />}
                     mainStat={{
                         label: "Abandoned Cart",
-                        value: "20%",
-                        change: "+0.00%"
-                    }}
-                    secondaryStat={{
-                        label: "Customers",
-                        value: 30
+                        value: value?.abandonedOrders ?? 0,
                     }}
                     timeFrame={timeFrame}
                 />
@@ -61,13 +48,8 @@ const Dashboard: React.FC = () => {
                     icon={<Users className="text-blue-600" size={20} />}
                     mainStat={{
                         label: "Customers",
-                        value: "1,250",
+                        value: value?.customer ?? 0,
                         change: "+15.80%"
-                    }}
-                    secondaryStat={{
-                        label: "Active",
-                        value: "1,180",
-                        change: "-4.90%"
                     }}
                     timeFrame={timeFrame}
                 />
@@ -88,16 +70,16 @@ const Dashboard: React.FC = () => {
                     <div className="grid grid-cols-3 gap-4">
                         <div>
                             <div className="text-gray-500 text-sm">All Orders</div>
-                            <div className="text-2xl font-semibold mt-1">10</div>
+                            <div className="text-2xl font-semibold mt-1">{value?.orders}</div>
                         </div>
                         <div>
                             <div className="text-gray-500 text-sm">Pending</div>
-                            <div className="text-2xl font-semibold mt-1">3</div>
+                            <div className="text-2xl font-semibold mt-1">{value?.pendingOrders}</div>
                         </div>
                         <div>
                             <div className="text-gray-500 text-sm">Completed</div>
                             <div className="flex items-end mt-1">
-                                <div className="text-2xl font-semibold">7</div>
+                                <div className="text-2xl font-semibold">{value?.completedOrders}</div>
                                 <div className="text-green-500 text-xs ml-1">+0.00%</div>
                             </div>
                         </div>
