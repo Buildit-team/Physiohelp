@@ -41,6 +41,7 @@ import UserAddress from "./components/userAccont/UserAddress";
 import Dashboard from "./admin/components/dashboard";
 import Wallet from "./admin/components/wallet";
 import OrderDetails from "./admin/components/order/index[id]";
+import SessionDetails from "./admin/components/session/index[id]";
 export const Routes = createBrowserRouter([
     {
         path: '/',
@@ -257,6 +258,10 @@ export const Routes = createBrowserRouter([
             {
                 path: '/admin/session',
                 element: <Sessions />
+            },
+            {
+                path: '/admin/session/:id',
+                element: <SessionDetails />
             },
 
         ]
