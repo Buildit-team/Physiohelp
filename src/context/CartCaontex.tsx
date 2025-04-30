@@ -80,7 +80,6 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
     const clearCart = () => {
         setCart([]);
-        toast.success('Cart cleared');
     };
 
     return (

@@ -83,14 +83,14 @@ const OrderManagement = () => {
             render: (value) => (
                 <span
                     className={`px-2 py-1 rounded-full text-xs ${value === 'pending'
-                            ? 'bg-red-100 text-red-800'
+                        ? 'bg-red-100 text-red-800'
                         : value === 'abandoned'
-                                ? 'bg-yellow-100 text-yellow-800'
-                                : value === 'completed'
-                                    ? 'bg-green-100 text-green-800'
-                                    : value === 'Cancelled'
-                                        ? 'bg-red-100 text-red-800'
-                                        : 'bg-gray-100 text-gray-800'
+                            ? 'bg-yellow-100 text-yellow-800'
+                            : value === 'completed'
+                                ? 'bg-green-100 text-green-800'
+                                : value === 'Cancelled'
+                                    ? 'bg-red-100 text-red-800'
+                                    : 'bg-gray-100 text-gray-800'
                         }`}
                 >
                     {value}
@@ -115,7 +115,7 @@ const OrderManagement = () => {
                 filterOptions={filterOptions}
                 filterKey="order_status"
                 isLoading={isLoading}
-                // itemsPerPage={baseLimit}
+                rowUrl={(order) => `/admin/order/${order.order_track_id}`}
                 currentPage={pagination.currentPage}
                 onPageChange={handlePageChange}
                 emptyStateMessage="No orders found. Orders will appear here once they are created."

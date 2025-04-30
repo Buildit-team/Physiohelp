@@ -97,6 +97,7 @@ const Sessions = () => {
                 }}
                 emptyStateMessage="No appointments found."
                 isLoading={isLoading}
+                rowUrl={(session) => `/admin/session/${session.session_id}`}
 
             />
 

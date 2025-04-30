@@ -42,7 +42,7 @@ export const uploadProduct = async (uploadData: IProduct) => {
     })
     return response.data;
 }
-export const getAdminProduct = async (page : number, itemsPerPage: number) => {
+export const getAdminProduct = async (page: number, itemsPerPage: number) => {
     const offset = page;
     const response = await axios.get(`${VITE_ENDPOINT}/admins/products/?offset=${offset}&limit=${itemsPerPage}`, {
         headers: {
@@ -137,12 +137,12 @@ export const getAllCustomer = async () => {
     const response = await axios.get(`${VITE_ENDPOINT}/customers`, {
         headers: {
             Authorization: `Bearer ${VITE_TOKEN}`
-        } 
+        }
     })
     return response.data.data
 }
 
-export const getCustomerById = async (id : string) => {
+export const getCustomerById = async (id: string) => {
     const response = await axios.get(`${VITE_ENDPOINT}/customers/${id}`, {
         headers: {
             Authorization: `Bearer ${VITE_TOKEN}`
@@ -160,7 +160,7 @@ export const getCustomerSummaryById = async (id: string) => {
     return response.data.data
 }
 
-export const getCustomerTransactionById = async (id: string,type: string) => {
+export const getCustomerTransactionById = async (id: string, type: string) => {
     const response = await axios.get(`${VITE_ENDPOINT}/customers/${id}/transactions?type=${type}`, {
         headers: {
             Authorization: `Bearer ${VITE_TOKEN}`
@@ -195,6 +195,47 @@ export const assignDoctor = async (adminId: string, sessionId: string) => {
     })
     return response.data.data
 }
+export const getAdminDashboard = async () => {
+    const response = await axios.get(`${VITE_ENDPOINT}/admins/dashboard`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+export const getAdminBalance = async () => {
+    const response = await axios.get(`${VITE_ENDPOINT}/admins/balance`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+
+export const getOrderDetails = async (id: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/orders/${id}`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+export const getSessionDetails = async (id: string) => {
+    const response = await axios.get(`${VITE_ENDPOINT}/sessions/${id}`, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
+export const updateSessionVisit = async (id: string, numberOfTimes: number) => {
+    const response = await axios.post(`${VITE_ENDPOINT}/sessions/${id}/create`, { numberOfTimes }, {
+        headers: {
+            Authorization: `Bearer ${VITE_TOKEN}`
+        }
+    })
+    return response.data.data
+}
 
 ////USER
 
@@ -214,9 +255,9 @@ export const createCart = async (items: CartItems[], totalPrice: number) => {
     return response.data;
 }
 
-export const createOrder = async (customer_info: CustomerInfo, id: string) => { 
+export const createOrder = async (customer_info: CustomerInfo, id: string) => {
     const response = await axios.post(`${VITE_ENDPOINT}/orders/carts/${id}`, { customer_info })
-        return response.data;
+    return response.data;
 }
 
 
