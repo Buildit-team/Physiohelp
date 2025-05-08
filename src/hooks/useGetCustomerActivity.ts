@@ -41,10 +41,6 @@ const getEmailFromStorage = (): string => {
     const email = localStorage.getItem('email');
     return null !== email ? email : '';
 };
-/**
- * Custom hook using React Query to fetch customer activity data
- * @returns React Query result with customer activity data
- */
 
 export const useGetCustomerActivity = (): UseQueryResult<CustomerActivityData, Error> => {
     const email = getEmailFromStorage();
