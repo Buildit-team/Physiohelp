@@ -4,7 +4,7 @@ interface WithdrawalModalProps {
     isOpen: boolean;
     onClose: () => void;
     availableBalance: number;
-    withdrawAmount: string;
+    amount: string;
     setWithdrawAmount: (value: string) => void;
     withdrawalMethod: string;
     setWithdrawalMethod: (value: string) => void;
@@ -16,12 +16,13 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
     isOpen,
     onClose,
     availableBalance,
-    withdrawAmount,
+    amount,
     setWithdrawAmount,
     onWithdraw,
     isLoading
 }) => {
     if (!isOpen) return null;
+
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -47,7 +48,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                         </span>
                         <input
                             type="number"
-                            value={withdrawAmount}
+                            value={amount}
                             onChange={(e) => setWithdrawAmount(e.target.value)}
                             placeholder="0.00"
                             className="pl-8 pr-4 py-2 w-full border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -55,7 +56,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                             max={availableBalance}
                         />
                     </div>
-                    {parseFloat(withdrawAmount) > availableBalance && (
+                    {parseFloat(amount) > availableBalance && (
                         <p className="text-red-500 text-sm mt-1">
                             Amount exceeds available balance
                         </p>
@@ -72,7 +73,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                     </button>
                     <button
                         onClick={onWithdraw}
-                        disabled={!withdrawAmount || parseFloat(withdrawAmount) <= 0 || parseFloat(withdrawAmount) > availableBalance || isLoading}
+                        disabled={!amount || parseFloat(amount) <= 0 || parseFloat(amount) > availableBalance || isLoading}
                         className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                         {isLoading ? (

@@ -265,6 +265,14 @@ export const addBankDetails = async (bankDetails: BankDetails) => {
     return response.data.data;
 };
 
+export const withdrawFunds = async ({ amount }: { amount: number }) => {
+    return await axios.post(`${VITE_ENDPOINT}/withdrawals/create-withdrawal`, { amount }, {
+        headers: {
+            'Authorization': `Bearer ${VITE_TOKEN}`,
+        }
+    })
+};
+
 ////USER
 
 export const getUserProduct = async (page: number, limit: number) => {

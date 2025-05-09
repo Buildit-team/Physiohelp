@@ -8,10 +8,13 @@ import { useNavigate } from "react-router-dom";
 import { RxCross2 } from "react-icons/rx";
 import { CiWallet } from "react-icons/ci";
 import { SiSession } from "react-icons/si";
+import { useAdminContext } from "../../context/adminContext";
 
 const Sidebar = ({ onClose }: { onClose: () => void }) => {
     const navigate = useNavigate();
+    const { adminData } = useAdminContext();
 
+    const isSuperAdmin = adminData?.role === "superadmin";
     return (
         <div className="w-full flex bg-[#1053D4] h-full">
             <div className="w-[90%] mt-[20px] relative">
@@ -36,16 +39,21 @@ const Sidebar = ({ onClose }: { onClose: () => void }) => {
                         <RxDashboard />
                         <p>Dashboard</p>
                     </span>
-                    <span
-                        className="w-[80%] h-[60px] cursor-pointer flex gap-[10px] items-center text-white"
-                        onClick={() => {
-                            navigate("/admin/wallet")
-                            onClose()
-                        }}
-                    >
-                        <CiWallet />
-                        <p>Wallet</p>
-                    </span>
+                    {
+                        isSuperAdmin && (
+                            <span
+                                className="w-[80%] h-[60px] cursor-pointer flex gap-[10px] items-center text-white"
+                                onClick={() => {
+                                    navigate("/admin/wallet")
+                                    onClose()
+                                }}
+                            >
+                                <CiWallet />
+                                <p>Wallet</p>
+                            </span>
+                        )
+                    }
+
                     <span
                         className="w-[80%] h-[60px] cursor-pointer flex gap-[10px] items-center text-white"
                         onClick={() => {

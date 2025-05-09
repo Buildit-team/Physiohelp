@@ -9,17 +9,21 @@ import {
 } from 'lucide-react';
 import Table from '../../../utils/Table';
 import { ColumnT } from '../../../interface/addProduct';
-import { useQuery } from 'react-query';
-import { getAdminBalance } from '../../services/api-service';
+import { useMutation, useQuery } from 'react-query';
+import { getAdminBalance, withdrawFunds } from '../../services/api-service';
 import WithdrawalModal from './WithdrawalModal';
 import BankDetailsModal, { BankDetails } from './BankDetailsModal';
+import toast from 'react-hot-toast';
+import { IErrorResponse } from '../../type/types';
+import { useAdminContext } from '../../../context/adminContext';
 
 const Wallet = () => {
+    const { adminData } = useAdminContext();
+    const isSuperAdmin = adminData?.role === "superadmin";
     const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
     const [isBankDetailsModalOpen, setIsBankDetailsModalOpen] = useState(false);
-    const [withdrawAmount, setWithdrawAmount] = useState('');
+    const [amount, setWithdrawAmount] = useState('');
     const [withdrawalMethod, setWithdrawalMethod] = useState('bank');
-    const [isLoading, setIsLoading] = useState(false);
     const [walletBalance, setWalletBalance] = useState(2547.63);
     const [bankDetails, setBankDetails] = useState<BankDetails | null>(null);
 
@@ -31,6 +35,23 @@ const Wallet = () => {
     })
     const availableBalance = walletBalance
 
+
+    const { mutate: submitWithdrawal, isLoading: isWithdrawing } = useMutation(
+        ['withdrawFunds'],
+        withdrawFunds,
+        {
+            onSuccess: (response) => {
+                console.log("Withdrawal successful:", response);
+                toast.success("Withdrawal request submitted successfully.");
+                setIsWithdrawModalOpen(false);
+                setWithdrawAmount('');
+            },
+            onError: (error: IErrorResponse) => {
+                console.error("Error processing withdrawal:", error);
+                toast.error(error?.response?.data?.message);
+            },
+        }
+    );
     const withdrawalHistory = [
         {
             id: 'WD-12345',
@@ -141,28 +162,35 @@ const Wallet = () => {
         { label: 'Failed', value: 'failed' }
     ];
 
-    const handleWithdraw = () => {
-        setIsLoading(true);
-
-        setTimeout(() => {
-            setIsLoading(false);
-            setIsWithdrawModalOpen(false);
-            setWithdrawAmount('');
-        }, 1500);
+    const handleWithdrawSubmit = () => {
+        if (amount) {
+            const amountAsNumber = Number(amount);
+            if (isNaN(amountAsNumber)) {
+                toast.error("Please enter a valid number for the withdrawal amount.");
+                return;
+            }
+            submitWithdrawal({
+                amount: amountAsNumber,
+            });
+        } else {
+            toast.error("Please enter an amount to withdraw.");
+        }
     };
 
     const handleSaveBankDetails = (details: BankDetails) => {
-        setIsLoading(true);
-
-        // Here you would typically make an API call to save the bank details
-        // For now, we'll simulate with a timeout
         setTimeout(() => {
             setBankDetails(details);
-            setIsLoading(false);
             setIsBankDetailsModalOpen(false);
         }, 1500);
     };
+    if (!isSuperAdmin) {
+        return (
+            <div className="w-full flex justify-center items-center h-[80vh]">
+                <p className="text-xl font-medium text-gray-900">You do not have access to this page</p>
+            </div>
+        );
 
+    }
     return (
         <div className="px-4 sm:px-6 lg:px-8 py-8 w-full">
             <div className="mb-8">
@@ -243,12 +271,12 @@ const Wallet = () => {
                 isOpen={isWithdrawModalOpen}
                 onClose={() => setIsWithdrawModalOpen(false)}
                 availableBalance={availableBalance}
-                withdrawAmount={withdrawAmount}
+                amount={amount}
                 setWithdrawAmount={setWithdrawAmount}
                 withdrawalMethod={withdrawalMethod}
                 setWithdrawalMethod={setWithdrawalMethod}
-                onWithdraw={handleWithdraw}
-                isLoading={isLoading}
+                onWithdraw={handleWithdrawSubmit}
+                isLoading={isWithdrawing}
             />
 
             <BankDetailsModal

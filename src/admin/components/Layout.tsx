@@ -4,14 +4,13 @@ import Sidebar from "../sidebar";
 import { IoMdNotificationsOutline } from "react-icons/io";
 import { RxHamburgerMenu } from "react-icons/rx";
 import { routeTitleMap } from "../../utils/routeTitle";
-import { useQuery } from 'react-query';
-import { getAdmin } from '../services/api-service';
+import { useAdminContext } from "../../context/adminContext";
 
 const Layout = () => {
     const location = useLocation();
     const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+    const { adminData } = useAdminContext();
 
-    const { data } = useQuery('user', () => getAdmin());
 
     useEffect(() => {
         const title = routeTitleMap[location.pathname] || "Admin";
@@ -23,7 +22,7 @@ const Layout = () => {
     };
 
     const currentTitle = routeTitleMap[location.pathname] || "Admin";
-    const adminName = data?.data?.name;
+
 
     return (
         <div className="w-full flex h-screen">
@@ -44,7 +43,7 @@ const Layout = () => {
                         </span>
                         <div className="flex-1 md:w-[80%] flex justify-end gap-3 md:gap-[10px] items-center">
                             <span className="flex items-center justify-center px-3 py-1.5 rounded-[8px] bg-[#E1E6FF]">
-                                <p className="text-sm md:text-base">{adminName}</p>
+                                <p className="text-sm md:text-base">{adminData?.name}</p>
                             </span>
                             <button className="p-2 rounded-full hover:bg-gray-100">
                                 <IoMdNotificationsOutline className="w-6 h-6" />
