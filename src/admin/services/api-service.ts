@@ -2,6 +2,7 @@ import axios from "axios";
 import { SignUpData, LoginData, VerificationData } from "../type/types";
 import { CartItems, CustomerInfo, IProduct } from "../../interface/addProduct";
 import { AppointmentData } from "../../components/appointment/AppointmentPreview";
+import { BankDetails } from "../components/wallet/BankDetailsModal";
 
 const { VITE_ENDPOINT } = import.meta.env;
 
@@ -237,6 +238,52 @@ export const updateSessionVisit = async (id: string, numberOfTimes: number) => {
     return response.data.data
 }
 
+export const fetchBanks = async () => {
+    return await axios.get("https://api.korapay.com/merchant/api/v1/misc/banks?countryCode=NG", {
+        headers: {
+            'Authorization': `Bearer pk_test_a4mBL7A3sbMHrGUq5m2kZynxfHifyTpWX17aChC3`,
+        },
+    });
+};
+
+
+export const addBankDetails = async (bankDetails: BankDetails) => {
+    const response = await axios.post(
+        `${VITE_ENDPOINT}/withdrawals/add-bank-details`,
+        {
+            bank_name: bankDetails.bank_name,
+            account_number: bankDetails.account_number,
+            account_name: bankDetails.account_name,
+            bank_code: bankDetails.bank_code,
+        },
+        {
+            headers: {
+                Authorization: `Bearer ${VITE_TOKEN}`
+            }
+        }
+    );
+    return response.data.data;
+};
+
+export const withdrawFunds = async ({ amount }: { amount: number }) => {
+    return await axios.post(`${VITE_ENDPOINT}/withdrawals/create-withdrawal`, { amount }, {
+        headers: {
+            'Authorization': `Bearer ${VITE_TOKEN}`,
+        }
+    })
+};
+
+export const confirmWithdrawFunds = async ({ email, token }: { email: string, token: string }) => {
+    return await axios.post(
+        `${VITE_ENDPOINT}/withdrawals/confirm-withdrawal?email=${email}&token=${token}`,
+        {},
+        {
+            headers: {
+                'Authorization': `Bearer ${VITE_TOKEN}`,
+            }
+        }
+    );
+};
 ////USER
 
 export const getUserProduct = async (page: number, limit: number) => {

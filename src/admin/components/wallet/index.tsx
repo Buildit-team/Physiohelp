@@ -4,28 +4,54 @@ import {
     Clock,
     CheckCircle,
     XCircle,
-    Wallet as WalletIcon
+    Wallet as WalletIcon,
+    // Bank
 } from 'lucide-react';
 import Table from '../../../utils/Table';
 import { ColumnT } from '../../../interface/addProduct';
-import { useQuery } from 'react-query';
-import { getAdminBalance } from '../../services/api-service';
+import { useMutation, useQuery } from 'react-query';
+import { getAdminBalance, withdrawFunds } from '../../services/api-service';
 import WithdrawalModal from './WithdrawalModal';
+import BankDetailsModal, { BankDetails } from './BankDetailsModal';
+import toast from 'react-hot-toast';
+import { IErrorResponse } from '../../type/types';
+import { useAdminContext } from '../../../context/adminContext';
 
 const Wallet = () => {
+    const { adminData } = useAdminContext();
+    const isSuperAdmin = adminData?.roles === "super_admin";
     const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
-    const [withdrawAmount, setWithdrawAmount] = useState('');
+    const [isBankDetailsModalOpen, setIsBankDetailsModalOpen] = useState(false);
+    const [amount, setWithdrawAmount] = useState('');
     const [withdrawalMethod, setWithdrawalMethod] = useState('bank');
-    const [isLoading, setIsLoading] = useState(false);
     const [walletBalance, setWalletBalance] = useState(2547.63);
+    const [bankDetails, setBankDetails] = useState<BankDetails | null>(null);
 
     useQuery(['GETWALLETBALANCE'], getAdminBalance, {
         onSuccess: (balance) => {
-            setWalletBalance(balance)
+            console.log(balance.available_balance)
+            setWalletBalance(balance.available_balance)
         }
     })
     const availableBalance = walletBalance
 
+
+    const { mutate: submitWithdrawal, isLoading: isWithdrawing } = useMutation(
+        ['withdrawFunds'],
+        withdrawFunds,
+        {
+            onSuccess: (response) => {
+                console.log("Withdrawal successful:", response);
+                toast.success("Withdrawal request submitted successfully.");
+                setIsWithdrawModalOpen(false);
+                setWithdrawAmount('');
+            },
+            onError: (error: IErrorResponse) => {
+                console.error("Error processing withdrawal:", error);
+                toast.error(error?.response?.data?.message);
+            },
+        }
+    );
     const withdrawalHistory = [
         {
             id: 'WD-12345',
@@ -136,35 +162,51 @@ const Wallet = () => {
         { label: 'Failed', value: 'failed' }
     ];
 
-    const handleWithdraw = () => {
-        setIsLoading(true);
-
-        setTimeout(() => {
-            setIsLoading(false);
-            setIsWithdrawModalOpen(false);
-            setWithdrawAmount('');
-        }, 1500);
+    const handleWithdrawSubmit = () => {
+        if (amount) {
+            const amountAsNumber = Number(amount);
+            if (isNaN(amountAsNumber)) {
+                toast.error("Please enter a valid number for the withdrawal amount.");
+                return;
+            }
+            submitWithdrawal({
+                amount: amountAsNumber,
+            });
+        } else {
+            toast.error("Please enter an amount to withdraw.");
+        }
     };
 
+    const handleSaveBankDetails = (details: BankDetails) => {
+        setTimeout(() => {
+            setBankDetails(details);
+            setIsBankDetailsModalOpen(false);
+        }, 1500);
+    };
+    if (!isSuperAdmin) {
+        return (
+            <div className="w-full flex justify-center items-center h-[80vh]">
+                <p className="text-xl font-medium text-gray-900">You do not have access to this page</p>
+            </div>
+        );
 
-
+    }
     return (
-        <div className=" px-4 sm:px-6 lg:px-8 py-8 w-full">
+        <div className="px-4 sm:px-6 lg:px-8 py-8 w-full">
             <div className="mb-8">
-                <h1 className="text-2xl font-bold text-gray-900 flex items-center mb-1">
+                <h1 className="text-xl font-medium text-gray-900 flex items-center mb-1">
                     <WalletIcon className="mr-2 h-6 w-6" /> My Wallet
                 </h1>
                 <p className="text-gray-500">Manage your funds and track your withdrawals</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6 mb-8">
-
                 <div className="bg-white rounded-lg shadow-md p-6 flex flex-col">
                     <div className="text-gray-500 mb-1 flex items-center">
                         <ArrowDownCircle className="h-4 w-4 mr-1" /> Available for Withdrawal
                     </div>
-                    <div className="text-3xl font-bold text-gray-900">
-                        ₦{availableBalance.toFixed(2)}
+                    <div className="text-2xl font-medium text-gray-900">
+                        ₦{availableBalance}
                     </div>
                     <button
                         onClick={() => setIsWithdrawModalOpen(true)}
@@ -174,10 +216,42 @@ const Wallet = () => {
                         Withdraw Funds
                     </button>
                 </div>
+
+                <div className="bg-white rounded-lg shadow-md p-6 flex flex-col">
+                    <div className="text-gray-500 mb-1 flex items-center">
+                        Bank Account Details
+                    </div>
+
+                    {bankDetails ? (
+                        <div className="mt-2">
+                            <div className="mb-2">
+                                <span className="text-sm text-gray-500">Bank Name:</span>
+                                <p className="font-medium">{bankDetails.bank_name}</p>
+                            </div>
+                            <div className="mb-2">
+                                <span className="text-sm text-gray-500">Account Number:</span>
+                                <p className="font-medium">{bankDetails.account_number}</p>
+                            </div>
+                            <div className="mb-2">
+                                <span className="text-sm text-gray-500">Account Name:</span>
+                                <p className="font-medium">{bankDetails.account_name}</p>
+                            </div>
+                        </div>
+                    ) : (
+                        <p className="text-gray-500 text-sm my-2">No bank details added yet</p>
+                    )}
+
+                    <button
+                        onClick={() => setIsBankDetailsModalOpen(true)}
+                        className="mt-4 flex items-center justify-center gap-2 bg-gray-100 hover:bg-gray-200 text-gray-800 font-medium py-2 px-4 rounded-md transition-colors"
+                    >
+                        {bankDetails ? 'Update Bank Details' : 'Add Bank Details'}
+                    </button>
+                </div>
             </div>
 
-            <div className=" rounded-lg ">
-                <h2 className="text-xl font-semibold mb-6 flex items-center">
+            <div className="rounded-lg">
+                <h2 className="text-sm font-semibold mb-6 flex items-center">
                     <Clock className="mr-2 h-5 w-5" /> Withdrawal History
                 </h2>
 
@@ -197,12 +271,19 @@ const Wallet = () => {
                 isOpen={isWithdrawModalOpen}
                 onClose={() => setIsWithdrawModalOpen(false)}
                 availableBalance={availableBalance}
-                withdrawAmount={withdrawAmount}
+                amount={amount}
                 setWithdrawAmount={setWithdrawAmount}
                 withdrawalMethod={withdrawalMethod}
                 setWithdrawalMethod={setWithdrawalMethod}
-                onWithdraw={handleWithdraw}
-                isLoading={isLoading}
+                onWithdraw={handleWithdrawSubmit}
+                isLoading={isWithdrawing}
+            />
+
+            <BankDetailsModal
+                isOpen={isBankDetailsModalOpen}
+                onClose={() => setIsBankDetailsModalOpen(false)}
+                onSave={handleSaveBankDetails}
+                currentBankDetails={bankDetails}
             />
         </div>
     );

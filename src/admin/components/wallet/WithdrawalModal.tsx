@@ -4,7 +4,7 @@ interface WithdrawalModalProps {
     isOpen: boolean;
     onClose: () => void;
     availableBalance: number;
-    withdrawAmount: string;
+    amount: string;
     setWithdrawAmount: (value: string) => void;
     withdrawalMethod: string;
     setWithdrawalMethod: (value: string) => void;
@@ -16,14 +16,13 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
     isOpen,
     onClose,
     availableBalance,
-    withdrawAmount,
+    amount,
     setWithdrawAmount,
-    withdrawalMethod,
-    setWithdrawalMethod,
     onWithdraw,
     isLoading
 }) => {
     if (!isOpen) return null;
+
 
     return (
         <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
@@ -35,7 +34,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                         Available Balance
                     </label>
                     <div className="text-2xl font-bold text-gray-900">
-                        ${availableBalance.toFixed(2)}
+                        ₦{availableBalance}
                     </div>
                 </div>
 
@@ -45,11 +44,11 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                     </label>
                     <div className="relative">
                         <span className="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-gray-500">
-                            $
+                            ₦
                         </span>
                         <input
                             type="number"
-                            value={withdrawAmount}
+                            value={amount}
                             onChange={(e) => setWithdrawAmount(e.target.value)}
                             placeholder="0.00"
                             className="pl-8 pr-4 py-2 w-full border rounded-md focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
@@ -57,27 +56,13 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                             max={availableBalance}
                         />
                     </div>
-                    {parseFloat(withdrawAmount) > availableBalance && (
+                    {parseFloat(amount) > availableBalance && (
                         <p className="text-red-500 text-sm mt-1">
                             Amount exceeds available balance
                         </p>
                     )}
                 </div>
 
-                <div className="mb-6">
-                    <label className="block text-sm font-medium text-gray-700 mb-1">
-                        Withdrawal Method
-                    </label>
-                    <select
-                        value={withdrawalMethod}
-                        onChange={(e) => setWithdrawalMethod(e.target.value)}
-                        className="w-full border rounded-md py-2 px-3 focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                    >
-                        <option value="bank">Bank Transfer</option>
-                        <option value="paypal">PayPal</option>
-                        <option value="crypto">Cryptocurrency</option>
-                    </select>
-                </div>
 
                 <div className="flex gap-3 justify-end">
                     <button
@@ -88,7 +73,7 @@ const WithdrawalModal: React.FC<WithdrawalModalProps> = ({
                     </button>
                     <button
                         onClick={onWithdraw}
-                        disabled={!withdrawAmount || parseFloat(withdrawAmount) <= 0 || parseFloat(withdrawAmount) > availableBalance || isLoading}
+                        disabled={!amount || parseFloat(amount) <= 0 || parseFloat(amount) > availableBalance || isLoading}
                         className="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700 disabled:bg-blue-300 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                     >
                         {isLoading ? (
