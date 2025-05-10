@@ -14,7 +14,7 @@ const Sidebar = ({ onClose }: { onClose: () => void }) => {
     const navigate = useNavigate();
     const { adminData } = useAdminContext();
 
-    const isSuperAdmin = adminData?.role === "superadmin";
+    const isSuperAdmin = adminData?.roles === "super_admin";
     return (
         <div className="w-full flex bg-[#1053D4] h-full">
             <div className="w-[90%] mt-[20px] relative">

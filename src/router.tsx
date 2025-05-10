@@ -42,6 +42,7 @@ import Dashboard from "./admin/components/dashboard";
 import Wallet from "./admin/components/wallet";
 import OrderDetails from "./admin/components/order/index[id]";
 import SessionDetails from "./admin/components/session/index[id]";
+import CompleteWithdrawal from "./admin/components/wallet/CompleteWithdrawal";
 export const Routes = createBrowserRouter([
     {
         path: '/',
@@ -198,6 +199,10 @@ export const Routes = createBrowserRouter([
             {
                 path: '/admin/wallet',
                 element: <Wallet />
+            },
+            {
+                path: '/admin/withdraw/complete/:email/:token',
+                element: <CompleteWithdrawal />
             },
             {
                 path: '/admin/product',

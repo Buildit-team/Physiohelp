@@ -19,7 +19,7 @@ import { useAdminContext } from '../../../context/adminContext';
 
 const Wallet = () => {
     const { adminData } = useAdminContext();
-    const isSuperAdmin = adminData?.role === "superadmin";
+    const isSuperAdmin = adminData?.roles === "super_admin";
     const [isWithdrawModalOpen, setIsWithdrawModalOpen] = useState(false);
     const [isBankDetailsModalOpen, setIsBankDetailsModalOpen] = useState(false);
     const [amount, setWithdrawAmount] = useState('');

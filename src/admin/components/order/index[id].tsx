@@ -1,8 +1,8 @@
 import { useQuery } from "react-query";
 import { useParams, useNavigate } from "react-router-dom";
-import { format } from 'date-fns';
 import { ArrowLeft, Package, User, Clock, CreditCard, AlertCircle, CheckCircle, XCircle, ShoppingCart } from "lucide-react";
 import { getOrderDetails } from "../../services/api-service";
+import { formatCurrency, formatDate } from "../../../utils/formatNumbers";
 // import { OrderDetailsResponse } from "../../../interface/order";
 
 
@@ -19,16 +19,6 @@ const OrderDetails = () => {
             retry: false,
         }
     );
-    const formatCurrency = (amount: any) => {
-        return new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-        }).format(Number(amount));
-    };
-
-    const formatDate = (dateString: string | number | Date) => {
-        return format(new Date(dateString), 'PPP p');
-    };
 
     const OrderStatusBadge = ({ status }: { status: 'pending' | 'processing' | 'completed' | 'cancelled' | 'abandoned' }) => {
         const statusConfig = {

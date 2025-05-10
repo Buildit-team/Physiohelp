@@ -273,6 +273,17 @@ export const withdrawFunds = async ({ amount }: { amount: number }) => {
     })
 };
 
+export const confirmWithdrawFunds = async ({ email, token }: { email: string, token: string }) => {
+    return await axios.post(
+        `${VITE_ENDPOINT}/withdrawals/confirm-withdrawal?email=${email}&token=${token}`,
+        {},
+        {
+            headers: {
+                'Authorization': `Bearer ${VITE_TOKEN}`,
+            }
+        }
+    );
+};
 ////USER
 
 export const getUserProduct = async (page: number, limit: number) => {
