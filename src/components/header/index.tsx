@@ -40,7 +40,7 @@ const Header = () => {
         <div className={headerClass}>
             <div className="w-[30%] max-[650px]:w-[45%]">
                 {(isHomePage && !hasScrolled) ? (
-                    <img src="/newlogo.svg" onClick={() => navigate("/")} alt="Logo" />
+                    <img src="/newlogopng.png" onClick={() => navigate("/")} alt="Logo" />
                 ) : (
                     <img src="/logo-dark.svg" onClick={() => navigate("/")} alt="Logo" className="w-[320px]" />
                 )}
