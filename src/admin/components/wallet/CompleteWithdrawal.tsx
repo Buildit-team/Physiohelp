@@ -9,7 +9,15 @@ const CompleteWithdrawal = () => {
     const getParamsFromUrl = () => {
         const params = new URLSearchParams(window.location.search);
         const email = params.get('email');
-        const token = params.get('token');
+        let token = params.get('token');
+
+        if (!token) {
+            const search = window.location.search;
+            const match = search.match(/token(\d+)/);
+            if (match) {
+                token = match[1];
+            }
+        }
         return { email, token };
     };
 
@@ -19,7 +27,10 @@ const CompleteWithdrawal = () => {
     const mutation = useMutation({
         mutationFn: confirmWithdrawFunds,
         onSuccess: () => {
-
+            alert('Withdrawal confirmed successfully!');
+        },
+        onError: (error) => {
+            console.error('Error confirming withdrawal:', error);
         }
     });
 
@@ -27,7 +38,7 @@ const CompleteWithdrawal = () => {
         if (email && token) {
             mutation.mutate({ email: email!, token: token! });
         }
-    }, []);
+    }, [email, token]);
 
 
     const handleReturnToDashboard = () => {
@@ -39,7 +50,7 @@ const CompleteWithdrawal = () => {
     };
 
     return (
-        <div className="min-h-screen w-full  flex flex-col items-center justify-center p-4">
+        <div className=" w-full  flex flex-col items-center justify-center p-4">
             <div className="w-full max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="bg-blue-600 p-6 text-white">
                     <h1 className="text-2xl font-bold text-center">Withdrawal Confirmation</h1>
