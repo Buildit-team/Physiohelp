@@ -26,12 +26,6 @@ const CompleteWithdrawal = () => {
 
     const mutation = useMutation({
         mutationFn: confirmWithdrawFunds,
-        onSuccess: () => {
-            alert('Withdrawal confirmed successfully!');
-        },
-        onError: (error) => {
-            console.error('Error confirming withdrawal:', error);
-        }
     });
 
     useEffect(() => {
@@ -65,7 +59,7 @@ const CompleteWithdrawal = () => {
                                 We encountered an error while processing your withdrawal request.
                             </p>
                             <p className="text-sm text-gray-500 mb-6">
-                                Error: {mutation.error instanceof Error ? mutation.error.message : 'Unknown error'}
+                                Error: {mutation.error instanceof Error && (mutation.error as any)?.response?.data?.message ? (mutation.error as any).response.data.message : 'Unknown error'}
                             </p>
                             <button
                                 onClick={handleRetry}
