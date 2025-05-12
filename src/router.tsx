@@ -171,19 +171,19 @@ export const Routes = createBrowserRouter([
             </ScrollToTop>,
         children: [
             {
-                path: '/user/account',
+                path: 'account',
                 element: <AccountOverview />
             },
             {
-                path: '/user/account/orders',
+                path: 'account/orders',
                 element: <OrderHistory />
             },
             {
-                path: '/user/account/appointments',
+                path: 'account/appointments',
                 element: <UserAppointment />
             },
             {
-                path: '/user/account/address',
+                path: 'account/address',
                 element: <UserAddress />
             },
         ]
@@ -197,75 +197,75 @@ export const Routes = createBrowserRouter([
                 element: <Dashboard />
             },
             {
-                path: '/admin/wallet',
+                path: 'wallet',
                 element: <Wallet />
             },
             {
-                path: '/admin/withdraw/complete/:email/:token',
+                path: 'withdraw/complete/:email/:token',
                 element: <CompleteWithdrawal />
             },
             {
-                path: '/admin/product',
+                path: 'product',
                 element: <Products />
             },
             {
-                path: '/admin/product/:id',
+                path: 'product/:id',
                 element: <ProductDetails />
             },
             {
-                path: '/admin/add-product',
+                path: 'add-product',
                 element: <AddProduct />
             },
             {
-                path: '/admin/add-product-image/:id',
+                path: 'add-product-image/:id',
                 element: <UploadImage />
             },
             {
-                path: '/admin/products/:id/edit',
+                path: 'products/:id/edit',
                 element: <EditProduct />
             },
             {
-                path: '/admin/order',
+                path: 'order',
                 element: <OrderManagement />
             },
             {
-                path: '/admin/order/:id',
+                path: 'order/:id',
                 element: <OrderDetails />
             },
             {
-                path: '/admin/customer',
+                path: 'customer',
                 element: <CustomerManagement />
             },
             {
-                path: '/admin/customer/:id',
+                path: 'customer/:id',
                 element: <CustomerDetailsPage />
             },
             {
-                path: '/admin/report',
+                path: 'report',
                 element: <ReportManagement />
             },
             {
-                path: '/admin/blog',
+                path: 'blog',
                 element: <BlogManagment />
             },
             {
-                path: '/admin/add-blog',
+                path: 'add-blog',
                 element: <BlogUploadPage />
             },
             {
-                path: '/admin/preview-blog',
+                path: 'preview-blog',
                 element: <BlogPreviewPage />
             },
             {
-                path: '/admin/blog-upload-success',
+                path: 'blog-upload-success',
                 element: <BlogPostSuccess />
             },
             {
-                path: '/admin/session',
+                path: 'session',
                 element: <Sessions />
             },
             {
-                path: '/admin/session/:id',
+                path: 'session/:id',
                 element: <SessionDetails />
             },
 
