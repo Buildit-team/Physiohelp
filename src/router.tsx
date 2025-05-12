@@ -200,7 +200,10 @@ export const Routes = createBrowserRouter([
                 path: 'wallet',
                 element: <Wallet />
             },
-
+            {
+                path: 'withdrawals/confirm-withdrawal',
+                element: <CompleteWithdrawal />
+            },
             {
                 path: 'product',
                 element: <Products />
@@ -281,7 +284,7 @@ export const Routes = createBrowserRouter([
         element: <VerifyEmail />
     },
     {
-        path: 'withdrawals/comfirm-withdrawal',
+        path: 'withdrawals/confirm-withdrawal',
         element: <CompleteWithdrawal />
     },
 ])

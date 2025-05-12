@@ -274,7 +274,7 @@ export const withdrawFunds = async ({ amount }: { amount: number }) => {
 };
 
 export const confirmWithdrawFunds = async ({ email, token }: { email: string, token: string }) => {
-    return await axios.post(
+    const response = axios.post(
         `${VITE_ENDPOINT}/withdrawals/confirm-withdrawal?email=${email}&token=${token}`,
         {},
         {
@@ -283,6 +283,7 @@ export const confirmWithdrawFunds = async ({ email, token }: { email: string, to
             }
         }
     );
+    return response;
 };
 
 ////USER
