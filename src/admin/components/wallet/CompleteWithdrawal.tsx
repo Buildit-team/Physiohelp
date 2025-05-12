@@ -39,7 +39,7 @@ const CompleteWithdrawal = () => {
     };
 
     return (
-        <div className="min-h-screen bg-gray-50 flex flex-col items-center justify-center p-4">
+        <div className="min-h-screen w-full  flex flex-col items-center justify-center p-4">
             <div className="w-full max-w-md bg-white rounded-lg shadow-lg overflow-hidden">
                 <div className="bg-blue-600 p-6 text-white">
                     <h1 className="text-2xl font-bold text-center">Withdrawal Confirmation</h1>
@@ -64,6 +64,15 @@ const CompleteWithdrawal = () => {
                             </button>
                         </div>
                     )}
+
+                    {
+                        mutation.isLoading && (
+                            <div className="flex flex-col items-center justify-center py-8">
+                                <p className="text-lg font-semibold text-gray-600 mb-2">Processing your withdrawal...</p>
+                                <p className="text-sm text-gray-500">Please wait a moment.</p>
+                            </div>
+                        )
+                    }
 
                     {mutation.isSuccess && (
                         <div className="flex flex-col items-center justify-center py-8">
