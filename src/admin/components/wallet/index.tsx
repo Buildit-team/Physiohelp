@@ -218,7 +218,7 @@ const Wallet = () => {
                 </div>
 
                 <div className="bg-white rounded-lg shadow-md p-6 flex flex-col">
-                    <div className="text-gray-500 mb-1 flex items-center">
+                    {/* <div className="text-gray-500 mb-1 flex items-center">
                         Bank Account Details
                     </div>
 
@@ -239,7 +239,7 @@ const Wallet = () => {
                         </div>
                     ) : (
                         <p className="text-gray-500 text-sm my-2">No bank details added yet</p>
-                    )}
+                    )} */}
 
                     <button
                         onClick={() => setIsBankDetailsModalOpen(true)}
