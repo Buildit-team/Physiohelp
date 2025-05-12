@@ -7,12 +7,12 @@ import { useNavigate } from 'react-router-dom';
 const CompleteWithdrawal = () => {
     const navigate = useNavigate()
     const getParamsFromUrl = () => {
-        const url = window.location.href;
-        const parts = url.split('/');
-        const email = parts[parts.length - 2];
-        const token = parts[parts.length - 1];
+        const params = new URLSearchParams(window.location.search);
+        const email = params.get('email');
+        const token = params.get('token');
         return { email, token };
     };
+
 
     const { email, token } = getParamsFromUrl();
 
@@ -25,7 +25,7 @@ const CompleteWithdrawal = () => {
 
     useEffect(() => {
         if (email && token) {
-            mutation.mutate({ email, token });
+            mutation.mutate({ email: email!, token: token! });
         }
     }, []);
 
@@ -35,7 +35,7 @@ const CompleteWithdrawal = () => {
     };
 
     const handleRetry = () => {
-        mutation.mutate({ email, token });
+        mutation.mutate({ email: email!, token: token! });
     };
 
     return (

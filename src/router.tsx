@@ -201,7 +201,7 @@ export const Routes = createBrowserRouter([
                 element: <Wallet />
             },
             {
-                path: 'withdraw/complete/:email([\\w.%+-]+@[\\w.-]+\\.[a-zA-Z]{2,}):token',
+                path: 'withdrawals/comfirm-withdrawal',
                 element: <CompleteWithdrawal />
             },
             {
